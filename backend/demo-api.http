@@ -1,0 +1,85 @@
+# Sample requests for an HTTP client. Replace variables locally; do not commit real tokens.
+# Run Seed-DemoCatalogue.ps1 once with an administrator token before using DSTA/DSTC/DM001.
+@base = http://localhost:8080
+@accessToken = replace-with-passenger-access-token
+@adminToken = replace-with-admin-access-token
+@pnr = replace-with-booking-pnr
+# Replace with a future boarding date no later than today plus two calendar months (India time).
+@date = replace-with-YYYY-MM-DD
+
+### Search (CNF/WL suggestion is advisory)
+GET {{base}}/api/reservations/search?fromStation=DSTA&toStation=DSTC&dateOfJourney={{date}}&seatClass=SL&passengers=2
+
+### Quote DM001, two seats, INR 240 for the seeded demo route
+GET {{base}}/api/reservations/quote?trainNumber=DM001&fromStation=DSTA&toStation=DSTC&dateOfJourney={{date}}&seatClass=SL&passengers=2
+
+### Create one whole booking. Change the idempotency key for a NEW booking, keep it for retries.
+POST {{base}}/api/reservations/book
+Authorization: Bearer {{accessToken}}
+Idempotency-Key: demo-booking-0001
+Content-Type: application/json
+
+{"trainNumber":"DM001","fromStation":"DSTA","toStation":"DSTC","dateOfJourney":"{{date}}","seatClass":"SL","expectedTotalFare":240.00,"passengers":[{"name":"Demo One","age":25,"gender":"OTHER","birthPreference":"LOWER"},{"name":"Demo Two","age":30,"gender":"OTHER","birthPreference":"NONE"}]}
+
+### Create Razorpay TEST order from the saved booking amount
+POST {{base}}/api/payments/create-order
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"pnr":"{{pnr}}"}
+
+# Complete provider TEST checkout with its configured test account.
+# /api/payments/verify requires the actual signed test checkout result; do not fabricate it.
+
+### Booking and payment/refund status
+GET {{base}}/api/reservations/pnr/{{pnr}}
+Authorization: Bearer {{accessToken}}
+
+### Payment status (SUCCESS can accompany a WL ticket)
+GET {{base}}/api/payments/{{pnr}}/status
+Authorization: Bearer {{accessToken}}
+
+### Filtered history
+GET {{base}}/api/reservations/my-bookings?page=0&size=10&sort=bookingTime&direction=desc&status=WL&fromDate={{date}}&toDate={{date}}
+Authorization: Bearer {{accessToken}}
+
+### Cancellation preview
+GET {{base}}/api/reservations/{{pnr}}/cancellation-preview
+Authorization: Bearer {{accessToken}}
+
+### Cancel whole booking; triggers promotion of eligible paid WL bookings
+DELETE {{base}}/api/reservations/{{pnr}}
+Authorization: Bearer {{accessToken}}
+
+### Download current demo PDF after verified test payment
+GET {{base}}/api/reservations/{{pnr}}/ticket.pdf
+Authorization: Bearer {{accessToken}}
+
+### Save passenger
+POST {{base}}/api/users/me/passengers
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"name":"Saved Demo Traveller","age":25,"gender":"OTHER","berthPreference":"LOWER"}
+
+### Master List
+GET {{base}}/api/users/me/passengers?page=0&size=20
+Authorization: Bearer {{accessToken}}
+
+### Paginated catalogue
+GET {{base}}/api/trains?page=0&size=10&sort=trainNumber&direction=asc
+
+### Invite another admin; email goes only to the specified invitee
+POST {{base}}/api/auth/admin/invitations
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"email":"replace-with-invitee-address@example.test"}
+
+### Current-device logout
+POST {{base}}/api/auth/logout
+Authorization: Bearer {{accessToken}}
+
+### All-device logout (use a still-active session)
+POST {{base}}/api/auth/logout-all
+Authorization: Bearer {{accessToken}}

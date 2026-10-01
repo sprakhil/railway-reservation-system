@@ -1,107 +1,129 @@
-Railway Reservation System: Master Architecture Document
-1. Executive Summary
-This project is a highly scalable, production-ready backend system for a Railway Reservation platform. It is built using a Spring Boot Microservices architecture consisting of 3 infrastructure services and 7 core domain business services. It features secure JWT authentication, asynchronous event-driven notifications, external payment gateway integration, and a masterclass in isolated, high-speed pure-Mockito unit testing.
+# Railwize — railway reservation platform
 
-2. Infrastructure & Routing (The Backbone)
-Instead of hardcoding connections, the system uses dynamic routing and centralized configuration.
+One repository containing the Spring Boot microservices backend and Angular frontend. Google sign-in, Razorpay **test-mode** payments, CNF/WL booking, ticket PDFs, email/in-app notifications, journey alternatives, Gemini assistant and administrator reporting are included. No Docker, WSL, Redis or SonarQube installation is required.
 
-Config Server: Centralizes all application.properties for every microservice. You configured this using a local native classpath (config-repo), allowing the project to be portable across different machines. (It securely manages secrets, keeping Google OAuth keys out of version control).
+```text
+backend/      Java microservices, configuration, database setup and launch scripts
+frontend/     Angular application, locked npm dependencies and Jasmine tests
+*.png         Existing architecture and design diagrams
+*.pptx        Existing project presentation
+```
 
-Eureka Server (Service Discovery): Acts as the phonebook for the system. Instead of services calling localhost:8081, they call the service name (e.g., PAYMENT-SERVICE), and Eureka resolves the IP/port dynamically.
+Detailed feature/API documentation: [backend README](backend/README.md). UI/testing documentation: [frontend README](frontend/README.md).
 
-API Gateway: The single entry point for the frontend (React/Angular) or Postman.
+## Download and prepare another Windows laptop
 
-Routes incoming traffic to the correct microservice.
+1. On GitHub select **Code → Download ZIP**, then extract the ZIP completely. Do not run scripts inside the ZIP. GitHub's [source archive instructions](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives) explain this workflow. The extracted folder normally ends in `-main`; it can be renamed or moved to Desktop.
+2. Install a JDK compatible with Java 21 source (this project was tested with JDK 22), Maven 3.9.x, Node.js 22.13 or newer in the 22.x line, MySQL 8.x and MySQL Workbench. Install native RabbitMQ with its compatible Erlang runtime, or use your existing accessible broker. Use [PowerShell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/install-powershell-on-windows), not Command Prompt, for the `.ps1` scripts. Git is optional when using ZIP.
+3. Open a new PowerShell terminal and confirm these commands work:
 
-Aggregates the Swagger UI documentation so all APIs can be viewed from one single dashboard.
+   ```powershell
+   java -version
+   mvn.cmd -version
+   node --version
+   npm.cmd --version
+   $PSVersionTable.PSVersion
+   ```
 
-Handles CORS and acts as the first line of defense for security.
+4. Start MySQL and RabbitMQ. Open `backend/Create-Databases.sql` in MySQL Workbench and execute it. It creates the eight missing databases without deleting existing data. Services create tables in fresh databases with `DDL_AUTO=update`; do not run old manual migration scripts against a fresh installation.
+5. Choose the data setup below, then configure `backend/.env`.
 
-3. Inter-Service Communication
-The architecture smartly divides communication into two distinct patterns based on business needs:
+### Keep your current data, or start fresh
 
-Synchronous (OpenFeign): Used for immediate data retrieval where the transaction cannot proceed without an answer. For example, the Reservation Service uses Feign to ask the Train Service if seats are available, and the Payment Service to confirm funds.
+**GitHub contains source code, not your running MySQL data.** To retain the current accounts, train catalogue, timetables, saved passengers and bookings, use MySQL Workbench **Server → Data Export** on the original laptop. Stop application services first so the eight databases form a consistent snapshot. Select all eight `railway_*_db` schemas listed in `backend/Create-Databases.sql`, select structure and data, and export to a private folder outside the repository. Import those schemas into the new laptop's MySQL using **Server → Data Import** before starting services. Keep the export private: it includes account and passenger data. Do not overwrite an existing database without backing it up first.
 
-Asynchronous (Cloud RabbitMQ): Used for background tasks that shouldn't block the user. You are using a cloud-hosted RabbitMQ (like CloudAMQP). When a ticket is booked, a NotificationEvent is pushed to a queue. The Notification Service consumes this at its own pace to send emails.
+Alternatively, start with the empty databases and add catalogue data through the admin UI. `backend/Seed-DemoCatalogue.ps1` can create two small DSTA → DSTB → DSTC demonstration routes after admin login. It requires an admin access token supplied privately in your terminal. It does not recreate your existing trains or test all nearby/interchange scenarios.
 
-4. The 7 Core Domain Microservices
-We engineered these services with strict domain isolation and specific business rules.
+**Privately transfer `backend/.env` from your original backend**, then update `DB_USERNAME`, `DB_PASSWORD` and any machine-specific addresses for the new laptop. Never commit this file. When starting entirely fresh, generate it instead:
 
-I. Auth Service
-Role: Security gatekeeper.
+```powershell
+cd backend
+.\New-DevEnvironment.ps1
+notepad .env
+```
 
-Features: Handles Registration, Login, OAuth (Google), Password Encoding, and JWT Generation.
+Fill database, SMTP, Google OAuth, Razorpay TEST and Gemini values from your own accounts. The generator creates local service secrets and refuses to overwrite an existing `.env`. All services launched with `Run-Service.ps1` read this one backend-root file. Keep `PDF_FONT_PATH=` empty to use the bundled ticket font unless you intentionally supply a valid font path on the new laptop.
 
-Data: Manages AuthUser entity (email, password, Role) and Refresh Tokens.
+Keep the local addresses consistent:
 
-Key Detail: During testing, we caught a NullPointerException because the Role enum wasn't initialized in the mock user. Fixing this ensured role-based access (ROLE_ADMIN vs ROLE_USER) works flawlessly.
+- Frontend: `http://localhost:4200`.
+- Gateway: `http://localhost:8080`.
+- Google authorized redirect URI and `GOOGLE_REDIRECT_URI`: `http://localhost:8080/api/auth/google/callback`.
+- `FRONTEND_CALLBACK_URI`: `http://localhost:4200/auth/callback`.
+- `FRONTEND_ORIGINS` and `FRONTEND_BASE_URL`: `http://localhost:4200`.
+- Use `localhost` consistently; mixing `127.0.0.1`, a LAN address and `localhost` changes cookie/origin behavior.
 
-II. User Service
-Role: Manages passenger demographic data.
+If you use a remote RabbitMQ/SMTP endpoint, the new laptop must be able to reach it. Gemini free quotas, OAuth configuration and SMTP delivery remain dependent on the provider; a source ZIP cannot guarantee them. Razorpay keys must begin with `rzp_test_` and match the supplied test secret. No real payments are supported.
 
-Features: Secure /api/users/me endpoint that extracts the username directly from the Spring Security Authentication object, preventing users from spoofing another user's ID.
+### Start the backend
 
-Design Pattern: Implements an elegant "Upsert" pattern (orElse(new UserProfile())). If a user updates their profile for the first time, it creates it; otherwise, it updates the existing record.
+Open a separate PowerShell terminal for each service, with its working directory set to the extracted `backend` folder. If scripts are blocked, use `Set-ExecutionPolicy -Scope Process Bypass` only in that terminal. The following are **separate long-running commands**, not one sequential script:
 
-III. Train & Station Service
-Role: The core catalog of the railway.
+```powershell
+.\Run-Service.ps1 config-server
+.\Run-Service.ps1 eureka-server
+.\Run-Service.ps1 auth-service
+.\Run-Service.ps1 user-service
+.\Run-Service.ps1 train-service
+.\Run-Service.ps1 schedule-service
+.\Run-Service.ps1 pnr-service
+.\Run-Service.ps1 reservation-service
+.\Run-Service.ps1 payment-service
+.\Run-Service.ps1 notification-service
+.\Run-Service.ps1 chatbot-service
+.\Run-Service.ps1 api-gateway
+```
 
-Features: Manages Train and Station entities. It maps a train to a specific Source and Destination station.
+Start Config Server and Eureka first, then the other services, and wait for registration before using the UI. The first Maven run downloads dependencies. A laptop running all twelve JVMs needs enough free RAM; avoid running duplicate instances from IntelliJ and PowerShell at the same time. Use Ctrl+C in each terminal to stop it.
 
-Security: Endpoints like @PostMapping to add trains/stations are secured via configuration to only allow Admin access.
+Config Server/Eureka browser pages require their credentials from `.env`; a 401 response without credentials is expected. They use infrastructure credentials, not a passenger login. Gateway Swagger is at `http://localhost:8080/swagger-ui/index.html`.
 
-IV. Schedule Service
-Role: Manages the routing and timetables for trains.
+For a **fresh database only**, configure `BOOTSTRAP_ADMIN_ENABLED=true` and the bootstrap admin username/email/password in `.env` before the first auth-service start. After creation, set bootstrap to false and restart auth-service. An imported database already has your accounts. Use the normal frontend login for the admin workspace; public registration never grants ADMIN.
 
-Data Rule: Enforces a @UniqueConstraint on (trainNumber, stopSequence) in the database so a train cannot have two "Stop #1"s.
+### Start the frontend
 
-Design Pattern: Uses a "Bulk Replace" pattern for updates. When an admin updates a route, the service calls deleteByTrainNumber to wipe the old route and saveAll to insert the new sequence, preventing orphaned data.
+In another terminal, open the extracted `frontend` folder:
 
-V. Payment Service
-Role: Financial processor.
+```powershell
+npm.cmd ci
+npm.cmd test
+npm.cmd start
+```
 
-Features: Integrates with the Razorpay SDK.
+Open `http://localhost:4200`. The Angular dev proxy forwards `/api` calls to port 8080; do not open `index.html` directly. `npm ci` restores exactly the dependencies in `package-lock.json`. There is no frontend secret file. The PowerShell alternative is `.\Start-Frontend.ps1 -Install`.
 
-Workflow:
+### Verify the second laptop
 
-Creates a Razorpay Order (translates Rupees to Paise: amount * 100). Saves status as CREATED.
+1. Confirm all services register in Eureka and the gateway Swagger page loads.
+2. Register, verify OTP, log in, view your profile and log out. Verify Google login separately.
+3. Sign in as admin; load users, stations, trains, timetables and reports.
+4. Search a future date within two months on a train operating that day. Fresh databases have no train results until a catalogue/timetable is added.
+5. Select a saved passenger; create a booking; complete Razorpay test checkout within two minutes.
+6. Check the ticket, seat/berth labels, PDF, confirmation email and notification. Verify cancellation preview, cancellation and test-refund progress.
+7. Test WL/promotion on a small-capacity train, nearby-station/one-interchange suggestions with suitable catalogue data, and the assistant's account queries and Gemini policy replies.
+8. Check admin CSV exports and logout; a second user's private data must not appear.
 
-Verifies the cryptographic signature (razorpay_signature) of the successful payment using a secret key.
+Automated commands:
 
-Updates the PaymentRecord to SUCCESS or FAILED.
+```powershell
+# In backend: isolated JUnit/Mockito and integration suites
+.\Verify-Backend.ps1
+# In frontend: Jasmine, production build and optional browser scenarios
+npm.cmd test
+npm.cmd run build
+npm.cmd run test:e2e
+```
 
-VI. Notification Service
-Role: Event consumer and auditor.
+Browser scenarios use Microsoft Edge by default. Offline backend tests do not require your MySQL data or real provider credentials. A live Gemini smoke test is opt-in and is not part of the normal test command.
 
-Workflow: Listens to RabbitMQ. Uses JavaMailSender to dispatch emails.
+## What is intentionally excluded
 
-Design Pattern: Implements a strict Audit Log. It creates a NotificationLog entity. If the SMTP server crashes, the code catches the exception, avoids crashing the whole service, and saves the log with a FAILED status and the exact error message.
+`.env`, runtime logs, MySQL exports, `node_modules`, Maven `target`, Angular build/cache folders, browser reports and local verification output stay off GitHub. They do **not** need to be deleted from your original laptop. Keep `.env` and your database backup in private storage. Fonts, logos, templates, SQL schema/migration source, test source and npm lockfile are included.
 
-VII. PNR & Reservation Services (Contextualized)
-Note: While not fully pasted in our recent chats, based on our history:
+Previously committed logs are omitted from this latest snapshot but remain in Git history. This update does not rewrite history or rotate provider credentials. If any old credential was previously committed, revoke it with its provider separately. The original diagrams/presentation are retained and may describe earlier architecture details.
 
-PNR Service: Responsible for generating unique, collision-proof 10-digit Passenger Name Records.
+SonarQube is intentionally deferred.
 
-Reservation Service: The orchestrator. Handles booking math, seat allocation, soft-deletes (cancellations), and refunds, coordinating between Train, PNR, Payment, and Notification services.
+## Preparation checks (2 October 2026)
 
-5. Masterclass Testing Strategy (Your Secret Weapon)
-This is what elevates your project from a "student project" to a "senior-level enterprise system." Instead of relying on slow @SpringBootTest context loading, you used Pure Mockito (@ExtendWith(MockitoExtension.class)).
-
-If an evaluator asks about your testing, mention these 4 advanced techniques you used:
-
-Isolating 3rd-Party SDKs (mockConstruction & mockStatic): In the Payment Service, you used mockConstruction to intercept the creation of the new RazorpayClient(), and mockStatic to intercept Utils.verifyPaymentSignature. This guarantees your CI/CD pipeline never accidentally hits Razorpay's real servers.
-
-Mocking Security Contexts: In the User and Payment controllers, you mocked the Spring Security Authentication interface (when(authentication.getName()).thenReturn("johndoe")). This allowed you to test secured endpoints without having to generate real JWTs for every test.
-
-Intercepting Hidden Objects (ArgumentCaptor): In the Notification Service, you used ArgumentCaptor to intercept the SimpleMailMessage and NotificationLog right before they were sent/saved, allowing you to assert their internal values.
-
-Injecting Private Configuration (ReflectionTestUtils): You used this to inject @Value properties (like razorpayKeySecret and refreshExpirationMs) directly into the private fields of your services during test initialization.
-
-6. Monorepo & Deployment Strategy
-Git Setup: You structured the project as a clean Monorepo. A master .gitignore prevents compiled target/ folders and IDE .idea/ settings from causing cross-machine conflicts.
-
-Security Management: When GitHub's Push Protection flagged your raw Google OAuth secrets, you successfully masked them with placeholder text, proving you understand Secret Management.
-
-Database Resilience: You configured your MySQL JDBC URLs with ?createDatabaseIfNotExist=true. This ensures that when the system is deployed on a fresh machine, Spring Boot automatically builds the databases, requiring zero manual SQL scripts.
-
-Startup Sequence: You established a strict boot order (Config -> Eureka -> Core Services -> Gateway) to ensure no service tries to fetch a route or property before its provider is awake.
+The combined repository was assembled from the current application folders, retaining existing GitHub diagrams and the presentation. All 12 backend services packaged successfully using a newly populated Maven dependency cache (`package -DskipTests`); this checks fresh dependency resolution and compilation, not a new full backend test run. The copied frontend passed 34 Jasmine specs and strict Angular template/AOT compilation. Standard npm lifecycle installation and `ng build` were blocked by this execution environment's Windows `spawn EPERM`; dependencies were restored with lifecycle scripts disabled for the isolated unit/AOT checks. On the new laptop run ordinary `npm ci`, `npm run build` and the smoke checklist above. Live MySQL/provider behavior on that laptop has not yet been verified. The source snapshot excludes current environment credentials and runtime artifacts.

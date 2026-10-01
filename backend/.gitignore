@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+**/target/
+**/logs/
+**/.idea/
+**/*.iml
+backend-test-results.txt

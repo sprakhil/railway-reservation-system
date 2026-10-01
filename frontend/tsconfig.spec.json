@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext", "moduleResolution": "NodeNext", "esModuleInterop": true,
+    "outDir": ".verify/jasmine", "rootDir": ".", "types": ["jasmine", "node"]
+  },
+  "include": ["tests/jasmine/**/*.ts"]
+}
+

@@ -1,0 +1,7 @@
+package com.railway.userservice.service;
+import com.railway.userservice.dto.SavedPassengerRequest;import org.junit.jupiter.api.Test;import org.springframework.boot.test.context.SpringBootTest;import org.springframework.beans.factory.annotation.Autowired;import static org.junit.jupiter.api.Assertions.*;
+@SpringBootTest(properties={"spring.config.import=","spring.cloud.config.enabled=false","eureka.client.enabled=false","spring.cloud.compatibility-verifier.enabled=false","spring.datasource.url=jdbc:h2:mem:saved-passengers;MODE=MySQL","spring.datasource.driver-class-name=org.h2.Driver","spring.jpa.hibernate.ddl-auto=create-drop","jwt.secret=test-only-jwt-secret-with-at-least-32-bytes"})
+class SavedPassengerTest {
+ @Autowired SavedPassengerService service;
+ @Test void savedPassengerCrudIsOwnerScoped(){var p=service.save("master-owner",null,new SavedPassengerRequest("Demo Traveller",25,"OTHER","NONE"));assertEquals(1,service.list("master-owner",0,10).totalElements());assertEquals(0,service.list("master-other",0,10).totalElements());assertThrows(RuntimeException.class,()->service.delete("master-other",p.getId()));assertThrows(RuntimeException.class,()->service.save("master-other",p.getId(),new SavedPassengerRequest("Tampered",26,"OTHER","NONE")));var updated=service.save("master-owner",p.getId(),new SavedPassengerRequest("Updated",26,"OTHER","LOWER"));assertEquals("Updated",updated.getName());service.delete("master-owner",p.getId());assertEquals(0,service.list("master-owner",0,10).totalElements());}
+}

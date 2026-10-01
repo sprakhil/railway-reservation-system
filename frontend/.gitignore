@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.angular/
+out-tsc/
+test-results/
+playwright-report/
+*.log
+.env
+.verify/
+tsconfig.verify.json
+playwright.verify.config.ts

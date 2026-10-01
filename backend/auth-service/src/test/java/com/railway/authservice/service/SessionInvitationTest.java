@@ -1,0 +1,33 @@
+package com.railway.authservice.service;
+import com.railway.authservice.dto.*;import com.railway.authservice.entity.*;import com.railway.authservice.repository.*;
+import org.junit.jupiter.api.*;import org.springframework.beans.factory.annotation.Autowired;import org.springframework.boot.test.context.SpringBootTest;import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;import org.springframework.security.crypto.password.PasswordEncoder;import org.springframework.mail.javamail.JavaMailSender;import jakarta.mail.internet.MimeMessage;import org.mockito.ArgumentCaptor;import org.springframework.test.web.servlet.MockMvc;
+import java.util.UUID;import java.time.Instant;import static org.junit.jupiter.api.Assertions.*;import static org.mockito.Mockito.*;import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+@SpringBootTest(properties={"spring.config.import=","spring.cloud.config.enabled=false","eureka.client.enabled=false","spring.cloud.compatibility-verifier.enabled=false","spring.datasource.url=jdbc:h2:mem:session-invite;MODE=MySQL","spring.datasource.driver-class-name=org.h2.Driver","spring.jpa.hibernate.ddl-auto=create-drop","spring.mail.host=localhost","jwt.secret=test-only-jwt-secret-with-at-least-32-bytes","jwt.expirationMs=900000","auth.bootstrap-admin.enabled=false"})
+@AutoConfigureMockMvc
+class SessionInvitationTest {
+ @Autowired AuthService auth;@Autowired SessionService sessions;@Autowired AuthUserRepository users;@Autowired RefreshTokenRepository tokens;@Autowired AdminInvitationRepository invitations;@Autowired AdminInvitationService invites;@Autowired PasswordEncoder passwords;@Autowired MockMvc mvc;
+ @MockitoBean JavaMailSender mail;
+ @BeforeEach void prepareMail(){lenient().when(mail.createMimeMessage()).thenAnswer(i->new MimeMessage(jakarta.mail.Session.getInstance(new java.util.Properties())));}
+ private String plain(jakarta.mail.Part part){try{if(part.isMimeType("text/plain"))return part.getContent().toString();if(part.getContent() instanceof jakarta.mail.Multipart m)for(int j=0;j<m.getCount();j++){String result=plain(m.getBodyPart(j));if(result!=null)return result;}return null;}catch(Exception ex){throw new RuntimeException(ex);}}
+ private AuthUser user(AuthUser.Role role){String name=UUID.randomUUID().toString().replace("-","").substring(0,12);return users.save(AuthUser.builder().username(name).email(name+"@example.test").password(passwords.encode("Password123!")).role(role).provider(AuthUser.Provider.LOCAL).isVerified(true).emailVerified(true).status(AuthUser.Status.ACTIVE).build());}
+ private AuthResponse login(AuthUser u){LoginRequest req=new LoginRequest();req.setIdentifier(u.getUsername());req.setPassword("Password123!");return auth.login(req);}
+ @Test void logoutRevokesOnlyCurrentDeviceThenAllDevices()throws Exception {
+  var u=user(AuthUser.Role.PASSENGER);var a=login(u);var b=login(u);
+  assertEquals(2,tokens.findAll().stream().filter(t->t.getUser().getId().equals(u.getId())).count());
+  mvc.perform(post("/api/auth/logout").header("Authorization","Bearer "+a.getAccessToken())).andExpect(status().isNoContent());
+  assertThrows(RuntimeException.class,()->auth.refreshToken(a.getRefreshToken()));assertNotNull(auth.refreshToken(b.getRefreshToken()));
+  mvc.perform(post("/api/auth/logout-all").header("Authorization","Bearer "+a.getAccessToken())).andExpect(status().isUnauthorized()).andExpect(jsonPath("$.code").value("UNAUTHORIZED"));
+  mvc.perform(post("/api/auth/logout-all").header("Authorization","Bearer "+b.getAccessToken())).andExpect(status().isNoContent());assertThrows(RuntimeException.class,()->auth.refreshToken(b.getRefreshToken()));
+ }
+ private String inviteToken(AuthUser admin,AuthUser recipient){invites.invite(admin.getUsername(),recipient.getEmail());var captor=ArgumentCaptor.forClass(MimeMessage.class);verify(mail,atLeastOnce()).send(captor.capture());try{captor.getValue().saveChanges();}catch(Exception ex){throw new RuntimeException(ex);}String text=plain(captor.getValue());return text.substring(text.indexOf("#token=")+7).split("\n")[0];}
+ @Test void onlyInvitedVerifiedAccountCanAcceptOnceAndExistingSessionsAreRevoked(){
+  var admin=user(AuthUser.Role.ADMIN);var recipient=user(AuthUser.Role.PASSENGER);var wrong=user(AuthUser.Role.PASSENGER);var session=login(recipient);String token=inviteToken(admin,recipient);
+  assertThrows(RuntimeException.class,()->invites.accept(wrong.getUsername(),token));assertEquals(AuthUser.Role.PASSENGER,users.findById(recipient.getId()).orElseThrow().getRole());
+  invites.accept(recipient.getUsername(),token);assertEquals(AuthUser.Role.ADMIN,users.findById(recipient.getId()).orElseThrow().getRole());assertThrows(RuntimeException.class,()->auth.refreshToken(session.getRefreshToken()));assertThrows(RuntimeException.class,()->invites.accept(recipient.getUsername(),token));
+ }
+ @Test void expiredAndRevokedInvitationsCannotElevate(){var admin=user(AuthUser.Role.ADMIN);var recipient=user(AuthUser.Role.PASSENGER);String token=inviteToken(admin,recipient);var i=invitations.findAll().stream().filter(x->x.getEmail().equals(recipient.getEmail())).findFirst().orElseThrow();i.setExpiresAt(Instant.now().minusSeconds(1));invitations.save(i);assertThrows(RuntimeException.class,()->invites.accept(recipient.getUsername(),token));
+  String next=inviteToken(admin,recipient);var current=invitations.findAll().stream().filter(x->x.getEmail().equals(recipient.getEmail())&&x.getExpiresAt().isAfter(Instant.now())).findFirst().orElseThrow();invites.revoke(admin.getUsername(),current.getId());assertThrows(RuntimeException.class,()->invites.accept(recipient.getUsername(),next));}
+ @Test void passengersCannotIssueInvitationsAndPublicRoleCannotBeChosen()throws Exception {var u=user(AuthUser.Role.PASSENGER);var session=login(u);mvc.perform(post("/api/auth/admin/invitations").header("Authorization","Bearer "+session.getAccessToken()).contentType("application/json").content("{\"email\":\"someone@example.test\"}")).andExpect(status().isForbidden()).andExpect(jsonPath("$.fieldErrors").exists());assertThrows(RuntimeException.class,()->invites.invite(u.getUsername(),"someone@example.test"));}
+ @Test void mailFailureRollsBackUnsentInvitation(){var admin=user(AuthUser.Role.ADMIN);long before=invitations.count();doThrow(new org.springframework.mail.MailSendException("SMTP unavailable")).when(mail).send(any(MimeMessage.class));assertThrows(org.springframework.mail.MailSendException.class,()->invites.invite(admin.getUsername(),"invite@example.test"));assertEquals(before,invitations.count());}
+}
