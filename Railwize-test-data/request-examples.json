@@ -1,0 +1,54 @@
+{
+  "notes": [
+    "Replace YOUR_REAL_EMAIL with an inbox you control. Do not use example.invalid when testing email.",
+    "Replace FUTURE_DATE with an eligible India date and fare with the current quote.",
+    "Registration is not admin creation. Use the configured bootstrap/invitation flow for admin."
+  ],
+  "register": {
+    "username": "qa_passenger_a",
+    "email": "YOUR_REAL_EMAIL",
+    "password": "QaTravel@2026Demo"
+  },
+  "savedPassengers": [
+    {
+      "name": "Aarav Test",
+      "age": 30,
+      "gender": "MALE",
+      "berthPreference": "LOWER"
+    },
+    {
+      "name": "Meera Test",
+      "age": 28,
+      "gender": "FEMALE",
+      "berthPreference": "UPPER"
+    },
+    {
+      "name": "Kiran Test",
+      "age": 65,
+      "gender": "OTHER",
+      "berthPreference": "SIDE_LOWER"
+    }
+  ],
+  "bookingTwoSeats": {
+    "trainNumber": "QA109",
+    "fromStation": "QAWLS",
+    "toStation": "QAWLD",
+    "dateOfJourney": "FUTURE_DATE",
+    "seatClass": "SL",
+    "expectedTotalFare": 140,
+    "passengers": [
+      {
+        "name": "Aarav Test",
+        "age": 30,
+        "gender": "MALE",
+        "birthPreference": "LOWER"
+      },
+      {
+        "name": "Meera Test",
+        "age": 28,
+        "gender": "FEMALE",
+        "birthPreference": "UPPER"
+      }
+    ]
+  }
+}

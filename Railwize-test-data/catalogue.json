@@ -1,0 +1,888 @@
+{
+  "description": "Synthetic QA catalogue, not official station coordinates, fares, services or running times. No users, reservations or transactions are seeded.",
+  "stations": [
+    {
+      "stationCode": "QAMUM",
+      "stationName": "QA Mumbai Central",
+      "city": "Mumbai",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 19,
+      "longitude": 72.83
+    },
+    {
+      "stationCode": "QADAD",
+      "stationName": "QA Dadar Nearby",
+      "city": "Mumbai",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 19.02,
+      "longitude": 72.84
+    },
+    {
+      "stationCode": "QASRT",
+      "stationName": "QA Surat",
+      "city": "Surat",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 21.17,
+      "longitude": 72.83
+    },
+    {
+      "stationCode": "QABRC",
+      "stationName": "QA Vadodara Junction",
+      "city": "Vadodara",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 22.31,
+      "longitude": 73.18
+    },
+    {
+      "stationCode": "QAAHM",
+      "stationName": "QA Ahmedabad",
+      "city": "Ahmedabad",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 23.03,
+      "longitude": 72.58
+    },
+    {
+      "stationCode": "QAMAN",
+      "stationName": "QA Maninagar Nearby",
+      "city": "Ahmedabad",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 23.01,
+      "longitude": 72.6
+    },
+    {
+      "stationCode": "QAPUN",
+      "stationName": "QA Pune",
+      "city": "Pune",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 18.53,
+      "longitude": 73.87
+    },
+    {
+      "stationCode": "QAZERO",
+      "stationName": "QA Missing Coordinates",
+      "city": "Test City",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "stationCode": "QAWLS",
+      "stationName": "QA Waitlist Origin",
+      "city": "Test City",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 28,
+      "longitude": 78
+    },
+    {
+      "stationCode": "QAWLD",
+      "stationName": "QA Waitlist Destination",
+      "city": "Test City",
+      "state": "TEST",
+      "zone": "QA",
+      "latitude": 28.9,
+      "longitude": 78
+    }
+  ],
+  "trains": [
+    {
+      "trainNumber": "QA101",
+      "trainName": "QA Direct And Segment Express",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAMUM",
+      "destinationStationCode": "QABRC",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QAMUM",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "08:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QASRT",
+          "stopSequence": 2,
+          "arrivalTime": "11:00:00",
+          "departureTime": "11:10:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 250
+        },
+        {
+          "stationCode": "QABRC",
+          "stopSequence": 3,
+          "arrivalTime": "13:00:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 400
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA102",
+      "trainName": "QA Valid Connection",
+      "category": "EXPRESS",
+      "sourceStationCode": "QABRC",
+      "destinationStationCode": "QAAHM",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QABRC",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "14:30:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAAHM",
+          "stopSequence": 2,
+          "arrivalTime": "16:30:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 100
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA103",
+      "trainName": "QA Too Short Connection",
+      "category": "EXPRESS",
+      "sourceStationCode": "QABRC",
+      "destinationStationCode": "QAAHM",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QABRC",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "13:20:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAAHM",
+          "stopSequence": 2,
+          "arrivalTime": "15:20:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 100
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA104",
+      "trainName": "QA Too Long Connection",
+      "category": "EXPRESS",
+      "sourceStationCode": "QABRC",
+      "destinationStationCode": "QAAHM",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QABRC",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "21:30:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAAHM",
+          "stopSequence": 2,
+          "arrivalTime": "23:30:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 100
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA105",
+      "trainName": "QA Nearby Direct Express",
+      "category": "EXPRESS",
+      "sourceStationCode": "QADAD",
+      "destinationStationCode": "QAMAN",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QADAD",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "09:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAMAN",
+          "stopSequence": 2,
+          "arrivalTime": "17:00:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 480
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA106",
+      "trainName": "QA Overnight First Leg",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAMUM",
+      "destinationStationCode": "QABRC",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QAMUM",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "22:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QABRC",
+          "stopSequence": 2,
+          "arrivalTime": "02:00:00",
+          "departureTime": null,
+          "dayNumber": 2,
+          "departureDayNumber": 2,
+          "distanceKm": 400
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA107",
+      "trainName": "QA Overnight Connection",
+      "category": "EXPRESS",
+      "sourceStationCode": "QABRC",
+      "destinationStationCode": "QAAHM",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QABRC",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "03:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAAHM",
+          "stopSequence": 2,
+          "arrivalTime": "05:00:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 100
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA108",
+      "trainName": "QA Monday Only Express",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAMUM",
+      "destinationStationCode": "QAPUN",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QAMUM",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "08:30:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAPUN",
+          "stopSequence": 2,
+          "arrivalTime": "11:30:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 150
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA109",
+      "trainName": "QA Two Seat Waitlist Lab",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAWLS",
+      "destinationStationCode": "QAWLD",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 2,
+          "baseFare": 20,
+          "ratePerKm": 0.5,
+          "minimumFare": 40
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QAWLS",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "18:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAWLD",
+          "stopSequence": 2,
+          "arrivalTime": "19:30:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 100
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA110",
+      "trainName": "QA Unpublished Train",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAMUM",
+      "destinationStationCode": "QAPUN",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": []
+    },
+    {
+      "trainNumber": "QA111",
+      "trainName": "QA No Coordinates Express",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAZERO",
+      "destinationStationCode": "QAAHM",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QAZERO",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "09:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAAHM",
+          "stopSequence": 2,
+          "arrivalTime": "10:00:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 100
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA112",
+      "trainName": "QA Nearby Connection First Leg",
+      "category": "EXPRESS",
+      "sourceStationCode": "QADAD",
+      "destinationStationCode": "QABRC",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QADAD",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "08:30:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QABRC",
+          "stopSequence": 2,
+          "arrivalTime": "12:30:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 400
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA113",
+      "trainName": "QA All Classes Layout Express",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAMUM",
+      "destinationStationCode": "QAPUN",
+      "seatClasses": [
+        "SL",
+        "CLASS_3A",
+        "CLASS_2A",
+        "CLASS_1A",
+        "CLASS_3E",
+        "EC",
+        "CLASS_2S",
+        "UR"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        },
+        {
+          "seatClass": "CLASS_3A",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 100,
+          "ratePerKm": 1,
+          "minimumFare": 200
+        },
+        {
+          "seatClass": "CLASS_2A",
+          "coachCount": 1,
+          "seatsPerCoach": 6,
+          "baseFare": 150,
+          "ratePerKm": 1.5,
+          "minimumFare": 300
+        },
+        {
+          "seatClass": "CLASS_1A",
+          "coachCount": 1,
+          "seatsPerCoach": 4,
+          "baseFare": 200,
+          "ratePerKm": 2,
+          "minimumFare": 400
+        },
+        {
+          "seatClass": "CLASS_3E",
+          "coachCount": 1,
+          "seatsPerCoach": 9,
+          "baseFare": 80,
+          "ratePerKm": 0.8,
+          "minimumFare": 160
+        },
+        {
+          "seatClass": "EC",
+          "coachCount": 1,
+          "seatsPerCoach": 6,
+          "baseFare": 120,
+          "ratePerKm": 1.2,
+          "minimumFare": 240
+        },
+        {
+          "seatClass": "CLASS_2S",
+          "coachCount": 1,
+          "seatsPerCoach": 6,
+          "baseFare": 20,
+          "ratePerKm": 0.2,
+          "minimumFare": 40
+        },
+        {
+          "seatClass": "UR",
+          "coachCount": 1,
+          "seatsPerCoach": 10,
+          "baseFare": 10,
+          "ratePerKm": 0.1,
+          "minimumFare": 20
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QAMUM",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "10:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAPUN",
+          "stopSequence": 2,
+          "arrivalTime": "14:00:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 200
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA114",
+      "trainName": "QA Minimum Fare Express",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAZERO",
+      "destinationStationCode": "QAMAN",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 10,
+          "ratePerKm": 0.5,
+          "minimumFare": 50
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QAZERO",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "08:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QAMAN",
+          "stopSequence": 2,
+          "arrivalTime": "09:00:00",
+          "departureTime": null,
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 10
+        }
+      ]
+    },
+    {
+      "trainNumber": "QA115",
+      "trainName": "QA Midnight Intermediate Stop",
+      "category": "EXPRESS",
+      "sourceStationCode": "QAMUM",
+      "destinationStationCode": "QABRC",
+      "seatClasses": [
+        "SL"
+      ],
+      "operatingDays": [
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
+      "classConfigurations": [
+        {
+          "seatClass": "SL",
+          "coachCount": 1,
+          "seatsPerCoach": 8,
+          "baseFare": 50,
+          "ratePerKm": 0.5,
+          "minimumFare": 100
+        }
+      ],
+      "schedule": [
+        {
+          "stationCode": "QAMUM",
+          "stopSequence": 1,
+          "arrivalTime": null,
+          "departureTime": "21:00:00",
+          "dayNumber": 1,
+          "departureDayNumber": 1,
+          "distanceKm": 0
+        },
+        {
+          "stationCode": "QASRT",
+          "stopSequence": 2,
+          "arrivalTime": "23:55:00",
+          "departureTime": "00:05:00",
+          "dayNumber": 1,
+          "departureDayNumber": 2,
+          "distanceKm": 250
+        },
+        {
+          "stationCode": "QABRC",
+          "stopSequence": 3,
+          "arrivalTime": "02:00:00",
+          "departureTime": null,
+          "dayNumber": 2,
+          "departureDayNumber": 2,
+          "distanceKm": 400
+        }
+      ]
+    }
+  ]
+}
