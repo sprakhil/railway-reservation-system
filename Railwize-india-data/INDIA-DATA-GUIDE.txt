@@ -1,0 +1,826 @@
+RAILWIZE - INDIA CATALOGUE AND EVALUATION GUIDE
+================================================
+Prepared: 11 October 2026
+Files: LOAD-INDIA-CATALOGUE.sql and INDIA-DATA-GUIDE.txt
+
+1. WHAT YOU ARE LOADING
+-----------------------
+60 real Indian station identities, 27 trains, 165 timetable stops.
+20 numbered services are based on researched Indian train timetables.
+7 RW-prefixed services are fictional demonstration fixtures over real stations.
+Coverage: Delhi, Uttar Pradesh, Punjab, Haryana, Chandigarh, Uttarakhand,
+Jammu/Katra, Rajasthan, Madhya Pradesh, Gujarat, Mumbai and Pune.
+
+The 20 real-service entries retain the listed source/destination, times, days and
+cumulative kilometres from the linked timetable snapshot. 12955 and 12956 use
+selected major stops, not every real halt. Other entries use the stops shown by
+their source. Rounding can make distances in opposite directions differ slightly.
+The tables below show EXACTLY what this SQL loads; omitted stations cannot be
+searched as boarding/destination stations on that train in this dataset.
+
+This is a reproducible evaluation catalogue, not a live Indian Railways feed.
+All class capacities, fare parameters and RW-prefixed services are demonstration
+values. They are not official rake compositions, fares or guaranteed connections.
+Stations have approximate station-area latitude/longitude values in decimal
+degrees. NDLS, NZM, MMCT and CSMT use the cited coordinate references; other points
+are approximate demonstration locations and have not been individually surveyed.
+Small-radius boundary results must not be treated as precise geographic claims.
+
+COMPATIBILITY CHOICES
+- Railwize supports 1A, 2A, 3A, 3E, EC, SL, 2S and UR. It has no CC enum.
+  Shatabdi/Vande Bharat entries therefore expose EC only, although their real
+  services have additional classes. CC is NOT relabelled as EC or 2S.
+- Deccan Queen exposes 2S only. Unsupported CC/EV are omitted.
+- RW901 deliberately includes all eight supported classes for UI testing; that
+  combined composition is fictional. RW907 has just two SL berths to demonstrate
+  a paid waitlist without making dozens of bookings.
+- Timetables are recurring weekly patterns, not rows for specific calendar dates.
+- Indian time (IST) is used throughout. Day 1 is the source departure date.
+- Source arrival and destination departure are SQL NULL, not 00:00 or empty strings.
+- Kilometres are cumulative from each train's source. They are not station metadata.
+- Published routes, operating days and capacity are immutable in the application.
+  Do not edit imported schedules/capacity in SQL after bookings have been made.
+
+2. HOW TO IMPORT SAFELY
+-----------------------
+This file inserts catalogue data only. It does not create application databases,
+change database credentials, alter business tables, delete records, register users,
+insert payments, or manufacture bookings/emails/notifications.
+
+Prerequisites:
+1) Use MySQL 8.0. Keep your existing database backup if it contains important data.
+2) Create the normal project databases using backend/Create-Databases.sql if needed.
+3) Run the CURRENT train-service and schedule-service once with DDL_AUTO=update,
+   or apply the project's existing schema migrations if you use validate/none.
+   Confirm station coordinates, class inventory and departure_day_number exist.
+4) Stop application services during the import. Both catalogue databases must be
+   on the SAME MySQL server. All six affected tables must use InnoDB.
+5) Use a DB account with SELECT/INSERT in both schemas, CREATE TEMPORARY TABLES,
+   and CREATE ROUTINE/ALTER ROUTINE/EXECUTE in railway_train_db.
+
+MySQL Workbench (recommended):
+1) Open the connection used by the project.
+2) File > Open SQL Script > choose LOAD-INDIA-CATALOGUE.sql.
+3) If you changed database names, replace EVERY railway_train_db and
+   railway_schedule_db occurrence with the configured names before execution.
+4) Execute the WHOLE script, not only the statement under the cursor. The file
+   uses DELIMITER and session-private staging tables. Keep the same connection.
+5) Look for the result row IMPORT SUCCEEDED. On an empty catalogue it reports
+   60 new stations, 27 new trains, 165 timetable stops. Existing reused stations
+   reduce only the new_stations value. Scoped totals should be 60 / 27 / 165.
+6) Restart services normally, then start the frontend and refresh the catalogue.
+
+CMD alternative (no PowerShell script or execution-policy change is needed):
+  mysql -h localhost -P 3306 -u root -p
+At the mysql> prompt enter the absolute location using forward slashes:
+  SOURCE C:/your/project/Railwize-india-data/LOAD-INDIA-CATALOGUE.sql;
+Use your configured username/port, not necessarily root/3306. Enter the password
+only when prompted. If mysql is not in PATH, launch its installed mysql.exe.
+
+Existing data / repeated execution:
+- Existing station codes are reused; names, IDs and coordinates are NOT overwritten.
+  Review the reused-station report to ensure a code represents the correct place.
+  If an existing station lacks coordinates, use Admin > Stations to fill them
+  before the nearby-station tests. Newly added stations already have coordinates.
+- If ANY of these train numbers already exists, or has an existing timetable,
+  the loader stops before inserting application data. It does not silently mix
+  old timetables with new capacity/fare settings. Inspect the conflict report.
+- Running the file again after success is intentionally rejected without changes.
+  You do not need to reload for another date: every train uses a weekly pattern.
+- If it conflicts with your own trains, retain them. Use a separate fresh demo
+  installation/database set, or prepare a reviewed subset with different fixture
+  numbers. Do not solve a conflict by deleting booked trains or passenger records.
+- Errors during loading roll back inserts across both databases. MySQL may leave
+  auto-increment gaps after rollback; gaps are normal and not missing records.
+- Only this script's temporary staging tables and named helper procedure are
+  created/replaced/removed. Application tables and existing rows are retained.
+- After an error, read Workbench's Action Output. Later SELECT counts are not proof
+  of a successful load; IMPORT SUCCEEDED is the explicit success result.
+
+Affected application tables:
+  railway_train_db.stations
+  railway_train_db.trains
+  railway_train_db.train_seat_classes
+  railway_train_db.train_operating_days
+  railway_train_db.train_class_configurations
+  railway_schedule_db.schedules
+No new application database or table is required.
+
+3. STATION DIRECTORY
+---------------------
+Codes are what searches and timetables use. For example, Mumbai is a city;
+MMCT, CSMT, BDTS and DR are separate stations. LJN and LKO are also different.
+NR=Northern, NER=North Eastern, NCR=North Central, NWR=North Western,
+WR=Western, CR=Central, WCR=West Central Railway.
+
+Code  | Station | City / State | Zone | Approx. latitude, longitude
+MMCT  | Mumbai Central | Mumbai / Maharashtra | WR | 18.9697, 72.8194
+CSMT  | Chhatrapati Shivaji Maharaj Terminus | Mumbai / Maharashtra | CR | 18.93985, 72.83544
+DR    | Dadar Central | Mumbai / Maharashtra | CR | 19.018, 72.843
+BDTS  | Bandra Terminus | Mumbai / Maharashtra | WR | 19.062, 72.84
+BVI   | Borivali | Mumbai / Maharashtra | WR | 19.23, 72.857
+KJT   | Karjat Junction | Karjat / Maharashtra | CR | 18.91, 73.32
+LNL   | Lonavala | Lonavala / Maharashtra | CR | 18.75, 73.407
+SVJR  | Shivajinagar | Pune / Maharashtra | CR | 18.532, 73.849
+PUNE  | Pune Junction | Pune / Maharashtra | CR | 18.528, 73.874
+VAPI  | Vapi | Vapi / Gujarat | WR | 20.373, 72.909
+ST    | Surat | Surat / Gujarat | WR | 21.204, 72.841
+BH    | Bharuch Junction | Bharuch / Gujarat | WR | 21.705, 72.996
+BRC   | Vadodara Junction | Vadodara / Gujarat | WR | 22.31, 73.181
+ANND  | Anand Junction | Anand / Gujarat | WR | 22.563, 72.966
+ND    | Nadiad Junction | Nadiad / Gujarat | WR | 22.691, 72.856
+ADI   | Ahmedabad Junction | Ahmedabad / Gujarat | WR | 23.026, 72.602
+SBT   | Sabarmati Junction | Ahmedabad / Gujarat | WR | 23.072, 72.588
+RTM   | Ratlam Junction | Ratlam / Madhya Pradesh | WR | 23.331, 75.05
+NAD   | Nagda Junction | Nagda / Madhya Pradesh | WR | 23.458, 75.416
+KOTA  | Kota Junction | Kota / Rajasthan | WCR | 25.224, 75.88
+SWM   | Sawai Madhopur Junction | Sawai Madhopur / Rajasthan | WCR | 26.018, 76.359
+DPA   | Durgapura | Jaipur / Rajasthan | NWR | 26.851, 75.785
+JP    | Jaipur Junction | Jaipur / Rajasthan | NWR | 26.92, 75.787
+NDLS  | New Delhi | New Delhi / Delhi | NR | 28.6428, 77.21908
+NZM   | Hazrat Nizamuddin | New Delhi / Delhi | NR | 28.58917, 77.25417
+DLI   | Delhi Junction | Delhi / Delhi | NR | 28.661, 77.228
+ANVT  | Anand Vihar Terminal | Delhi / Delhi | NR | 28.65, 77.315
+GZB   | Ghaziabad Junction | Ghaziabad / Uttar Pradesh | NR | 28.654, 77.427
+ALJN  | Aligarh Junction | Aligarh / Uttar Pradesh | NCR | 27.888, 78.074
+TDL   | Tundla Junction | Tundla / Uttar Pradesh | NCR | 27.21, 78.236
+ETW   | Etawah Junction | Etawah / Uttar Pradesh | NCR | 26.785, 79.022
+PHD   | Phaphund | Dibiyapur / Uttar Pradesh | NCR | 26.665, 79.552
+CNB   | Kanpur Central | Kanpur / Uttar Pradesh | NCR | 26.454, 80.35
+ON    | Unnao Junction | Unnao / Uttar Pradesh | NR | 26.55, 80.489
+LJN   | Lucknow Junction | Lucknow / Uttar Pradesh | NER | 26.831, 80.922
+LKO   | Lucknow Charbagh | Lucknow / Uttar Pradesh | NR | 26.8315, 80.923
+AGC   | Agra Cantt | Agra / Uttar Pradesh | NCR | 27.158, 77.989
+PRYJ  | Prayagraj Junction | Prayagraj / Uttar Pradesh | NCR | 25.445, 81.824
+BSB   | Varanasi Junction | Varanasi / Uttar Pradesh | NR | 25.327, 82.986
+MTC   | Meerut City Junction | Meerut / Uttar Pradesh | NR | 28.978, 77.674
+MOZ   | Muzaffarnagar | Muzaffarnagar / Uttar Pradesh | NR | 29.471, 77.708
+SRE   | Saharanpur Junction | Saharanpur / Uttar Pradesh | NR | 29.964, 77.543
+RK    | Roorkee | Roorkee / Uttarakhand | NR | 29.85, 77.883
+HW    | Haridwar Junction | Haridwar / Uttarakhand | NR | 29.948, 78.156
+DDN   | Dehradun | Dehradun / Uttarakhand | NR | 30.314, 78.033
+PNP   | Panipat Junction | Panipat / Haryana | NR | 29.391, 76.97
+KKDE  | Kurukshetra Junction | Kurukshetra / Haryana | NR | 29.969, 76.852
+UMB   | Ambala Cantt Junction | Ambala / Haryana | NR | 30.338, 76.827
+CDG   | Chandigarh | Chandigarh / Chandigarh | NR | 30.702, 76.821
+KLK   | Kalka | Kalka / Haryana | NR | 30.838, 76.932
+RPJ   | Rajpura Junction | Rajpura / Punjab | NR | 30.477, 76.594
+LDH   | Ludhiana Junction | Ludhiana / Punjab | NR | 30.912, 75.848
+PGW   | Phagwara Junction | Phagwara / Punjab | NR | 31.218, 75.771
+JUC   | Jalandhar City Junction | Jalandhar / Punjab | NR | 31.326, 75.591
+BEAS  | Beas Junction | Beas / Punjab | NR | 31.516, 75.289
+ASR   | Amritsar Junction | Amritsar / Punjab | NR | 31.634, 74.872
+PTKC  | Pathankot Cantt | Pathankot / Punjab | NR | 32.269, 75.642
+KTHU  | Kathua | Kathua / Jammu and Kashmir | NR | 32.386, 75.526
+JAT   | Jammu Tawi | Jammu / Jammu and Kashmir | NR | 32.706, 74.879
+SVDK  | Shri Mata Vaishno Devi Katra | Katra / Jammu and Kashmir | NR | 32.976, 74.924
+
+4. TRAIN SUMMARY
+-----------------
+Class names in the UI are abbreviated. APIs/SQL use CLASS_1A, CLASS_2A, CLASS_3A,
+CLASS_3E and CLASS_2S; use these exact enum values in Swagger.
+Every real service below links to its timetable source, checked on 11 October 2026.
+Days/timings can change after this snapshot. Full loaded stop tables follow.
+
+Number | Route | Departure -> Arrival | Operating days | Configured classes
+12951 | MMCT -> NDLS | D1 17:00 -> D2 08:32 | Daily | 1A, 2A, 3A
+12952 | NDLS -> MMCT | D1 16:55 -> D2 08:35 | Daily | 1A, 2A, 3A
+12955 | MMCT -> JP | D1 19:05 -> D2 12:00 | Daily | SL, 3A, 2A, 1A
+12956 | JP -> MMCT | D1 14:00 -> D2 06:55 | Daily | SL, 3A, 2A, 1A
+12004 | NDLS -> LJN | D1 06:10 -> D1 13:00 | Daily | EC
+12003 | LJN -> NDLS | D1 15:30 -> D1 22:25 | Daily | EC
+12029 | NDLS -> ASR | D1 07:20 -> D1 13:30 | Except Thursday | EC
+12030 | ASR -> NDLS | D1 16:50 -> D1 22:50 | Except Thursday | EC
+12017 | NDLS -> DDN | D1 06:45 -> D1 12:55 | Daily | EC
+12018 | DDN -> NDLS | D1 16:55 -> D1 22:50 | Daily | EC
+12009 | MMCT -> ADI | D1 06:20 -> D1 12:40 | Except Sunday | EC
+12010 | ADI -> MMCT | D1 15:10 -> D1 21:45 | Except Sunday | EC
+12123 | CSMT -> PUNE | D1 17:10 -> D1 20:25 | Daily | 2S
+12124 | PUNE -> CSMT | D1 07:15 -> D1 10:25 | Daily | 2S
+12005 | NDLS -> KLK | D1 17:15 -> D1 21:15 | Daily | EC
+12006 | KLK -> NDLS | D1 06:15 -> D1 10:15 | Daily | EC
+22436 | NDLS -> BSB | D1 06:00 -> D1 14:00 | Except Thursday | EC
+22435 | BSB -> NDLS | D1 15:00 -> D1 23:00 | Except Thursday | EC
+12425 | NDLS -> JAT | D1 20:40 -> D2 05:00 | Daily | 1A, 2A, 3A
+12426 | JAT -> NDLS | D1 21:25 -> D2 05:55 | Daily | 1A, 2A, 3A
+RW901 | NZM -> LJN | D1 06:00 -> D1 14:30 | Daily | SL, 3A, 2A, 1A, 3E, EC, 2S, UR
+RW902 | LJN -> BSB | D1 16:00 -> D1 21:00 | Daily | SL, 3A, 2A
+RW903 | LJN -> BSB | D1 14:50 -> D1 20:00 | Daily | SL, 3A, 2A
+RW904 | LJN -> BSB | D1 23:45 -> D2 05:00 | Daily | SL, 3A, 2A
+RW905 | BDTS -> SBT | D1 08:00 -> D1 15:00 | Daily | SL, 3A, 2A
+RW906 | NZM -> LJN | D1 21:00 -> D2 06:00 | Monday | SL, 3A
+RW907 | JAT -> SVDK | D1 10:00 -> D1 12:00 | Daily | SL
+
+5. COMPLETE LOADED TIMETABLES
+------------------------------
+Arrival day and departure day are separate. At a midnight halt an arrival may be
+on Day 1 and departure on Day 2. -- means not applicable (SQL NULL).
+The km column is cumulative rail distance for the sampled route, not aerial distance.
+
+12951 - Mumbai Central - New Delhi Tejas Rajdhani
+Runs: Daily. Category: RAJDHANI
+Source: https://erail.in/train-enquiry/12951
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | MMCT  | --                 | D1 17:00             | 0
+  2 | BVI   | D1 17:20           | D1 17:22             | 30
+  3 | ST    | D1 19:43           | D1 19:48             | 263
+  4 | BRC   | D1 21:06           | D1 21:16             | 392
+  5 | RTM   | D2 00:25           | D2 00:28             | 653
+  6 | NAD   | D2 01:08           | D2 01:10             | 695
+  7 | KOTA  | D2 03:15           | D2 03:20             | 920
+  8 | NDLS  | D2 08:32           | --                   | 1384
+
+12952 - New Delhi - Mumbai Central Tejas Rajdhani
+Runs: Daily. Category: RAJDHANI
+Source: https://erail.in/train-enquiry/12952
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NDLS  | --                 | D1 16:55             | 0
+  2 | KOTA  | D1 21:30           | D1 21:40             | 465
+  3 | NAD   | D1 23:57           | D1 23:59             | 690
+  4 | RTM   | D2 00:30           | D2 00:33             | 731
+  5 | BRC   | D2 03:40           | D2 03:50             | 993
+  6 | ST    | D2 05:13           | D2 05:18             | 1122
+  7 | BVI   | D2 07:38           | D2 07:40             | 1355
+  8 | MMCT  | D2 08:35           | --                   | 1384
+
+12955 - Mumbai Central - Jaipur Superfast
+Runs: Daily. Category: SUPERFAST
+Source: https://erail.in/train-enquiry/12955
+Selected major stops only; minor real-world halts omitted.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | MMCT  | --                 | D1 19:05             | 0
+  2 | BVI   | D1 19:32           | D1 19:34             | 30
+  3 | VAPI  | D1 20:53           | D1 20:55             | 170
+  4 | ST    | D1 22:30           | D1 22:35             | 263
+  5 | BRC   | D2 00:08           | D2 00:18             | 392
+  6 | RTM   | D2 04:05           | D2 04:10             | 653
+  7 | NAD   | D2 04:58           | D2 05:00             | 695
+  8 | KOTA  | D2 07:45           | D2 07:55             | 920
+  9 | SWM   | D2 09:20           | D2 09:45             | 1027
+ 10 | DPA   | D2 11:27           | D2 11:30             | 1151
+ 11 | JP    | D2 12:00           | --                   | 1159
+
+12956 - Jaipur - Mumbai Central Superfast
+Runs: Daily. Category: SUPERFAST
+Source: https://erail.in/train-enquiry/12956
+Selected major stops only; minor real-world halts omitted.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | JP    | --                 | D1 14:00             | 0
+  2 | DPA   | D1 14:09           | D1 14:12             | 8
+  3 | SWM   | D1 15:50           | D1 16:05             | 132
+  4 | KOTA  | D1 17:10           | D1 17:20             | 240
+  5 | NAD   | D1 20:35           | D1 20:37             | 465
+  6 | RTM   | D1 21:10           | D1 21:20             | 506
+  7 | BRC   | D2 00:56           | D2 01:06             | 767
+  8 | ST    | D2 02:48           | D2 02:53             | 896
+  9 | VAPI  | D2 03:58           | D2 04:00             | 989
+ 10 | BVI   | D2 05:47           | D2 05:50             | 1129
+ 11 | MMCT  | D2 06:55           | --                   | 1159
+
+12004 - New Delhi - Lucknow Swarn Shatabdi
+Runs: Daily. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12004
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NDLS  | --                 | D1 06:10             | 0
+  2 | GZB   | D1 06:40           | D1 06:42             | 24
+  3 | ALJN  | D1 07:47           | D1 07:49             | 129
+  4 | TDL   | D1 08:45           | D1 08:47             | 207
+  5 | ETW   | D1 09:40           | D1 09:42             | 299
+  6 | PHD   | D1 10:14           | D1 10:15             | 355
+  7 | CNB   | D1 11:23           | D1 11:28             | 439
+  8 | ON    | D1 11:54           | D1 11:56             | 456
+  9 | LJN   | D1 13:00           | --                   | 512
+
+12003 - Lucknow - New Delhi Swarn Shatabdi
+Runs: Daily. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12003
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | LJN   | --                 | D1 15:30             | 0
+  2 | ON    | D1 16:19           | D1 16:21             | 57
+  3 | CNB   | D1 16:48           | D1 16:53             | 74
+  4 | PHD   | D1 17:47           | D1 17:48             | 157
+  5 | ETW   | D1 18:18           | D1 18:20             | 214
+  6 | TDL   | D1 19:26           | D1 19:28             | 305
+  7 | ALJN  | D1 20:15           | D1 20:17             | 383
+  8 | GZB   | D1 21:38           | D1 21:40             | 489
+  9 | NDLS  | D1 22:25           | --                   | 512
+
+12029 - New Delhi - Amritsar Swarn Shatabdi
+Runs: Except Thursday. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12029
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NDLS  | --                 | D1 07:20             | 0
+  2 | UMB   | D1 09:41           | D1 09:43             | 198
+  3 | RPJ   | D1 10:02           | D1 10:04             | 226
+  4 | LDH   | D1 11:08           | D1 11:11             | 312
+  5 | PGW   | D1 11:40           | D1 11:42             | 348
+  6 | JUC   | D1 12:06           | D1 12:08             | 369
+  7 | BEAS  | D1 12:38           | D1 12:40             | 405
+  8 | ASR   | D1 13:30           | --                   | 447
+
+12030 - Amritsar - New Delhi Swarn Shatabdi
+Runs: Except Thursday. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12030
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | ASR   | --                 | D1 16:50             | 0
+  2 | BEAS  | D1 17:18           | D1 17:20             | 42
+  3 | JUC   | D1 17:53           | D1 17:56             | 79
+  4 | PGW   | D1 18:14           | D1 18:16             | 100
+  5 | LDH   | D1 18:50           | D1 18:55             | 135
+  6 | RPJ   | D1 19:52           | D1 19:54             | 221
+  7 | UMB   | D1 20:26           | D1 20:30             | 249
+  8 | NDLS  | D1 22:50           | --                   | 447
+
+12017 - New Delhi - Dehradun Shatabdi
+Runs: Daily. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12017
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NDLS  | --                 | D1 06:45             | 0
+  2 | GZB   | D1 07:21           | D1 07:23             | 26
+  3 | MTC   | D1 08:01           | D1 08:03             | 73
+  4 | MOZ   | D1 08:41           | D1 08:43             | 129
+  5 | SRE   | D1 09:50           | D1 10:15             | 187
+  6 | RK    | D1 10:49           | D1 10:51             | 222
+  7 | HW    | D1 11:35           | D1 11:40             | 263
+  8 | DDN   | D1 12:55           | --                   | 315
+
+12018 - Dehradun - New Delhi Shatabdi
+Runs: Daily. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12018
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | DDN   | --                 | D1 16:55             | 0
+  2 | HW    | D1 18:02           | D1 18:07             | 52
+  3 | RK    | D1 18:42           | D1 18:44             | 93
+  4 | SRE   | D1 19:30           | D1 19:55             | 128
+  5 | MOZ   | D1 20:38           | D1 20:40             | 186
+  6 | MTC   | D1 21:18           | D1 21:20             | 242
+  7 | GZB   | D1 22:02           | D1 22:04             | 289
+  8 | NDLS  | D1 22:50           | --                   | 315
+
+12009 - Mumbai Central - Ahmedabad Shatabdi
+Runs: Except Sunday. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12009
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | MMCT  | --                 | D1 06:20             | 0
+  2 | BVI   | D1 06:43           | D1 06:45             | 30
+  3 | VAPI  | D1 08:05           | D1 08:07             | 170
+  4 | ST    | D1 09:21           | D1 09:24             | 263
+  5 | BH    | D1 10:02           | D1 10:04             | 322
+  6 | BRC   | D1 10:54           | D1 10:59             | 392
+  7 | ANND  | D1 11:30           | D1 11:32             | 427
+  8 | ND    | D1 11:46           | D1 11:48             | 446
+  9 | ADI   | D1 12:40           | --                   | 491
+
+12010 - Ahmedabad - Mumbai Central Shatabdi
+Runs: Except Sunday. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12010
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | ADI   | --                 | D1 15:10             | 0
+  2 | ND    | D1 15:39           | D1 15:41             | 46
+  3 | ANND  | D1 15:58           | D1 16:00             | 64
+  4 | BRC   | D1 16:30           | D1 16:35             | 100
+  5 | BH    | D1 17:22           | D1 17:24             | 170
+  6 | ST    | D1 18:10           | D1 18:15             | 229
+  7 | VAPI  | D1 19:18           | D1 19:20             | 322
+  8 | BVI   | D1 20:48           | D1 20:50             | 462
+  9 | MMCT  | D1 21:45           | --                   | 491
+
+12123 - Mumbai CSMT - Pune Deccan Queen
+Runs: Daily. Category: SUPERFAST
+Source: https://erail.in/train-enquiry/12123
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | CSMT  | --                 | D1 17:10             | 0
+  2 | KJT   | D1 18:33           | D1 18:35             | 100
+  3 | LNL   | D1 19:18           | D1 19:20             | 128
+  4 | SVJR  | D1 20:09           | D1 20:10             | 190
+  5 | PUNE  | D1 20:25           | --                   | 192
+
+12124 - Pune - Mumbai CSMT Deccan Queen
+Runs: Daily. Category: SUPERFAST
+Source: https://erail.in/train-enquiry/12124
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | PUNE  | --                 | D1 07:15             | 0
+  2 | LNL   | D1 08:06           | D1 08:07             | 64
+  3 | DR    | D1 10:03           | D1 10:05             | 183
+  4 | CSMT  | D1 10:25           | --                   | 192
+
+12005 - New Delhi - Kalka Shatabdi
+Runs: Daily. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12005
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NDLS  | --                 | D1 17:15             | 0
+  2 | PNP   | D1 18:18           | D1 18:20             | 89
+  3 | KKDE  | D1 19:00           | D1 19:02             | 157
+  4 | UMB   | D1 19:50           | D1 19:53             | 198
+  5 | CDG   | D1 20:30           | D1 20:38             | 266
+  6 | KLK   | D1 21:15           | --                   | 303
+
+12006 - Kalka - New Delhi Shatabdi
+Runs: Daily. Category: SHATABDI
+Source: https://erail.in/train-enquiry/12006
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | KLK   | --                 | D1 06:15             | 0
+  2 | CDG   | D1 06:45           | D1 06:53             | 38
+  3 | UMB   | D1 07:33           | D1 07:38             | 106
+  4 | KKDE  | D1 08:08           | D1 08:10             | 147
+  5 | PNP   | D1 08:50           | D1 08:52             | 214
+  6 | NDLS  | D1 10:15           | --                   | 303
+
+22436 - New Delhi - Varanasi Vande Bharat
+Runs: Except Thursday. Category: VANDE_BHARAT
+Source: https://erail.in/train-enquiry/22436
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NDLS  | --                 | D1 06:00             | 0
+  2 | CNB   | D1 10:08           | D1 10:10             | 441
+  3 | PRYJ  | D1 12:08           | D1 12:10             | 636
+  4 | BSB   | D1 14:00           | --                   | 771
+
+22435 - Varanasi - New Delhi Vande Bharat
+Runs: Except Thursday. Category: VANDE_BHARAT
+Source: https://erail.in/train-enquiry/22435
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | BSB   | --                 | D1 15:00             | 0
+  2 | PRYJ  | D1 16:30           | D1 16:32             | 135
+  3 | CNB   | D1 18:30           | D1 18:32             | 330
+  4 | NDLS  | D1 23:00           | --                   | 771
+
+12425 - New Delhi - Jammu Tawi Rajdhani
+Runs: Daily. Category: RAJDHANI
+Source: https://erail.in/train-enquiry/12425
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NDLS  | --                 | D1 20:40             | 0
+  2 | LDH   | D2 00:28           | D2 00:38             | 312
+  3 | PTKC  | D2 03:10           | D2 03:12             | 478
+  4 | KTHU  | D2 03:41           | D2 03:43             | 501
+  5 | JAT   | D2 05:00           | --                   | 577
+
+12426 - Jammu Tawi - New Delhi Rajdhani
+Runs: Daily. Category: RAJDHANI
+Source: https://erail.in/train-enquiry/12426
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | JAT   | --                 | D1 21:25             | 0
+  2 | KTHU  | D1 22:31           | D1 22:33             | 77
+  3 | PTKC  | D1 23:05           | D1 23:07             | 100
+  4 | LDH   | D2 01:35           | D2 01:45             | 265
+  5 | NDLS  | D2 05:55           | --                   | 577
+
+RW901 - Railwize Demo - Delhi Agra Lucknow Layout Explorer
+Runs: Daily. Category: EXPRESS
+Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NZM   | --                 | D1 06:00             | 0
+  2 | AGC   | D1 09:00           | D1 09:10             | 188
+  3 | CNB   | D1 13:00           | D1 13:10             | 470
+  4 | LJN   | D1 14:30           | --                   | 544
+
+RW902 - Railwize Demo - Lucknow Varanasi Connection
+Runs: Daily. Category: EXPRESS
+Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | LJN   | --                 | D1 16:00             | 0
+  2 | PRYJ  | D1 19:00           | D1 19:10             | 200
+  3 | BSB   | D1 21:00           | --                   | 335
+
+RW903 - Railwize Demo - Connection Too Short
+Runs: Daily. Category: EXPRESS
+Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | LJN   | --                 | D1 14:50             | 0
+  2 | BSB   | D1 20:00           | --                   | 335
+
+RW904 - Railwize Demo - Connection Too Long
+Runs: Daily. Category: EXPRESS
+Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | LJN   | --                 | D1 23:45             | 0
+  2 | BSB   | D2 05:00           | --                   | 335
+
+RW905 - Railwize Demo - Bandra Sabarmati Nearby Alternative
+Runs: Daily. Category: EXPRESS
+Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | BDTS  | --                 | D1 08:00             | 0
+  2 | ST    | D1 11:00           | D1 11:10             | 252
+  3 | BRC   | D1 13:00           | D1 13:10             | 381
+  4 | SBT   | D1 15:00           | --                   | 490
+
+RW906 - Railwize Demo - Monday Midnight Crossing
+Runs: Monday. Category: EXPRESS
+Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | NZM   | --                 | D1 21:00             | 0
+  2 | AGC   | D1 23:55           | D2 00:05             | 188
+  3 | LJN   | D2 06:00           | --                   | 544
+
+RW907 - Railwize Demo - Jammu Katra Waitlist Lab
+Runs: Daily. Category: EXPRESS
+Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
+Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
+  1 | JAT   | --                 | D1 10:00             | 0
+  2 | SVDK  | D1 12:00           | --                   | 78
+
+6. FARES, COACHES AND BERTHS
+----------------------------
+Railwize computes a fare for the selected segment, not the entire train route:
+  distance = destination cumulative km - boarding cumulative km
+  per passenger = max(minimum fare, base fare + rate per km * distance)
+  total = per-passenger fare * passenger count
+Amounts are INR, rounded to two decimals. These are project fare parameters,
+not actual Indian Railways tariffs; catering, dynamic quotas and real tax rules
+are not being reproduced by this dataset.
+
+Class | Base INR | INR/km | Minimum INR | Default sample coaches x seats
+SL    |    50.00 |   0.50 |      100.00 | 2 x 72 = 144
+3A    |   100.00 |   1.20 |      200.00 | 2 x 72 = 144
+2A    |   150.00 |   1.80 |      300.00 | 1 x 48 = 48
+1A    |   250.00 |   2.80 |      500.00 | 1 x 24 = 24
+3E    |    80.00 |   1.00 |      180.00 | 1 x 80 = 80
+EC    |   150.00 |   1.50 |      250.00 | 1 x 56 = 56
+2S    |    20.00 |   0.30 |       50.00 | 2 x 80 = 160
+UR    |    10.00 |   0.20 |       30.00 | 1 x 80 = 80
+
+Only classes declared for a train are configured. The defaults above do not mean
+every real train has every class. RW901 uses small class inventories instead:
+  SL 8, 3A 8, 2A 6, 1A 4, 3E 8, EC 6, 2S 6, UR 6; one coach per class.
+RW907 uses only SL: one coach, two berths. All other trains use the defaults.
+Capacity is per train/class/source-run date, shared across overlapping segments.
+
+Worked examples:
+- 12951, MMCT -> NDLS, 3A: 1,384 km.
+  max(200, 100 + 1.20*1384) = INR 1,760.80 each; two people = INR 3,521.60.
+- 12951, ST -> BRC, 3A: 392-263 = 129 km.
+  max(200, 100 + 1.20*129) = INR 254.80 each.
+- RW901, NZM -> AGC, SL: 188 km, INR 144.00 each.
+- RW907, JAT -> SVDK, SL: 78 km; 50 + 0.50*78 = 89, so minimum INR 100 applies.
+- 12123, SVJR -> PUNE, 2S: 2 km; minimum INR 50 applies.
+
+Coach display:
+SL -> S1/S2; 3A -> B1/B2; 2A -> A1; 1A -> H1; 3E -> M1;
+EC -> E1; 2S -> D1/D2; UR -> GS1.
+SL/3A berth positions repeat every eight:
+  1 Lower, 2 Middle, 3 Upper, 4 Lower, 5 Middle, 6 Upper, 7 Side lower, 8 Side upper.
+2A positions repeat every six:
+  1 Lower, 2 Upper, 3 Lower, 4 Upper, 5 Side lower, 6 Side upper.
+1A/3E detailed berth type remains unspecified in the current app. Do not claim it
+models actual coupe/cabin allocation. UR is represented by the project's simplified
+numbered-seat model, not Indian Railways' actual unreserved boarding process.
+
+7. PICKING DEMONSTRATION DATES
+------------------------------
+Use D = a date seven days ahead in IST for normal scenarios. Choose a suitable
+weekday where required, and keep every boarding date within two calendar months
+of today. Avoid today if the train's boarding departure time has already passed.
+Use fresh dates for independent scenarios to avoid earlier bookings/cancellations
+affecting availability. Dates in this guide are relative so it remains reusable.
+
+Important operating-day exceptions:
+  12009 / 12010: not Sunday.
+  12029 / 12030 and 22435 / 22436: not Thursday.
+  RW906: source departures on Monday only.
+  All other seeded services: daily.
+
+Boarding date is when YOU board, which may be Day 2 of the train's source run.
+Example: 12951 leaves MMCT Monday 17:00, reaches KOTA Tuesday 03:15 and departs
+03:20. A KOTA -> NDLS passenger chooses Tuesday; source runDate is Monday.
+RW906 arrives AGC Monday 23:55 and departs Tuesday 00:05. For AGC -> LJN choose
+Tuesday; the Monday operating-day rule is still satisfied. Choosing Monday at
+AGC would correspond to a Sunday source run and must return no RW906 option.
+
+8. FEATURE WALKTHROUGH / EVALUATOR DEMONSTRATIONS
+------------------------------------------------
+Expected results assume these catalogues and no conflicting prior bookings/run
+cancellations. Your additional trains may produce extra search/planner options.
+
+A. Direct trains and comparative results
+  Search MMCT -> NDLS, 3A, 2 passengers, date D: 12951, next-day arrival.
+  Search MMCT -> JP, SL, date D: 12955.
+  Search NDLS -> LJN, EC: 12004; NDLS -> ASR, EC on a non-Thursday: 12029.
+  Search NDLS -> DDN, EC: 12017; NDLS -> KLK, EC: 12005.
+  Search NDLS -> BSB, EC on a non-Thursday: 22436.
+  Search NDLS -> JAT, 3A: 12425 with next-day arrival.
+  Search CSMT -> PUNE, 2S: 12123. Reverse PUNE -> CSMT uses 12124.
+  Search MMCT -> ST, 3A: compare 12951 and 12955 by time/fare/availability.
+
+B. Intermediate boarding and distance-based fares
+  Search ST -> BRC on 12951 in 3A; confirm the 129-km segment fare above.
+  Search BRC -> JP on 12955: boarding is Day 2; the source run date is D-1.
+  Load its timetable in Admin and show increasing cumulative distances.
+
+C. A connection where no direct seeded train exists
+  Search NZM -> BSB, SL, one passenger, D. Exact direct search has no train.
+  Open alternatives; nearby=false, min transfer=60, max transfer=360 minutes.
+  Expected: RW901 NZM 06:00 -> LJN 14:30, then RW902 LJN 16:00 -> BSB 21:00.
+  Interchange=LJN; wait=90 minutes; both legs SL; first leg INR 322.00,
+  second leg INR 217.50; combined illustrative fare INR 539.50 per passenger.
+  Each leg is separately booked, paid and assigned its own PNR. This feature does
+  not issue one protected through-ticket or guarantee a missed connection refund.
+
+D. Reject unrealistic transfers
+  In the same NZM -> BSB search, RW901 -> RW903 waits only 20 minutes and must be
+  excluded. The planner's lowest configurable minimum is 30 minutes.
+  RW901 -> RW904 waits 555 minutes and must be excluded with max=360.
+  Raising max to 600 allows RW904 (overnight arrival) while RW903 stays excluded.
+  A train being excluded as a connection does not make its own direct route invalid.
+
+E. Connection entirely using the researched services
+  LJN -> ASR, EC, depart on D when D+1 is not Thursday:
+  12003 arrives NDLS at 22:25; 12029 leaves next day 07:20, arrives ASR 13:30.
+  Set max transfer=600 minutes (wait=535); default 360 will correctly exclude it.
+  Select nearby=false to make the same-station connection easy to explain.
+  MMCT -> JAT, 3A via 12951/12425 is NOT offered: NDLS wait is 728 minutes,
+  beyond even the planner's 720-minute maximum. This is expected, not missing data.
+
+F. Nearby source AND destination
+  Search CSMT -> ADI, SL, date D; enable nearby alternatives with radius 25 km.
+  Expected nearby direct option: RW905 BDTS 08:00 -> SBT 15:00.
+  BDTS is an alternative Mumbai departure and SBT is near Ahmedabad Junction.
+  CSMT -> ADI in SL has no exact direct train in this dataset.
+  Reduce radius to 1 km: this alternative should disappear.
+  Nearby distances are straight-line estimates, not road distances/travel times.
+  Reaching BDTS and travelling from SBT to the desired destination is up to the
+  passenger; local transfers are not included in the rail fare.
+
+G. Nearby destination using a real-service entry
+  NDLS -> LKO, EC: no exact seeded train uses LKO, but nearby=true (radius 5 km)
+  finds 12004 ending at LJN next door. LJN and LKO must not be treated as one code.
+  With nearby=false, this nearby direct alternative disappears.
+
+H. Nearby origin combined with a connection
+  DLI -> BSB, SL, nearby=true, radius 15 km: look for NZM -> LJN -> BSB using
+  RW901/RW902. The departure is NZM rather than DLI. Explain the local transfer.
+  Only the four closest alternative stations per endpoint are considered; existing
+  extra catalogue stations can affect which alternatives are selected. Exact source
+  and destination are always retained. The planner returns at most 20 alternatives.
+
+I. Weekly operation and midnight halt
+  RW906 NZM -> AGC on next Monday: departure 21:00, arrival 23:55 Monday.
+  RW906 AGC -> LJN on Tuesday: departure 00:05, arrival 06:00 Tuesday.
+  Check arrivalDayNumber=1 / departureDayNumber=2 for AGC in the timetable.
+  NZM -> LJN Tuesday still has RW901, but must NOT show RW906 originating Tuesday.
+  Use the train-number filter or quote endpoint to inspect RW906 specifically.
+
+J. Seats, saved passengers and normal booking
+  Save two passengers in the master list. Book RW901 NZM -> LJN, SL, for them.
+  Select saved passengers, complete Razorpay TEST payment within the two-minute
+  hold, and inspect PNR, S1 coach, berth numbers/types, PDF, email attachment,
+  notification, history, calendar download and chatbot PNR lookup.
+  Test 3A and 2A separately to show B/A coaches and different berth patterns.
+  Berth preference is a preference; inspect actual allocation instead of assuming
+  a request guarantees a specific seat. Pay each booking before its hold expires.
+
+K. Fast, reproducible waitlist promotion
+  Use RW907 JAT -> SVDK, SL, date at least seven days away (fresh date).
+  Capacity=2. Make and pay booking A for one passenger; make and pay booking B
+  for one passenger. Both should confirm. Then make and pay booking C for one
+  passenger with the WL option. It has no allocated berth while waitlisted.
+  Cancel A through the app. After lifecycle processing C should become confirmed,
+  acquire the released berth, and produce a promotion notification/email.
+  A's normal confirmed cancellation has the configured cancellation deduction
+  (default 20%: INR 20 fee and INR 80 refund from INR 100). Use the preview for
+  actual values if you changed settings. C does not pay again on promotion.
+
+L. Whole-booking waitlist (no partial promotion, no RAC)
+  On a DIFFERENT RW901 date, pay SL bookings of 6 and 2 passengers, filling 8.
+  Pay a third booking of 3 passengers as WL. Cancel the 2-passenger booking:
+  only two seats free, so the whole 3-passenger WL booking must stay WL.
+  Cancel the 6-passenger booking; now the entire WL booking can confirm together.
+  Individual passengers inside a paid group are not independently promoted.
+
+M. Hold expiry, failed payment and retry
+  On a fresh RW907 date, hold both seats but do not pay. Wait over two minutes
+  and refresh availability/history; lifecycle processing releases the hold.
+  Booking status becomes expired. Starting checkout alone is not a captured payment.
+  For failure email testing, use a provider-supported failed TEST payment attempt;
+  merely closing a browser tab is not necessarily a payment.failed callback.
+  Retry only within the active hold. A late captured payment should be reconciled
+  to the existing late-payment/full-refund path rather than confirm an expired hold.
+
+N. Automatic unpaid/paid waitlist deadlines
+  Default paid-WL deadline is one hour before that passenger's boarding departure.
+  For RW907 at 10:00 IST, leave a paid WL booking unpromoted and inspect around
+  09:00 on its travel day; the existing scheduler should cancel/refund it fully.
+  Create the WL booking BEFORE that cutoff. Do not alter your computer clock or
+  booked timetable to accelerate this demonstration. This is a timed scenario,
+  not something static catalogue rows can make happen instantly.
+
+O. Operator cancellation of a dated train / full refunds
+  On a fresh future RW907 date, create paid CNF and WL bookings. In Admin >
+  Cancel a train run, select RW907 and its ORIGINAL SOURCE departure date.
+  Preview, enter a meaningful reason and confirm cancellation.
+  CNF and paid WL bookings for that run cancel with zero cancellation fee;
+  captured amounts receive full test refunds. Unpaid holds have nothing to refund.
+  Verify cancellation notification/email, refund-processed notification/email,
+  history, reason in ticket/PDF, and removal from search for only that run date.
+  Next day's service remains bookable. A repeat request must not duplicate refunds.
+  Try a departed source run: cancellation should be rejected.
+  For 12951 MMCT Monday -> NDLS Tuesday, select MONDAY even if a passenger boards
+  KOTA on Tuesday. This operation covers every class/segment on that same source run.
+  Separately booked connecting legs are not automatically cancelled/refunded.
+
+P. Segment inventory reuse
+  Use a fresh RW901 run. Fill all eight SL berths on NZM -> AGC (book 6 then 2,
+  paying each). AGC -> LJN can still use the same eight physical berths because
+  its segment does not overlap. NZM -> LJN cannot confirm while the first segment
+  is full. This demonstrates segment-based inventory, not one capacity per search.
+
+Q. Admin catalogue, reports and dashboard
+  Browse 60 stations / 27 added trains with pagination/sorting. Load any timetable.
+  In Admin create another train through the form using existing station IDs and
+  explicit class capacity/fares/days, then publish a valid timetable. Choose a new
+  unique number; the SQL import itself does not test admin form validation.
+  Make several paid bookings on different trains and future dates; cancel some.
+  Check popular trains, booking totals, cancellation counts, user booking history,
+  revenue/refund views, date/train filters and the existing report export buttons.
+  Booking-time reports use WHEN YOU BOOKED, not necessarily the travel date. To
+  populate different booking months genuinely, data over time or separate audited
+  fixtures would be needed; this file does not falsify transaction timestamps.
+
+R. Account / notification / chatbot features
+  Register real test users through the app; verify OTP; check welcome, profile
+  email, logout, Google login, saved passengers and per-user recent searches.
+  Use two accounts and verify booking/notification ownership isolation.
+  Ask the assistant to search a seeded route, show your bookings/cancellations,
+  next journey and a PNR. Select passenger count when booking from its card.
+  SMTP, RabbitMQ, Razorpay test keys and Gemini connectivity/quota must work for
+  these external features. Catalogue SQL cannot establish these integrations.
+  Test Help search/categories and open the assistant panel from the same page.
+
+9. NEGATIVE / BOUNDARY CHECKS
+-----------------------------
+Use the UI or Swagger for invalid requests; never insert corrupt SQL to test them.
+- Same station: NDLS -> NDLS must fail validation.
+- Passenger count 0, -1 or 7: reject. Counts 1 through 6 are supported.
+- Null passenger inside a non-empty passenger list: reject.
+- Past boarding date: reject. More than two calendar months ahead: reject.
+- Today after a train's boarding time: no bookable quote for that departure.
+- Wrong direction: 12951 NDLS -> MMCT does not exist; 12952 serves the reverse.
+- Wrong class: 12951 SL and 12029 SL must not be offered.
+- Wrong weekday: 12009 Sunday and 22436 Thursday must not be offered.
+- Train exists but has no timetable: not bookable. Missing fares/days/capacity also
+  make a train non-bookable. All imported trains intentionally have these fields.
+- First arrival/destination departure fields should be disabled in the admin form;
+  the API rejects a timetable with those endpoint times filled in.
+- Duplicate stop code, nonconsecutive sequence, decreasing distance, arrival before
+  previous departure, or mismatched train endpoints: schedule API rejects the route.
+- IDs cannot be guessed across accounts: another user's private booking/profile
+  or notifications must not become accessible with a passenger token.
+- After source-run cancellation, booking/quote/search cannot revive that run.
+- A second import must produce a conflict and preserve all business data.
+
+10. SWAGGER / URL EXAMPLES
+--------------------------
+Use the gateway at http://localhost:8080/swagger-ui/index.html. Replace DATE with
+a valid YYYY-MM-DD chosen above. Authenticate for protected booking/admin calls.
+These catalogue/search examples are read-only:
+
+GET /api/schedules/12951
+GET /api/schedules/RW906
+GET /api/reservations/search?fromStation=MMCT&toStation=NDLS&dateOfJourney=DATE&seatClass=CLASS_3A&passengers=2
+GET /api/reservations/quote?trainNumber=RW907&fromStation=JAT&toStation=SVDK&dateOfJourney=DATE&seatClass=SL&passengers=1
+GET /api/reservations/alternatives?fromStation=NZM&toStation=BSB&dateOfJourney=DATE&seatClass=SL&passengers=1&nearby=false&radiusKm=25&minTransferMinutes=60&maxTransferMinutes=360
+GET /api/reservations/alternatives?fromStation=CSMT&toStation=ADI&dateOfJourney=DATE&seatClass=SL&passengers=1&nearby=true&radiusKm=25&minTransferMinutes=60&maxTransferMinutes=360
+GET /api/reservations/alternatives?fromStation=LJN&toStation=ASR&dateOfJourney=DATE&seatClass=EC&passengers=1&nearby=false&radiusKm=25&minTransferMinutes=60&maxTransferMinutes=600
+
+11. IF A TRAIN DOES NOT SHOW UP
+--------------------------------
+Check in this order:
+1) IMPORT SUCCEEDED was printed, not an error followed by unrelated SELECT results.
+2) Your services connect to the same database names/server that you imported into.
+3) Choose the STATION CODE, correct travel direction and a supported class.
+4) Date is future, within the booking window, and the SOURCE run operates that day.
+5) Day-2 boarding uses yesterday's source run. Check departure_day_number at midnight.
+6) Train has not been cancelled on that source-run date; seats/WL cutoff allow booking.
+7) For connections, both legs need the SAME requested class and the SAME interchange
+   station code, with waiting time within your minimum/maximum. Cross-city station
+   transfers at the interchange are not implemented by this planner.
+8) For nearby options, check coordinates, radius, four-nearest-station cap and
+   whether another existing station displaced a candidate. Direct search and
+   the alternatives endpoint return different kinds of results.
+9) Confirm discovery/gateway/train/schedule/reservation services are healthy and
+   restarted after import. Check the API error/request ID rather than assuming
+   an empty response always means a timetable is missing.
+
+12. DATA SOURCES AND VERIFICATION
+---------------------------------
+Timetable sources: individual eRail links listed above each real train's stop
+table. These are third-party timetable references, not an official live feed.
+Only schedule facts (identity, route, times, days and distance) were used.
+Official travel-time checks can be made separately at Indian Railways NTES:
+https://enquiry.indianrail.gov.in/
+
+Coordinate references for the principal nearby-search examples:
+https://en.wikipedia.org/wiki/New_Delhi_railway_station
+https://en.wikipedia.org/wiki/Hazrat_Nizamuddin_railway_station
+https://en.wikipedia.org/wiki/Mumbai_Central_railway_station
+https://en.wikipedia.org/wiki/Chhatrapati_Shivaji_Maharaj_Terminus
+Other coordinates are approximate demonstration points, as noted in section 1.
+
+Checked against the project's current Train/Station/Schedule entities, supported
+class/category enums, route validation, fare formula and connection limits.
+Validated every seeded route's chronology, stop order, endpoints, distances, days,
+station references, fare parameters and capacity before generating this file.
+The SQL was executed on isolated MySQL 8.0 with schema based on those mappings:
+fresh insertion, existing-station preservation, duplicate-run rejection, orphan
+timetable conflict rejection and rollback across both schemas were checked.
+No changes were made to the running application's databases by this preparation.
+This validates catalogue import; it is not a new end-to-end payment/email test.
