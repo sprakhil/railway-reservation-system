@@ -64,6 +64,12 @@ public class TicketPdfService {
                 c.text(r.getDateOfJourney()==null?"Not available":DATE.format(r.getDateOfJourney()),315,279,11,true,INK);
                 c.text("Boarding: "+(r.getDepartureAt()==null?"Check timetable":TIME.format(r.getDepartureAt())),50,284,9,false,MUTED);
                 c.y=326;
+                if(r.getOperatorCancellationReason()!=null) {
+                    for(String line:c.wrap("TRAIN CANCELLED BY OPERATOR: "+r.getOperatorCancellationReason()+". Full captured ticket fare refundable; no cancellation deduction. Check current refund status below.",495,9,true)) {
+                        c.text(line,50,c.y,9,true,new Color(148,57,46)); c.y+=13;
+                    }
+                    c.y+=14;
+                }
                 if("WAITING".equals(status)) {
                     String note="WAITLIST "+(r.getWaitlistPosition()==null?"": "POSITION "+r.getWaitlistPosition()+". ")+"Seats will be assigned after confirmation.";
                     if(r.getWaitlistDeadline()!=null)note+=" Cutoff: "+TIME.format(r.getWaitlistDeadline())+".";

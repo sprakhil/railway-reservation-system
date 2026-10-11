@@ -1,5 +1,27 @@
 # Railway reservation backend — test payments
 
+## Dated train cancellation and passenger Help (11 October 2026)
+
+Admin → **Cancel a train run** (`/admin/train-runs`) previews a train's original source-departure date, active booking/passenger counts and refund obligation. The administrator enters a 5–500-character reason and acknowledges the reviewed run before cancelling. The original run date is in Asia/Kolkata, not an intermediate passenger's boarding date. The first version supports runs within the two-calendar-month window and strictly before departure from the first station. Cancellation is permanent; train catalogue records, historical bookings and other dates are retained. There is no delete, reinstatement, partial-route cancellation or suspension of all future dates.
+
+One reservation-database transaction records the audited cancellation (admin, reason, timestamp), cancels every active CNF/WL/unpaid booking across all classes and boarding segments, and inserts durable in-app/email events. A run-wide pessimistic lock coordinates booking allocation, payment acceptance, expiry, promotion and cancellation; class inventory locks are acquired after it. Internal zero-capacity `train|date|RUN` inventory rows coordinate locking only and are never passenger seats. New quotes, direct search and journey-planner legs exclude the cancelled run; final booking allocation rechecks under the lock. Waitlist promotion never runs on a cancelled service. If the transaction fails, the decision and all its changes roll back; repeat the request safely. There is no partial background booking-cancellation batch. This deliberately serializes operations for one run and is intended for the project's bounded catalogue, not unbounded production-scale mass processing.
+
+Captured fares receive full **test refunds with zero fee** through existing payment reconciliation. Unpaid bookings have no refund until an in-flight payment is captured, in which case it is fully refunded. Previously cancelled/expired bookings keep their original decision. Refund completion is asynchronous; the run details show processed/outstanding amounts and can be refreshed, including late captures. Repeated cancellation retains the original reason/admin and does not duplicate events. Legacy active bookings without reliable run identification or fare metadata are rejected for review rather than guessed. Separately booked onward legs remain independent.
+
+`TRAIN_CANCELLED` emails/in-app notices identify the reason and full-refund policy. Ticket responses and downloaded PDFs retain the operator reason; ordinary cancellation reports already include these cancelled bookings and full refund amounts. The Help centre (`/help`) adds search, topic filters, account/booking shortcuts and explanations for train cancellation, late captures, connecting tickets, calendar reminders and payment recovery. It is a self-service guide, not a human support-ticket system. The main navigation includes Help. Bundled chatbot guidance includes operator cancellation; restart chatbot-service to rebuild its in-memory knowledge/cache.
+
+ADMIN-only APIs (Reservation Service → Train run cancellations in Swagger):
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/reservations/admin/train-runs?page=0&size=20` | Paginated cancellation audit history |
+| GET | `/api/reservations/admin/train-runs/{trainNumber}/{runDate}` | Preview active impact, or inspect cancelled-run refund progress |
+| POST | `/api/reservations/admin/train-runs/{trainNumber}/{runDate}/cancel` | Body `{"reason":"Track maintenance"}`; repeat-safe cancellation |
+
+**Upgrade:** stop reservation-service before applying the schema change. With the usual `DDL_AUTO=update`, restart it to add `train_run_cancellations`, three nullable operator-cancellation columns and the train/run index on reservations. If using `validate/none`, back up first and apply `reservation-service/src/main/resources/db/manual-migrations/004_train_run_cancellation.sql` once instead. Do not apply both methods. Restart notification-service and chatbot-service, then restart Angular. No new credentials or database is required. Never leave old and new reservation-service instances running together during this upgrade because the old code does not take the new run lock.
+
+**Manual verification:** create paid CNF and WL bookings and an unpaid checkout on one future run; also book another date and an overnight intermediate boarding where possible. Preview and cancel only the first run. Verify all affected bookings become cancelled, fees are zero, refunds equal captured fares, no WL promotion occurs, and the other date is unchanged. Search/quote and stale checkout must reject the cancelled run. Inspect email, in-app history, PDF reason and provider-confirmed refund progress. Retry cancellation and confirm no duplicates. Test passenger/anonymous denial, already-started runs and Help search on mobile. Automated tests use H2/mocked providers; this update does not execute a live cancellation or contact passengers during verification.
+
 This is the backend only. Angular will be a separate sibling project. All checkout and refund operations are restricted to **Razorpay test mode**. The code rejects live keys. These bookings do not issue real railway tickets or move real money.
 
 For database SQL, startup commands, shared Swagger authorization, all request JSON bodies and the manual test sequence, see the [complete local startup and Swagger walkthrough](#complete-local-startup-and-swagger-walkthrough).

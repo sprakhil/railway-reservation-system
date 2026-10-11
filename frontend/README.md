@@ -1,5 +1,12 @@
 # Railwize — Angular railway reservation frontend
 
+## Train cancellation and Help centre (11 October 2026)
+
+- Admin → **Cancel a train run** (`/admin/train-runs`): choose a train number and original source-departure date, review affected bookings/passengers and full refund total, provide a reason, and acknowledge before submission. Cancellation history opens current processed/outstanding refund progress. Only future source departures are cancellable; there is no undo or train deletion. Dates use India time and include passengers boarding on later days of the same run. The server rechecks state when executing the action.
+- Affected tickets show the operator reason and link to cancellation help. Paid fares receive full test refunds; unpaid bookings are cancelled, and late captures are reconciled. Separate onward tickets remain independent. Remove imported calendar reminders manually.
+- **Help** is in the main navigation and at `/help`, with searchable answers, topic buttons, empty-result recovery and shortcuts to bookings, account and assistant. It covers train cancellation, payment recovery, refunds, waitlists, journey alternatives, fares, saved passengers and notifications. No fictional support contact or live-agent service is offered.
+- Restart the updated reservation-service and notification-service, restart chatbot-service for its policy update, then restart Angular. See backend README for the additive schema upgrade. `tests/jasmine/help-runs.spec.ts` checks topic links/search and cancellation review safeguards. Run `npm test`, `npm run build`, then the configured browser suite locally.
+
 A separate Angular 21 application for the railway-reservation-system backend. The design uses ivory, forest green and warm orange, with an original SVG train illustration, responsive passenger pages and an administrator workspace.
 
 ## Start locally

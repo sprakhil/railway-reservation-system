@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long>, org.springframework.data.jpa.repository.JpaSpecificationExecutor<Reservation> {
+    List<Reservation> findByTrainNumberAndRunDateOrderByReservationIdAsc(String trainNumber,java.time.LocalDate runDate);
+    boolean existsByTrainNumberAndRunDateIsNullAndStatusIn(String trainNumber,java.util.Collection<Reservation.ReservationStatus> statuses);
     List<Reservation> findByInventoryKeyAndStatusInOrderByReservationIdAsc(String key, java.util.Collection<Reservation.ReservationStatus> statuses);
     @org.springframework.data.jpa.repository.Query("select distinct r.inventoryKey from Reservation r where r.inventoryKey is not null and r.status in (com.railway.reservationservice.entity.Reservation.ReservationStatus.PENDING_PAYMENT, com.railway.reservationservice.entity.Reservation.ReservationStatus.WAITING) order by r.inventoryKey")
     List<String> maintenanceKeys();

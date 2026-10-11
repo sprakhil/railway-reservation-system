@@ -1,4 +1,4 @@
-# Railwize platform FAQ — policy revision 2026-09-28
+# Railwize platform FAQ — policy revision 2026-10-11
 Only the application rules below are authoritative. Live quotes, payment state and booking details must come from authenticated backend tools. Configuration changes require updating this resource and restarting chatbot-service to rebuild its in-memory vectors and invalidate caches.
 
 ## Ticket types: CNF, WL and RAC
@@ -9,6 +9,8 @@ Paid WL bookings are automatically promoted as a whole when enough eligible seat
 
 ## Cancellation fees and refund policy
 For a paid confirmed booking cancelled before boarding, the default cancellation fee is 20 percent and the eligible refund is the remaining 80 percent. Paid WL cancellation has no cancellation fee and the eligible full fare is refunded. Unpaid cancelled or expired bookings have no refund due. Partial passenger cancellation is not supported. The live cancellation preview is authoritative for a particular booking. Cancellation and refund processing are separate steps; initiated is not the same as processed. All Razorpay payments and refunds are TEST MODE: no real money is charged or returned. Do not promise a real bank credit or a precise completion time.
+
+If the operator cancels a dated train run before its first-station departure, all active CNF, WL and unpaid bookings on that original run are cancelled, including next-day boarding. Captured ticket fares are refunded in full with zero deduction. Late captures are also refunded; previously cancelled tickets keep their existing decision. The reason and pending/processed refund status are on the booking page, with email and in-app updates. Independently booked onward trains are not automatically cancelled or refunded. Remove imported calendar reminders manually. Chat cannot cancel a train or ticket. Help is available at /help.
 
 ## Booking holds and failed payments
 Payment holds last up to two minutes and can end earlier near departure or the WL cutoff. Complete test checkout before the actual hold deadline. A failed attempt can be retried only while the hold remains active. Closing checkout is not evidence of a successful or failed payment; the backend verifies provider state. Late captured test payments on expired bookings trigger an eligible test refund, not automatic seat confirmation. Never send payment passwords, OTPs, card numbers or CVVs to chat.

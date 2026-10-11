@@ -10,7 +10,8 @@ import java.util.List;
 @Entity
 @Table(name = "reservations", indexes = {
     @Index(name="idx_reservation_inventory",columnList="inventory_key,from_sequence,to_sequence,status,hold_expires_at"),
-    @Index(name="idx_reservation_username",columnList="username")
+    @Index(name="idx_reservation_username",columnList="username"),
+    @Index(name="idx_reservation_run",columnList="train_number,run_date")
 })
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Reservation {
@@ -48,6 +49,9 @@ public class Reservation {
     @Column(precision=12, scale=2) private java.math.BigDecimal cancellationFee;
     @Column(precision=12, scale=2) private java.math.BigDecimal refundAmount;
     private String refundStatus;
+    @Column(length=500) private String operatorCancellationReason;
+    private java.time.Instant operatorCancelledAt;
+    private String operatorPreviousStatus;
     private String currency;
     private String userEmail;
     private String fromStation;

@@ -18,7 +18,7 @@ class JourneyServiceTest {
     private final ScheduleCatalogClient schedules = mock(ScheduleCatalogClient.class);
     private final LocalDate date = LocalDate.of(2030, 1, 2);
     private final JourneyService service = new JourneyService(trains, schedules,
-            Clock.fixed(Instant.parse("2030-01-01T00:00:00Z"), ZoneOffset.UTC));
+            Clock.fixed(Instant.parse("2030-01-01T00:00:00Z"), ZoneOffset.UTC),mock(com.railway.reservationservice.repository.TrainRunCancellationRepository.class));
     private CatalogTrain train;
     private List<CatalogStop> route;
 

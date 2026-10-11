@@ -21,6 +21,8 @@ public class BookingEngine {
     private final BookingNotificationRepository notifications;
     private final NotificationCenter notificationCenter;
     private final Clock clock;
+    private final InventoryInitializer initializer;
+    private final TrainRunCancellationRepository cancelledRuns;
     @PersistenceContext private EntityManager entityManager;
     @Value("${booking.hold-duration:PT2M}") private Duration holdDuration=Duration.ofMinutes(2);
     @Value("${booking.waitlist-cutoff:PT1H}") private Duration waitlistCutoff=Duration.ofHours(1);
@@ -36,6 +38,8 @@ public class BookingEngine {
         SeatInventory inventory=lockInventory(quote.inventoryKey());
         Optional<Reservation> previous=reservations.findByBookingKey(key);
         if(previous.isPresent()){checkReplay(previous.get(),hash); maintain(quote.inventoryKey()); return map(previous.get());}
+        if(cancelledRuns.existsById(InventoryInitializer.runKey(quote.getTrainNumber(),quote.getRunDate())))
+            throw BookingException.conflict("This train run has been cancelled by the operator");
         if(inventory.getCapacity()!=quote.capacity()) throw BookingException.conflict("Inventory configuration changed; contact the administrator");
         int count=req.getPassengers().size();
         if(count>inventory.getCapacity()) throw BookingException.badRequest("Passenger count exceeds the entire train class capacity");
@@ -92,10 +96,19 @@ public class BookingEngine {
         if(r.getInventoryKey()!=null) lockInventory(r.getInventoryKey());
         entityManager.refresh(r,LockModeType.PESSIMISTIC_WRITE); return r;
     }
-    private SeatInventory lockInventory(String key) {return inventories.lock(key).orElseThrow(()->BookingException.conflict("Inventory is not initialized"));}
+    private SeatInventory lockInventory(String key) {
+        lockRun(key.substring(0,key.lastIndexOf('|')));
+        return inventories.lock(key).orElseThrow(()->BookingException.conflict("Inventory is not initialized"));
+    }
+    private void lockRun(String key) {
+        initializer.ensureRun(key);
+        inventories.lock(key+"|RUN").orElseThrow(()->BookingException.conflict("Run inventory is not initialized"));
+    }
     // Caller holds the inventory lock. Expire before promotion; never partially allocate or skip a paid queue head.
     private void maintain(String key) {
         if(key==null) return;
+        // Operator cancellation never releases inventory for promotion or further sales.
+        if(cancelledRuns.existsById(key.substring(0,key.lastIndexOf('|')))) return;
         Instant now=clock.instant();
         for(Reservation r:reservations.findByInventoryKeyAndStatusInOrderByReservationIdAsc(key,List.of(PENDING_PAYMENT,WAITING))) {
             if(r.getStatus()==PENDING_PAYMENT && !r.getHoldExpiresAt().isAfter(now)) {
@@ -231,12 +244,59 @@ public class BookingEngine {
     public ReservationRes map(Reservation r) {
         Integer position=null;
         if(r.getStatus()==WAITING && r.getInventoryKey()!=null){List<Reservation> queue=waiting(r.getInventoryKey()); for(int i=0;i<queue.size();i++) if(queue.get(i).getPnr().equals(r.getPnr())){position=i+1; break;}}
-        return ReservationRes.builder().trainName(r.getTrainName()).cancellationFee(money(r.getCancellationFee())).pnr(r.getPnr()).trainNumber(r.getTrainNumber()).dateOfJourney(r.getDateOfJourney()).bookingTime(r.getBookingTime()).status(r.getStatus().name())
+        return ReservationRes.builder().operatorCancellationReason(r.getOperatorCancellationReason()).operatorCancelledAt(r.getOperatorCancelledAt()).trainName(r.getTrainName()).cancellationFee(money(r.getCancellationFee())).pnr(r.getPnr()).trainNumber(r.getTrainNumber()).dateOfJourney(r.getDateOfJourney()).bookingTime(r.getBookingTime()).status(r.getStatus().name())
             .fromStation(r.getFromStation()).toStation(r.getToStation()).seatClass(r.getSeatClass()).runDate(r.getRunDate()).departureAt(r.getDepartureAt()).holdExpiresAt(r.getHoldExpiresAt())
             .waitlistDeadline(r.getWaitlistDeadline()).waitlistPosition(position)
             .allocation(r.getStatus()==WAITING || (r.getStatus()==PENDING_PAYMENT && r.isWaitlistRequested())?"WL":r.getStatus()==CONFIRMED || r.getStatus()==PENDING_PAYMENT?"CNF":null)
             .farePerPassenger(r.getFarePerPassenger()).totalFare(r.getTotalFare()).currency(r.getCurrency()).baseFare(r.getBaseFare()).ratePerKm(r.getRatePerKm()).minimumFare(r.getMinimumFare()).distanceKm(r.getDistanceKm())
             .paymentStatus(r.getRazorpayPaymentId()!=null?"CAPTURED":"UNPAID").refundStatus(r.getRefundStatus()).refundAmount(money(r.getRefundAmount())).legacyBooking(r.getDataVersion()==0).testMode(true)
             .passengers(r.getPassengers().stream().map(p->PassengerDto.builder().name(p.getName()).age(p.getAge()).gender(p.getGender()).birthPreference(p.getBirthPreference()).seatNumber(p.getSeatNumber()).seatDetails(SeatLayouts.describe(r.getSeatClass(),p.getSeatNumber())).bookingStatus(p.getBookingStatus().name()).build()).toList()).build();
+    }
+
+    @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
+    public RunCancellationView cancelRun(String train,LocalDate date,Instant departure,String reason,String admin) {
+        String key=InventoryInitializer.runKey(train,date);
+        lockRun(key);
+        var existing=cancelledRuns.findById(key);
+        if(existing.isPresent()) return runView(existing.get(),true);
+        if(!departure.isAfter(clock.instant())) throw BookingException.conflict("Only runs that have not departed from their first station can be cancelled");
+        // Legacy rows cannot reliably identify an original run or its captured fare.
+        if(reservations.existsByTrainNumberAndRunDateIsNullAndStatusIn(train,List.of(CONFIRMED,WAITING,PENDING_PAYMENT)))
+            throw BookingException.conflict("This train has legacy active bookings without a run date; review those records before cancelling a run");
+        var decision=new TrainRunCancellation(); decision.setRunKey(key); decision.setTrainNumber(train);
+        decision.setRunDate(date); decision.setSourceDepartureAt(departure); decision.setReason(reason);
+        decision.setCancelledBy(admin); decision.setCancelledAt(clock.instant()); cancelledRuns.saveAndFlush(decision);
+        var affected=reservations.findByTrainNumberAndRunDateOrderByReservationIdAsc(train,date);
+        for(var r:affected) {
+            if(!List.of(CONFIRMED,WAITING,PENDING_PAYMENT).contains(r.getStatus())) continue;
+            if(r.getDataVersion()<2 || r.getInventoryKey()==null || r.getTotalFare()==null)
+                throw BookingException.conflict("An affected booking requires legacy data review; cancellation was not applied");
+            lockInventory(r.getInventoryKey());
+            r.setOperatorPreviousStatus(r.getStatus().name()); r.setOperatorCancellationReason(reason); r.setOperatorCancelledAt(decision.getCancelledAt());
+            cancelPaid(r,BigDecimal.ZERO,"TRAIN_CANCELLED","The operator cancelled train "+train+" starting on "+date+". Reason: "+reason+". Any captured ticket fare is refunded in full, without deduction. Review separately booked onward journeys and remove any imported calendar reminder.");
+        }
+        reservations.flush();
+        return runView(decision,true);
+    }
+    @Transactional(readOnly=true)
+    public RunCancellationView previewRun(String train,LocalDate date,Instant departure) {
+        var existing=cancelledRuns.findById(InventoryInitializer.runKey(train,date));
+        if(existing.isPresent()) return runView(existing.get(),true);
+        var draft=new TrainRunCancellation(); draft.setTrainNumber(train); draft.setRunDate(date); draft.setSourceDepartureAt(departure);
+        return runView(draft,false);
+    }
+    private RunCancellationView runView(TrainRunCancellation run,boolean cancelled) {
+        var rows=reservations.findByTrainNumberAndRunDateOrderByReservationIdAsc(run.getTrainNumber(),run.getRunDate()).stream()
+            .filter(r->cancelled?r.getOperatorCancelledAt()!=null:List.of(CONFIRMED,WAITING,PENDING_PAYMENT).contains(r.getStatus())).toList();
+        BigDecimal total=BigDecimal.ZERO,processed=BigDecimal.ZERO,outstanding=BigDecimal.ZERO;
+        for(var r:rows) if(r.getRazorpayPaymentId()!=null) {
+            BigDecimal amount=cancelled?money(r.getRefundAmount()):money(r.getTotalFare()); total=total.add(amount);
+            if(cancelled && "PROCESSED".equals(r.getRefundStatus())) processed=processed.add(amount); else outstanding=outstanding.add(amount);
+        }
+        return new RunCancellationView(run.getTrainNumber(),run.getRunDate(),run.getSourceDepartureAt(),cancelled,run.getReason(),run.getCancelledBy(),run.getCancelledAt(),
+            rows.size(),rows.stream().mapToLong(r->r.getPassengers().size()).sum(),
+            rows.stream().filter(r->"CONFIRMED".equals(cancelled?r.getOperatorPreviousStatus():r.getStatus().name())).count(),
+            rows.stream().filter(r->"WAITING".equals(cancelled?r.getOperatorPreviousStatus():r.getStatus().name())).count(),
+            rows.stream().filter(r->r.getRazorpayPaymentId()==null).count(),total,processed,outstanding);
     }
 }

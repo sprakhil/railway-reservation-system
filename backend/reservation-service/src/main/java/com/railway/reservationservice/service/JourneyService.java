@@ -19,6 +19,7 @@ public class JourneyService {
     private final TrainCatalogClient trains;
     private final ScheduleCatalogClient schedules;
     private final Clock clock;
+    private final com.railway.reservationservice.repository.TrainRunCancellationRepository cancelledRuns;
 
     public JourneyQuote quote(String trainNumber,String from,String to,LocalDate boardingDate,String seatClass,int count) {
         from = ReservationReq.normalizeStation(from);
@@ -80,6 +81,8 @@ public class JourneyService {
             throw BookingException.conflict("The published timetable is incomplete");
         int departureDay = origin.getDepartureDayNumber()==null ? origin.getDayNumber() : origin.getDepartureDayNumber();
         LocalDate runDate = date.minusDays(departureDay-1L);
+        if(cancelledRuns.existsById(InventoryInitializer.runKey(train.getTrainNumber(),runDate)))
+            throw BookingException.conflict("This train run has been cancelled by the operator. Choose another service or date.");
         if(train.getOperatingDays()==null || !train.getOperatingDays().contains(runDate.getDayOfWeek()))
             throw BookingException.conflict("Train does not operate on this run date");
         Instant departure = date.atTime(origin.getDepartureTime()).atZone(RAILWAY_ZONE).toInstant();

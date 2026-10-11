@@ -23,6 +23,7 @@ export const routes:Routes=[
   {path:'stations',title:'Manage stations · Railwize',data:{kind:'stations'},loadComponent:()=>import('./pages/admin').then(m=>m.AdminCatalogue)},
   {path:'trains',title:'Manage trains · Railwize',data:{kind:'trains'},loadComponent:()=>import('./pages/admin').then(m=>m.AdminCatalogue)},
   {path:'schedules',title:'Manage timetables · Railwize',loadComponent:()=>import('./pages/admin').then(m=>m.AdminSchedules)},
+  {path:'train-runs',title:'Train run cancellations · Railwize',loadComponent:()=>import('./pages/admin-runs').then(m=>m.AdminRuns)},
   {path:'invitations',title:'Admin invitations · Railwize',loadComponent:()=>import('./pages/admin').then(m=>m.AdminInvitations)}
  ]},
  {path:'help',title:'Booking guide · Railwize',loadComponent:()=>import('./pages/help').then(m=>m.Help)},

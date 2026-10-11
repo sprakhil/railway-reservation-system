@@ -16,7 +16,7 @@ class JourneyPlannerTest {
     final BookingEngine engine=mock(BookingEngine.class);
     final Clock clock=Clock.fixed(Instant.parse("2030-01-01T00:00:00Z"),ZoneOffset.UTC);
     final LocalDate date=LocalDate.of(2030,1,2);
-    final JourneyService quotes=new JourneyService(trains,schedules,clock);
+    final JourneyService quotes=new JourneyService(trains,schedules,clock,mock(com.railway.reservationservice.repository.TrainRunCancellationRepository.class));
     final JourneyPlanner planner=new JourneyPlanner(trains,stations,schedules,quotes,engine,clock);
     List<CatalogTrain> catalogue;
     @BeforeEach void setup(){

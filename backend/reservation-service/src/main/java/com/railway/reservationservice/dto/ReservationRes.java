@@ -31,6 +31,8 @@ public class ReservationRes {
     private String currency;
     private String paymentStatus;
     private String refundStatus;
+    private String operatorCancellationReason;
+    private java.time.Instant operatorCancelledAt;
     private java.math.BigDecimal refundAmount;
     private boolean legacyBooking;
     private boolean testMode;

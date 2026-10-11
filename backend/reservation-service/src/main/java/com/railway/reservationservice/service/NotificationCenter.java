@@ -33,6 +33,7 @@ public class NotificationCenter {
             case "PAYMENT_FAILED" -> "Your payment attempt failed";
             case "PAYMENT_INCOMPLETE" -> "Your payment hold has expired";
             case "CANCELLED" -> "Your booking has been cancelled";
+            case "TRAIN_CANCELLED" -> "Your train was cancelled by the operator";
             case "WAITLIST_EXPIRED" -> "Your waitlist deadline has passed";
             case "REFUND_INITIATED" -> "Your test refund is being processed";
             case "REFUND_COMPLETED" -> "Your test refund has been processed";

@@ -14,6 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class EmailServiceTest {
+ @Test void operatorCancellationEmailHasFullRefundReasonAndNoBankCreditClaim(){
+  var e=event("TRAIN_CANCELLED");e.setMessage("Train cancelled. Full refund without deduction. Review separately booked onward journeys.");
+  e.setBookingJson(e.getBookingJson().replace("\"status\":\"CONFIRMED\"","\"status\":\"CANCELLED\",\"runDate\":\"2030-01-01\",\"operatorCancellationReason\":\"Flooding <bridge>\"").replace("\"cancellationFee\":240","\"cancellationFee\":0").replace("\"refundAmount\":960","\"refundAmount\":1200"));
+  var result=BookingEmailTemplate.render(e,"http://localhost:4200","Provider processing may take longer.",Instant.now());
+  assertTrue(result.subject().contains("train has been cancelled"));assertTrue(result.plain().contains("Cancellation fee: INR 0.00"));assertTrue(result.plain().contains("Refund amount: INR 1200.00"));
+  assertTrue(result.html().contains("Flooding &lt;bridge&gt;"));assertFalse(result.html().contains("Flooding <bridge>"));assertTrue(result.plain().contains("Original run date: 2030-01-01"));assertTrue(result.plain().contains("onward journeys"));
+ }
  JavaMailSender sender; NotificationLogRepository logs; EmailService emails;
  @BeforeEach void setup(){sender=mock(JavaMailSender.class);logs=mock(NotificationLogRepository.class);emails=new EmailService(sender,logs);when(sender.createMimeMessage()).thenAnswer(i->new MimeMessage(Session.getInstance(new Properties())));}
  private NotificationEvent event(String type){return NotificationEvent.builder().eventId("1234567890:"+type).eventType(type).pnr("1234567890").username("Asha").userEmail("asha@example.test").trainNumber("56565").dateOfJourney("2030-01-02").bookingJson("""

@@ -24,6 +24,7 @@ public final class BookingEmailTemplate {
         String type=Objects.toString(e.getEventType(),"BOOKING_UPDATE");
         boolean waiting="WAITING".equals(text(b,"status"));
         String title=switch(type){
+            case "TRAIN_CANCELLED" -> "Your train has been cancelled.";
             case "PAYMENT_RECEIVED" -> waiting?"You’re on the waitlist.":"Your journey is confirmed.";
             case "PROMOTED" -> "Good news. Your seats are confirmed.";
             case "PAYMENT_FAILED" -> "Your payment did not go through.";
@@ -58,7 +59,11 @@ public final class BookingEmailTemplate {
         details.put("Departure",time(text(b,"departureAt")));details.put("Travel class",text(b,"seatClass").replace("CLASS_",""));
         details.put("Booking status",text(b,"status"));details.put("Booking fare",money(b,"totalFare"));
         if(waiting){details.put("Waitlist position",text(b,"waitlistPosition"));details.put("Confirmation deadline",time(text(b,"waitlistDeadline")));}
-        boolean cancellation=Set.of("CANCELLED","WAITLIST_EXPIRED","REFUND_INITIATED","REFUND_COMPLETED","REFUND_DELAYED").contains(type);
+        if(!text(b,"operatorCancellationReason").isBlank()) {
+            details.put("Cancelled by", "Train operator"); details.put("Reason",text(b,"operatorCancellationReason"));
+            details.put("Original run date",text(b,"runDate"));
+        }
+        boolean cancellation=Set.of("TRAIN_CANCELLED","CANCELLED","WAITLIST_EXPIRED","REFUND_INITIATED","REFUND_COMPLETED","REFUND_DELAYED").contains(type);
         if(cancellation){details.put("Cancellation fee",money(b,"cancellationFee"));details.put("Refund amount",money(b,"refundAmount"));details.put("Refund status",text(b,"refundStatus"));}
         boolean retry=false;
         if(type.equals("PAYMENT_FAILED")){
