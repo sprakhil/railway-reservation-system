@@ -171,6 +171,8 @@ Extract the repository fully if using **Code → Download ZIP**. MySQL records, 
 
 Start Config Server on **8888** and Eureka on **8761** first, then application services and the gateway on **8080**. Config Server/Eureka use infrastructure credentials from the environment, not a passenger account.
 
+Alternatively, after starting MySQL and RabbitMQ, run `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Start-Backend.ps1` from `backend` to start all twelve services in order, with API Gateway last. Keep the terminal open; Ctrl+C stops this run. The [backend guide](backend/README.md#powershell-helper) explains readiness checks, logs and timeouts. `Run-Service.ps1` remains available for individual services.
+
 For a fresh installation, enable the configured bootstrap admin once, create that account, then disable bootstrap. Further administrators join through invitations.
 
 ### 3. Start Angular

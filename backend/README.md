@@ -395,6 +395,37 @@ For fresh local databases, `DDL_AUTO=update` lets the current services create ta
 
 ### PowerShell helper
 
+To start the **complete backend in one terminal**, use the new launcher:
+
+```powershell
+.\Start-Backend.ps1
+```
+
+If unsigned scripts are blocked, run this from PowerShell or CMD in the `backend` folder (the policy override applies only to this process):
+
+```bat
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Start-Backend.ps1
+```
+
+`Start-Backend.ps1` loads the existing `backend/.env` and invokes the unchanged `Run-Service.ps1` for each service. It starts Config Server, waits for authenticated configuration access, starts Eureka, then starts the application services one by one. Each application must serve its API documentation and register as UP in Eureka before the next starts. API Gateway starts **last**, followed by a check that it can route to auth-service. This checks startup/discovery; it does not test payment, SMTP or Gemini credentials.
+
+Start **MySQL and RabbitMQ yourself first**, and create the project databases. Do not leave duplicate backend instances running in an IDE or another terminal: the launcher checks all service ports before starting anything. It supports the standard local ports and the `CHATBOT_PORT` setting; remote Config/Eureka overrides and other custom port configurations are not supported.
+
+The launcher keeps running and monitors its child processes. Press **Ctrl+C in that terminal** to stop its process trees in reverse order, with the gateway first and Config Server last. A startup failure also cleans up services launched by this invocation. This is forced local-development shutdown, not a graceful production shutdown; avoid stopping during booking/payment operations. Existing independently started processes are never intentionally stopped.
+
+Separate console/error logs are saved under `backend/logs/backend-startup/<timestamp>-<pid>/` (excluded from Git). To follow one, use `Get-Content <full-log-path> -Tail 30 -Wait` in another terminal. Normal service rolling logs remain in each service's own `logs` folder. These local logs can contain operational data; review them before sharing.
+
+Optional checks and longer startup timeout (per service):
+
+```powershell
+.\Start-Backend.ps1 -CheckOnly
+.\Start-Backend.ps1 -StartupTimeoutSeconds 600
+```
+
+`-CheckOnly` validates local prerequisites, required environment settings, service folders and free ports without launching anything. It does not connect to databases/providers. The normal timeout is 300 seconds per service; first-time Maven downloads may need longer. A domain-enforced execution policy can still block scripts despite `Bypass`; use the IDE/CMD instructions below in that case.
+
+For **one specific service**, keep using `Run-Service.ps1`.
+
 From this `backend` folder, start each command in a **separate terminal**. They are long-running processes, not one sequential startup script:
 
 ```powershell
