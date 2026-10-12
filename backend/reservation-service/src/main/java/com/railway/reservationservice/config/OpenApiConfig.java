@@ -37,6 +37,8 @@ public class OpenApiConfig {
                     "Public, read-only. One same-station interchange, default 60-360 minute transfer. Optional nearby station coordinates within radiusKm (1-100). Each leg must be booked and paid separately; availability is rechecked. Returned notices describe missing coordinates and bounded/partial results. Distances exclude road travel; fare excludes local transport.", true, null);
             document(api, "/api/reservations/search", PathItem.HttpMethod.GET, "Journey search", "Search matching journeys",
                     "Public. Use station codes and a boarding date from today through today plus two calendar months (Asia/Kolkata), inclusive. Availability and fare are rechecked during booking.", true, null);
+            document(api, "/api/reservations/trains", PathItem.HttpMethod.GET, "Journey search", "Search trains across all classes",
+                    "Public. Only fromStation, toStation and dateOfJourney are required. One result per train; classes contains per-passenger fares and current segment availability for every configured class. No booking or hold is created. Select a class, then use /quote with the actual passenger count. CNF, WL and UNAVAILABLE are distinct outcomes.", true, null);
             document(api, "/api/reservations/quote", PathItem.HttpMethod.GET, "Journey search", "Quote one train and journey",
                     "Public. Use station codes and a boarding date from today through today plus two calendar months (Asia/Kolkata), inclusive. Availability and fare are rechecked during booking.", true, null);
             document(api, "/api/reservations/book", PathItem.HttpMethod.POST, "Bookings", "Create a two-minute checkout hold",

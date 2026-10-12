@@ -50,14 +50,15 @@ Current-session and all-session logout are available. Passenger navigation and a
 
 ### Searching and recent searches
 
-The home and journey pages accept departure station, destination, boarding date, class and passenger count. Station suggestions use the backend catalogue. Search results show the train, times, fare and the server's CNF/WL availability suggestion.
+The home and journey pages require only departure station, destination and boarding date. Results group each train once, with a card for every configured class showing its per-passenger fare, current seat availability and CNF/WL/unavailable status. Unavailable classes cannot proceed to booking. A refresh action updates availability. Passenger count is chosen explicitly on the booking page after selecting a class; changing it requotes the whole group and preserves the remaining passenger details.
 
-The last **five** valid searches can be restored, removed individually or cleared. They are scoped to the signed-in account in this browser. Guest history stays in memory. Switching accounts immediately clears the visible list; another account's searches are not displayed. Restoring an old search does not reuse old availability, and past dates must be replaced.
+Recent history stores only route and date; old account history is normalized to those fields, so former class/count variants collapse into the same search. The last **five** valid searches can be restored, removed individually or cleared. They are scoped to the signed-in account in this browser. Guest history stays in memory. Switching accounts immediately clears the visible list; another account's searches are not displayed. Restoring an old search does not reuse old availability, and past dates must be replaced.
 
 ### Connecting trains and nearby stations
 
 **More ways to get there** displays itinerary alternatives. It loads automatically when no exact direct result has confirmed availability, and can also be opened manually.
 
+- Choose a class beside the alternative results; displayed itinerary fares are per passenger.
 - Choose whether to include nearby departure/destination stations.
 - Select a nearby radius of 25, 50 or 100 km.
 - Select a minimum interchange time of 1, 1.5 or 2 hours; the UI uses a six-hour maximum.
@@ -107,7 +108,7 @@ The public `/help` page has searchable, categorized guidance and shortcuts to ac
 
 The **Ask Railwize** launcher opens a right-side chat panel without leaving the current page. Its expand link opens `/assistant`; both views share the conversation, draft and current response stream. The panel can be closed using its controls or Escape.
 
-The assistant supports streamed replies, FAQ references, verified train/booking cards, stopping a reply and starting/clearing a conversation. Quick prompts include booking lists, cancelled tickets, booking counts and the next journey. Train cards ask for the passenger count before opening the booking form, which requotes the journey.
+The assistant supports streamed replies, FAQ references, verified train/booking cards, stopping a reply and starting/clearing a conversation. Quick prompts include booking lists, cancelled tickets, booking counts and the next journey. Train cards open the booking page, where the passenger chooses the number of travellers and receives a fresh group quote.
 
 The frontend reads authenticated SSE events through a bounded streaming parser. It never contains the Gemini API key. The assistant is read-only; normal application screens handle bookings and cancellations. Conversation state is account-scoped and cleared from view on logout or account changes.
 
@@ -233,7 +234,7 @@ Update backend CORS, frontend base/callback/invitation URLs and Google OAuth con
 
 | Symptom | Check |
 | --- | --- |
-| No train results | Correct station codes/direction/class, timetable, operating day, capacity/fares, future date and run cancellation |
+| No train results | Correct station codes/direction, timetable, operating day, capacity/fares, future date and run cancellation |
 | APIs unavailable | Gateway on 8080, Eureka registration and downstream services |
 | Google redirect mismatch | Exact backend callback registered in Google; frontend callback is a separate address |
 | Admin workspace denied | ADMIN returned by backend login; invitation accepted with the correct verified account; fresh login after elevation |

@@ -47,6 +47,31 @@ public class JourneyService {
         return result.stream().sorted(Comparator.comparing(JourneyQuote::getDepartureAt)).toList();
     }
 
+    public List<JourneyQuote> searchAllClasses(String from,String to,LocalDate date) {
+        from=ReservationReq.normalizeStation(from);to=ReservationReq.normalizeStation(to);
+        validateSearch(from,to,date,"SL",1);
+        List<JourneyQuote> results=new ArrayList<>();
+        try {
+            List<CatalogTrain> catalogue=trains.getTrains();
+            if(catalogue==null) throw new BookingException(HttpStatus.SERVICE_UNAVAILABLE,"Train catalogue is temporarily unavailable");
+            for(var train:catalogue) {
+                try {
+                    validateTrainConfiguration(train);
+                    // Fetch each timetable once, regardless of the number of classes offered.
+                    var route=schedules.getSchedule(train.getTrainNumber());
+                    for(String clazz:train.getSeatClasses().stream().sorted().toList()) {
+                        try { results.add(quoteRoute(train,route,from,to,date,clazz,1)); }
+                        catch(BookingException ex) { if(ex.getStatus()!=HttpStatus.CONFLICT)throw ex; }
+                    }
+                } catch(BookingException ex) { if(ex.getStatus()!=HttpStatus.CONFLICT)throw ex; }
+                catch(FeignException.NotFound missingTimetable) { /* Unpublished trains cannot be booked. */ }
+            }
+        } catch(FeignException ex) {
+            throw new BookingException(HttpStatus.SERVICE_UNAVAILABLE,"Train catalogue is temporarily unavailable");
+        }
+        return results.stream().sorted(Comparator.comparing(JourneyQuote::getDepartureAt).thenComparing(JourneyQuote::getTrainNumber).thenComparing(JourneyQuote::getFarePerPassenger)).toList();
+    }
+
     void validateSearch(String from,String to,LocalDate date,String seatClass,int count) {
         if(from==null || from.isBlank() || to==null || to.isBlank() || from.equalsIgnoreCase(to))
             throw BookingException.badRequest("Choose different boarding and destination stations");

@@ -4,7 +4,9 @@ export interface Station {stationId:number; stationCode:string; stationName:stri
 export interface ClassConfig {seatClass:string; coachCount:number; seatsPerCoach:number; baseFare:number; ratePerKm:number; minimumFare:number}
 export interface Train {trainId?:number; trainNumber:string; trainName:string; category:string; sourceStationId:number; destinationStationId:number; seatClasses:string[]; operatingDays:string[]; classConfigurations:ClassConfig[]}
 export interface Stop {id?:number; trainNumber?:string; stationCode:string; stopSequence:number; arrivalTime:string|null; departureTime:string|null; dayNumber:number; departureDayNumber:number; distanceKm:number}
-export interface Search {fromStation:string; toStation:string; dateOfJourney:string; seatClass:string; passengers:number}
+export interface RouteSearch {fromStation:string; toStation:string; dateOfJourney:string}
+export interface Search extends RouteSearch {seatClass:string; passengers:number}
+export interface TrainSearchResult {trainNumber:string;trainName:string;classes:Quote[]}
 export interface Quote {trainNumber:string; trainName:string; fromStation:string; toStation:string; seatClass:string; boardingDate:string; runDate:string; departureAt:string; arrivalAt:string; distanceKm:number; passengerCount:number; farePerPassenger:number; totalFare:number; baseFare:number; ratePerKm:number; minimumFare:number; availableSeats:number; suggestedAllocation:string; waitlistDeadline:string; waitlistOpen:boolean}
 export interface SeatDetails {coach:string|null; position:number|null; berthType:string|null; berthLabel:string|null; description:string; layout:string|null; bay:number|null}
 export interface Passenger {name:string; age:number|null; gender:string; birthPreference:string; seatNumber?:string; seatDetails?:SeatDetails; bookingStatus?:string}

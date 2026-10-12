@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 
-test('assistant panel retains the conversation and requires an explicit booking count',async({page})=>{
+test('assistant panel retains the conversation and chooses passenger count on the booking page',async({page})=>{
  const day=new Date(Date.now()+86400000).toISOString().slice(0,10);
  await page.addInitScript(()=>sessionStorage.setItem('railwize.session.v1',JSON.stringify({username:'alice',role:'PASSENGER',accessToken:'fixture',refreshToken:'fixture'})));
  let created=0;
@@ -12,6 +12,7 @@ test('assistant panel retains the conversation and requires an explicit booking 
   }
   let body:unknown={content:[],totalElements:0,totalPages:0,page:0,size:10};
   if(path==='/api/chat/conversations'){created++;body={id:'test-chat',messages:[],expiresAt:'2030-01-01T00:00:00Z'};}
+  if(path==='/api/reservations/quote')body={trainNumber:'T1',trainName:'Fixture Express',fromStation:'AAA',toStation:'BBB',seatClass:'SL',passengerCount:Number(new URL(route.request().url()).searchParams.get('passengers')||1),farePerPassenger:100,totalFare:300,suggestedAllocation:'CNF',departureAt:day+'T10:00:00Z',arrivalAt:day+'T12:00:00Z'};
   if(path==='/api/reservations/notifications')body={notifications:body,unreadCount:0};
   await route.fulfill({contentType:'application/json',body:JSON.stringify(body)});
  });
@@ -22,9 +23,8 @@ test('assistant panel retains the conversation and requires an explicit booking 
  await panel.getByRole('link',{name:'Open full assistant page'}).click();
  await expect(page).toHaveURL(/\/assistant$/);await expect(page.getByText('Here is your train option.')).toBeVisible();expect(created).toBe(1);
  await page.getByRole('button',{name:'Book now'}).click();
- await expect(page.getByRole('button',{name:'Continue to passenger details'})).toBeDisabled();
- await page.getByRole('combobox',{name:'Number of passengers'}).selectOption({label:'3 passengers'});
- await page.getByRole('button',{name:'Continue to passenger details'}).click();await expect(page).toHaveURL(/passengers=3/);
+ await expect(page).toHaveURL(/book\/T1/);expect(new URL(page.url()).searchParams.has('passengers')).toBeFalsy();
+ await expect(page.getByLabel('Full name')).toHaveCount(0);await page.getByLabel('Number of passengers').selectOption({label:'3 passengers'});await expect(page.getByLabel('Full name')).toHaveCount(3);
  await page.getByRole('button',{name:'Ask Railwize +'}).click();await page.setViewportSize({width:390,height:844});
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
  await page.getByRole('button',{name:'Close assistant'}).click();await expect(page.getByRole('dialog',{name:'Ask Railwize'})).toHaveCount(0);

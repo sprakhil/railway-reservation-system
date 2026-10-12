@@ -1,37 +1,35 @@
-import { CLASSES, Search } from './models';
-import { indiaDate, searchError } from './utils';
+import { RouteSearch } from './models';
+import { indiaDate, routeSearchError } from './utils';
 
 export const RECENT_SEARCHES_KEY = 'railwize.recent-searches.v1';
 export const RECENT_SEARCH_LIMIT = 5;
 type SearchStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
 // Read only the public search fields, including when storage contains unexpected data.
-export function normalizeSearch(value: unknown): Search | null {
+export function normalizeSearch(value: unknown): RouteSearch | null {
   if (!value || typeof value !== 'object') return null;
   const s = value as Record<string, unknown>;
   if (typeof s['fromStation'] !== 'string' || typeof s['toStation'] !== 'string'
-      || typeof s['dateOfJourney'] !== 'string' || typeof s['seatClass'] !== 'string'
-      || typeof s['passengers'] !== 'number') return null;
-  const query: Search = {
+      || typeof s['dateOfJourney'] !== 'string') return null;
+  const query: RouteSearch = {
     fromStation: s['fromStation'].trim().toUpperCase(),
     toStation: s['toStation'].trim().toUpperCase(),
-    dateOfJourney: s['dateOfJourney'], seatClass: s['seatClass'], passengers: s['passengers']
+    dateOfJourney: s['dateOfJourney']
   };
   if (![query.fromStation, query.toStation].every(code => /^[A-Z0-9]{1,10}$/.test(code))
-      || !CLASSES.some(c => c.value === query.seatClass)
-      || searchError(query, query.dateOfJourney)) return null;
+      || routeSearchError(query, query.dateOfJourney)) return null;
   return query;
 }
 
-export function searchKey(s: Search): string {
-  return [s.fromStation, s.toStation, s.dateOfJourney, s.seatClass, s.passengers].join('|');
+export function searchKey(s: RouteSearch): string {
+  return [s.fromStation, s.toStation, s.dateOfJourney].join('|');
 }
 
-export function parseRecentSearches(raw: string | null): Search[] {
+export function parseRecentSearches(raw: string | null): RouteSearch[] {
   try {
     const values: unknown = JSON.parse(raw || '[]');
     if (!Array.isArray(values)) return [];
-    const result: Search[] = [];
+    const result: RouteSearch[] = [];
     const seen = new Set<string>();
     for (const value of values) {
       const s = normalizeSearch(value);
@@ -45,32 +43,32 @@ export function parseRecentSearches(raw: string | null): Search[] {
 }
 
 export class RecentSearchStore {
-  private memory: Search[] = [];
+  private memory: RouteSearch[] = [];
   private persistent = true;
   private owner: string | null = null;
   constructor(private storage: () => SearchStorage = () => localStorage) {}
-  setOwner(owner: string | null): Search[] {
+  setOwner(owner: string | null): RouteSearch[] {
     if (owner !== this.owner) { this.owner = owner; this.memory = []; this.persistent = true; }
     // Old shared history has no verifiable owner. Never migrate it into an account.
     try { this.storage().removeItem(RECENT_SEARCHES_KEY); } catch {}
     return this.read();
   }
   private key(){ return 'railwize.recent-searches.v2.'+encodeURIComponent(this.owner!); }
-  read(): Search[] {
+  read(): RouteSearch[] {
     try { if (this.owner && this.persistent) this.memory = parseRecentSearches(this.storage().getItem(this.key())); }
     catch { this.persistent = false; }
     return this.memory.map(s => ({ ...s }));
   }
-  save(value: Search, today = indiaDate()): Search[] {
+  save(value: RouteSearch, today = indiaDate()): RouteSearch[] {
     const s = normalizeSearch(value);
-    if (!s || searchError(s, today)) return this.read();
+    if (!s || routeSearchError(s, today)) return this.read();
     return this.write([s, ...this.read().filter(item => searchKey(item) !== searchKey(s))].slice(0, RECENT_SEARCH_LIMIT));
   }
-  remove(s: Search): Search[] {
+  remove(s: RouteSearch): RouteSearch[] {
     return this.write(this.read().filter(item => searchKey(item) !== searchKey(s)));
   }
-  clear(): Search[] { return this.write([]); }
-  private write(values: Search[]): Search[] {
+  clear(): RouteSearch[] { return this.write([]); }
+  private write(values: RouteSearch[]): RouteSearch[] {
     this.memory = values;
     if (!this.owner) return values.map(s => ({ ...s }));
     try {

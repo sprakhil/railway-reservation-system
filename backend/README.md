@@ -106,7 +106,7 @@ Distance belongs to the **train's route stops**, not a single station. A station
 
 ## Search, fares and journey alternatives
 
-Direct search accepts station codes, passenger count, seat class and the passenger's **boarding date**. Both stations must appear in the correct order on the published route, the class must be configured, and the train must operate on the calculated source run date.
+`GET /api/reservations/trains` requires only station codes and the passenger's **boarding date**. It groups all configured classes under each train with per-passenger fares and current availability, fetching each timetable once. Search is read-only and creates no hold. The original `/search` endpoint remains compatible for class-specific consumers, including chatbot tools. `/quote` takes the class and actual passenger count after selection. Both stations must appear in the correct order on the published route, the class must be configured, and the train must operate on the calculated source run date.
 
 The allowed boarding window is today through **today plus two calendar months, inclusive**, in `Asia/Kolkata`; this is not a fixed 60 days. Boarding departure must still be in the future. Source run date is derived using the boarding stop's departure-day offset, so a Day-2 passenger may board on Tuesday on a train that originally departed Monday.
 

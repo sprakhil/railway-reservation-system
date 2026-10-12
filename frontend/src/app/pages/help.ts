@@ -5,7 +5,7 @@ import { Icon } from '../shared/ui';
 const FAQS=[
   {
     "q": "How do I book a ticket?",
-    "a": "Choose different departure and arrival stations, a date, class and 1–6 passengers. Select a train, review the fare, enter passenger details and create the booking. Check the confirmed/waitlist allocation, then complete checkout within the payment hold.",
+    "a": "Choose different departure and arrival stations and a date. Compare each train’s classes, per-passenger fares and seat availability. Select a class, choose 1–6 passengers on the booking page, review the updated group fare, enter their details and create the booking. Check the confirmed/waitlist allocation, then complete checkout within the payment hold.",
     "category": "Finding trains"
   },
   {
@@ -86,7 +86,7 @@ const FAQS=[
   {
     "category": "Finding trains",
     "q": "Why is a train missing from my search?",
-    "a": "The train must have a published timetable, serve your stations in the correct direction, operate on its original run date, and support the selected class with configured fares and capacity. Boarding must still be in the future. Cancelled runs cannot be booked. Try another date or class, or review connecting and nearby alternatives."
+    "a": "The train must have a published timetable, serve your stations in the correct direction, operate on its original run date, and support the selected class with configured fares and capacity. Boarding must still be in the future. Cancelled runs cannot be booked. Direct results include all configured classes. Try another date or review connecting and nearby alternatives."
   },
   {
     "category": "Finding trains",

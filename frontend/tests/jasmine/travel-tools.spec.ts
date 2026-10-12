@@ -3,7 +3,7 @@ import { bookingCalendar, canAddToCalendar } from '../../src/app/core/calendar';
 import { normalizeSearch, parseRecentSearches, RecentSearchStore, RECENT_SEARCHES_KEY } from '../../src/app/core/recent-searches';
 
 const today='2026-09-27';
-const search={fromStation:'PVL',toStation:'GOA',dateOfJourney:'2026-09-28',seatClass:'SL',passengers:2};
+const search={fromStation:'PVL',toStation:'GOA',dateOfJourney:'2026-09-28'};
 const booking={pnr:'1234567890',trainNumber:'56565',fromStation:'PVL',toStation:'GOA',seatClass:'SL',departureAt:'2026-09-28T15:10:00+05:30',status:'CONFIRMED'};
 const now=new Date('2026-09-27T10:00:00Z');
 
@@ -42,16 +42,16 @@ it('recent searches normalize, deduplicate, cap at five and persist across page 
   const store=new RecentSearchStore(()=>storage);store.setOwner('alice');
   store.save({...search,fromStation:' pvl '},today);
   assert.equal(store.save(search,today).length,1);
-  for(let passengers=1;passengers<=6;passengers++)store.save({...search,passengers},today);
-  assert.deepEqual(store.read().map(s=>s.passengers),[6,5,4,3,2]);
+  for(let day=1;day<=6;day++)store.save({...search,dateOfJourney:'2026-10-0'+day},today);
+  assert.deepEqual(store.read().map(s=>s.dateOfJourney),['2026-10-06','2026-10-05','2026-10-04','2026-10-03','2026-10-02']);
   assert.deepEqual(new RecentSearchStore(()=>storage).setOwner('alice'),store.read());
-  assert.equal(store.remove({...search,passengers:4}).length,4);
+  assert.equal(store.remove({...search,dateOfJourney:'2026-10-04'}).length,4);
   assert.deepEqual(store.clear(),[]);assert.equal(data.has(RECENT_SEARCHES_KEY),false);
 });
 it('recent search parser ignores corrupt and invalid entries and never retains unrelated fields',()=>{
   for(const raw of ['bad json','{}','null','42'])assert.deepEqual(parseRecentSearches(raw),[]);
-  assert.equal(normalizeSearch({...search,passengers:-1}),null);
-  assert.equal(normalizeSearch({...search,seatClass:'bad'}),null);
+  assert.deepEqual(normalizeSearch({...search,passengers:-1}),search);
+  assert.deepEqual(normalizeSearch({...search,seatClass:'bad'}),search);
   assert.equal(normalizeSearch({...search,fromStation:'bad code'}),null);
   assert.equal(normalizeSearch({...search,dateOfJourney:'2026-02-30'}),null);
   assert.deepEqual(parseRecentSearches(JSON.stringify([null,{...search,accessToken:'secret'},search])),[search]);
@@ -76,8 +76,8 @@ it('recent searches are isolated per immutable account and shared legacy history
  const store=new RecentSearchStore(()=>storage);
  assert.deepEqual(store.setOwner('alice'),[]);assert.equal(data.has(RECENT_SEARCHES_KEY),false);
  store.save(search,today);assert.deepEqual(store.setOwner(null),[]);
- assert.deepEqual(store.setOwner('bob'),[]);store.save({...search,passengers:3},today);
- assert.deepEqual(store.setOwner('alice'),[search]);assert.equal(store.setOwner('bob')[0].passengers,3);
+ assert.deepEqual(store.setOwner('bob'),[]);store.save({...search,dateOfJourney:'2026-10-03'},today);
+ assert.deepEqual(store.setOwner('alice'),[search]);assert.equal(store.setOwner('bob')[0].dateOfJourney,'2026-10-03');
  store.setOwner(null);store.save(search,today);assert.deepEqual(new RecentSearchStore(()=>storage).read(),[]);
 });
 

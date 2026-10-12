@@ -51,6 +51,31 @@ class JourneyServiceTest {
     }
     private CatalogTrain.ClassConfiguration config() { return train.getClassConfigurations().getFirst(); }
 
+    @Test void discoveryIncludesAnAcOnlyTrainAndFetchesEachTimetableOnce() {
+        var ac=new CatalogTrain.ClassConfiguration();ac.setSeatClass("CLASS_3A");ac.setCoachCount(1);ac.setSeatsPerCoach(72);
+        ac.setBaseFare(new BigDecimal("100"));ac.setRatePerKm(new BigDecimal("1.50"));ac.setMinimumFare(new BigDecimal("300"));
+        train.setSeatClasses(Set.of("CLASS_3A"));train.setClassConfigurations(List.of(ac));
+        when(trains.getTrains()).thenReturn(List.of(train));
+        var results=service.searchAllClasses(" aaa ","CCC",date);
+        assertEquals(1,results.size());assertEquals("CLASS_3A",results.getFirst().getSeatClass());
+        assertEquals(1,results.getFirst().getPassengerCount());assertEquals(new BigDecimal("400.00"),results.getFirst().getFarePerPassenger());
+        verify(schedules,times(1)).getSchedule("12345");
+    }
+
+    @Test void discoveryHasEveryClassAndHonoursDirectionAndDateValidation() {
+        var second=new CatalogTrain.ClassConfiguration();second.setSeatClass("CLASS_2A");second.setCoachCount(1);second.setSeatsPerCoach(48);
+        second.setBaseFare(new BigDecimal("150"));second.setRatePerKm(new BigDecimal("2"));second.setMinimumFare(new BigDecimal("300"));
+        train.setSeatClasses(Set.of("SL","CLASS_2A"));train.setClassConfigurations(List.of(config(),second));
+        when(trains.getTrains()).thenReturn(List.of(train));
+        var results=service.searchAllClasses("AAA","CCC",date);
+        assertEquals(List.of("SL","CLASS_2A"),results.stream().map(JourneyQuote::getSeatClass).toList());
+        verify(schedules,times(1)).getSchedule("12345");
+        assertTrue(service.searchAllClasses("CCC","AAA",date).isEmpty());
+        assertThrows(BookingException.class,()->service.searchAllClasses("AAA","AAA",date));
+        assertThrows(BookingException.class,()->service.searchAllClasses("AAA","CCC",date.minusYears(1)));
+        assertThrows(BookingException.class,()->service.searchAllClasses("AAA","CCC",date.plusMonths(3)));
+    }
+
     @Test void calculatesExactFareAndKeepsCanonicalInventoryClass() {
         JourneyQuote quote = quote();
         assertEquals(new BigDecimal("120.00"), quote.getFarePerPassenger());

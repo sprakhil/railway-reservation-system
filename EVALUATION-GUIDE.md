@@ -12,7 +12,7 @@ Use the quoted answers as speaking practice, not a script to memorize. No guide 
 
 **Two-minute answer: Explain your project.**
 
-> Railwize addresses the entire reservation lifecycle rather than only creating a booking record. The administrator configures stations, trains, class capacity, fare parameters and an ordered timetable. Passengers register and verify their email, or use Google sign-in. They search by boarding station, destination, date, class and passenger count.
+> Railwize addresses the entire reservation lifecycle rather than only creating a booking record. The administrator configures stations, trains, class capacity, fare parameters and an ordered timetable. Passengers register and verify their email, or use Google sign-in. They search by boarding station, destination and date. Each matching train shows its configured classes with per-passenger fares and current availability. After choosing a class, they select 1–6 passengers on the booking page and receive a fresh group quote.
 >
 > The backend checks the train's operating day and timetable, calculates the distance-based fare and checks availability across the requested route segments. It creates a two-minute payment hold. A verified Razorpay test payment activates either a confirmed booking or a paid waitlist booking. Waitlisted bookings promote automatically when all passengers can be accommodated; otherwise they receive a full refund at the configured cutoff.
 >
@@ -592,7 +592,7 @@ The implemented format is UTF-8 CSV with BOM, quoting and formula neutralization
 
 **Q110. What does the chatbot actually do?**
 
-It answers platform-policy questions, searches trains and retrieves the authenticated account's bookings, cancellations, counts, next journey or owned PNR details. It opens as a right-side panel and can expand to `/assistant`. Train cards ask passenger count and enter the normal booking flow, which requotes. The assistant cannot independently book, cancel, charge, refund or change accounts.
+It answers platform-policy questions, searches trains and retrieves the authenticated account's bookings, cancellations, counts, next journey or owned PNR details. It opens as a right-side panel and can expand to `/assistant`. Train cards enter the normal booking page, where passenger count is explicitly selected and the group is requoted. The assistant cannot independently book, cancel, charge, refund or change accounts.
 
 **Q111. What is RAG? Why not just ask Gemini?**
 
@@ -737,7 +737,7 @@ These are expected behaviors to explain and verify in the configured application
 | Evaluator's action | Expected response/reason |
 | --- | --- |
 | Select the same boarding/destination station | Reject; a journey needs distinct ordered stops. |
-| Search with a negative or zero passenger count | Reject; supported range is 1–6. |
+| Request a booking quote with a negative or zero passenger count | Reject; supported range is 1–6. |
 | Send a list containing a null passenger | Reject cleanly rather than crash while reading fields. |
 | Request more passengers than the entire class capacity | Reject; a group that can never fit should not enter WL. |
 | Use lowercase/spaced station codes | Trim and normalize valid codes; reject malformed values. |

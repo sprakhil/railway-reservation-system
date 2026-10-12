@@ -31,7 +31,7 @@ public class SecurityConfig {
                                 "/api/reservations/swagger-ui/**").permitAll()
                         .requestMatchers("/api/reservations/admin/**").hasRole("ADMIN")
                         // Require authentication for all bookings
-                        .requestMatchers("/internal/reservations/**", "/api/reservations/search", "/api/reservations/quote", "/api/reservations/alternatives").permitAll()
+                        .requestMatchers("/internal/reservations/**", "/api/reservations/search", "/api/reservations/trains", "/api/reservations/quote", "/api/reservations/alternatives").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

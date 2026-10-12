@@ -44,11 +44,11 @@ These are timetable-based suggestions. Each leg has its own booking, payment and
 | Registration and verification | Create an account, verify an email OTP, resend a code and receive a welcome email |
 | Sign-in and recovery | Use credentials or Google sign-in, reset a local-account password, and log out of one or all sessions |
 | Account details | View/update personal details, see the verified account email, and make one display/login username change |
-| Train discovery | Search by boarding station, destination, date, class and 1–6 passengers |
+| Train discovery | Search by boarding station, destination and date; compare all classes, per-person fares and seat availability |
 | Journey alternatives | Compare connecting trains and nearby-station options with transfer times and per-leg fares |
 | Recent searches | Reuse the five most recent valid searches, stored separately for each signed-in account in the browser |
 | Saved passengers | Maintain a personal Master List and select passengers while booking |
-| Fare review | See a server-calculated fare based on journey distance and class pricing before reserving |
+| Fare review | Choose a class from the results, then select 1–6 passengers on the booking page for a fresh group quote |
 | Reservation | Create a two-minute payment hold with whole-booking CNF or WL allocation |
 | Test checkout | Pay through Razorpay test checkout and track verified payment status |
 | Waitlist | Pay for a WL booking and receive automatic confirmation when the complete booking fits |

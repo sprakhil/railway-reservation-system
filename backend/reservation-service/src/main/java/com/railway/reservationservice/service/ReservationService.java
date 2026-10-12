@@ -47,6 +47,14 @@ public class ReservationService {
     public List<JourneyQuote> search(String from,String to,LocalDate date,String seatClass,int count) {
         return journeys.search(from,to,date,seatClass,count).stream().peek(engine::describeAvailability).toList();
     }
+    public List<TrainSearchResult> discover(String from,String to,LocalDate date) {
+        Map<String,List<JourneyQuote>> grouped=new LinkedHashMap<>();
+        for(var quote:journeys.searchAllClasses(from,to,date)) {
+            engine.describeAvailability(quote);
+            grouped.computeIfAbsent(quote.getTrainNumber(),key->new ArrayList<>()).add(quote);
+        }
+        return grouped.values().stream().map(classes->new TrainSearchResult(classes.getFirst().getTrainNumber(),classes.getFirst().getTrainName(),List.copyOf(classes))).toList();
+    }
     public List<ReservationRes> getMyBookings(String username) { return engine.mine(username); }
     public BookingOverview overview(String username) { return engine.overview(username); }
     public ReservationRes getReservationByPnr(String pnr,String username,boolean admin) { return engine.get(pnr,username,admin); }

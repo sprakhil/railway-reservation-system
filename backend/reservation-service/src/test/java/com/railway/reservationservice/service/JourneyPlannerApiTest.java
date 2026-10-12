@@ -41,4 +41,15 @@ class JourneyPlannerApiTest {
             .andExpect(status().isBadRequest()).andExpect(jsonPath("$.message").exists()).andExpect(jsonPath("$.requestId").exists());
         mvc.perform(get("/v3/api-docs")).andExpect(status().isOk()).andExpect(jsonPath("$.paths['/api/reservations/alternatives'].get.security").isEmpty());
     }
+    @Test void discoveryIsPublicGroupsClassesAndNeedsNoPassengerCount()throws Exception {
+        var t=train("T1");var ac=new CatalogTrain.ClassConfiguration();
+        ac.setSeatClass("CLASS_3A");ac.setCoachCount(1);ac.setSeatsPerCoach(72);ac.setBaseFare(new java.math.BigDecimal("100"));ac.setRatePerKm(new java.math.BigDecimal("1.50"));ac.setMinimumFare(new java.math.BigDecimal("300"));
+        t.setSeatClasses(Set.of("SL","CLASS_3A"));t.setClassConfigurations(List.of(t.getClassConfigurations().getFirst(),ac));
+        when(trains.getTrains()).thenReturn(List.of(t));
+        mvc.perform(get("/api/reservations/trains").param("fromStation","AAA").param("toStation","XXX").param("dateOfJourney",date))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(1))
+            .andExpect(jsonPath("$[0].classes.length()").value(2)).andExpect(jsonPath("$[0].classes[0].passengerCount").value(1))
+            .andExpect(jsonPath("$[0].classes[0].availableSeats").value(10)).andExpect(jsonPath("$[0].classes[1].availableSeats").value(72));
+        mvc.perform(get("/v3/api-docs")).andExpect(status().isOk()).andExpect(jsonPath("$.paths['/api/reservations/trains'].get.security").isEmpty());
+    }
 }

@@ -42,7 +42,9 @@ to hide a service/configuration failure. Old 12951 is not repaired or changed.
 
 QUICK SEARCH CHECKS
 Pick tomorrow or today+7 (IST), within the two-calendar-month booking window.
-Use 1 passenger and Sleeper (SL), AC 3 Tier (CLASS_3A) or AC 2 Tier (CLASS_2A).
+Search using only station codes and date. Results show Sleeper (SL), AC 3 Tier
+(CLASS_3A) and AC 2 Tier (CLASS_2A). Select a class, then choose your passenger
+count on the booking page; use 1 passenger for the fare examples below.
 EC/1A/3E/2S are intentionally absent from these services.
 
 MMCT -> NDLS: RW1001; return NDLS -> MMCT: RW1002.

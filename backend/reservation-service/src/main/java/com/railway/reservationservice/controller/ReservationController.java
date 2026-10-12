@@ -13,6 +13,11 @@ import java.util.List;
 @RestController @RequestMapping("/api/reservations") @RequiredArgsConstructor
 public class ReservationController {
     private final ReservationService reservations;
+    @GetMapping("/trains")
+    @io.swagger.v3.oas.annotations.Operation(summary="Find trains with all classes, fares and availability",description="Requires only boarding station, destination and boarding date. Fares are per passenger; no seats are held. Select a class, then request a quote for the actual passenger count before booking.")
+    public List<TrainSearchResult> discover(@RequestParam String fromStation,@RequestParam String toStation,@RequestParam LocalDate dateOfJourney) {
+        return reservations.discover(fromStation,toStation,dateOfJourney);
+    }
     @GetMapping("/search")
     public List<JourneyQuote> search(@RequestParam String fromStation,@RequestParam String toStation,
         @RequestParam LocalDate dateOfJourney,@RequestParam String seatClass,@RequestParam(defaultValue="1") int passengers) {

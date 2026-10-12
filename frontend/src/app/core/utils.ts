@@ -1,4 +1,4 @@
-import { Search } from './models';
+import { Search, RouteSearch } from './models';
 export function indiaDate(date=new Date()):string {
   const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
   return ['year','month','day'].map(t=>parts.find(p=>p.type===t)!.value).join('-');
@@ -9,13 +9,15 @@ export function addMonths(date:string,count:number):string {
   return new Date(Date.UTC(y,m-1+count,Math.min(d,last))).toISOString().slice(0,10);
 }
 export function tomorrow():string {const d=indiaDate(); const t=new Date(d+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+1);return t.toISOString().slice(0,10)}
-export function searchError(s:Search,today=indiaDate()):string {
+export function routeSearchError(s:RouteSearch,today=indiaDate()):string {
   if(!s.fromStation.trim()||!s.toStation.trim())return 'Choose both your departure and arrival station.';
   if(s.fromStation.trim().toUpperCase()===s.toStation.trim().toUpperCase())return 'Choose two different stations for your journey.';
   if(!/^\d{4}-\d{2}-\d{2}$/.test(s.dateOfJourney)||!Number.isFinite(Date.parse(s.dateOfJourney))||new Date(s.dateOfJourney).toISOString().slice(0,10)!==s.dateOfJourney)return 'Choose a valid travel date.';
   if(s.dateOfJourney<today||s.dateOfJourney>addMonths(today,2))return 'Choose a date from today through two calendar months ahead.';
-  if(!Number.isInteger(+s.passengers)||+s.passengers<1||+s.passengers>6)return 'A booking can have between 1 and 6 passengers.';
   return '';
+}
+export function searchError(s:Search,today=indiaDate()):string {
+  return routeSearchError(s,today)||(!Number.isInteger(+s.passengers)||+s.passengers<1||+s.passengers>6?'A booking can have between 1 and 6 passengers.':'');
 }
 export function safeReturn(value:string|null):string {return value?.startsWith('/')&&!value.startsWith('//')&&!value.includes('\\')?value:'/'}
 export function messageOf(error:unknown):string {

@@ -12,8 +12,8 @@ async function auth(page:Page,role='PASSENGER'){await page.addInitScript(s=>{if(
 async function mock(page:Page){await page.route('**/api/**',async route=>{const u=new URL(route.request().url()),p=u.pathname;
  if(p==='/api/stations')return json(route,pageOf(stations));
  if(p==='/api/trains')return json(route,pageOf([train]));
- if(p==='/api/reservations/search')return json(route,[quote]);
- if(p==='/api/reservations/quote')return json(route,quote);
+ if(p==='/api/reservations/trains')return json(route,[{trainNumber:quote.trainNumber,trainName:quote.trainName,classes:[quote]}]);
+ if(p==='/api/reservations/quote'){const count=Number(u.searchParams.get('passengers')||1);return json(route,{...quote,passengerCount:count,totalFare:120*count})}
  if(p==='/api/users/me/passengers')return json(route,pageOf([{id:1,...passenger,berthPreference:'LOWER'}]));
  if(p==='/api/reservations/my-bookings')return json(route,pageOf([booking]));
  if(p==='/api/reservations/pnr/1234567890')return json(route,booking);
@@ -34,13 +34,13 @@ test('home is responsive and validates identical stations before search',async({
  await page.getByRole('button',{name:'Toggle navigation'}).click();await expect(page.getByRole('navigation',{name:'Main navigation'}).getByRole('link',{name:'My journeys'})).toBeVisible();await page.getByRole('button',{name:'Toggle navigation'}).click();await page.screenshot({path:'test-results/home-mobile.png',fullPage:true});
 });
 test('search selects a train and preserves return journey through sign-in',async({page})=>{
- await page.goto('/');await page.getByLabel('Departure station').fill('DSTA');await page.getByLabel('Arrival station').fill('DSTC');await page.getByRole('button',{name:'Find trains',exact:true}).click();await expect(page.getByText('Demo Small Capacity Express')).toBeVisible();await page.getByRole('link',{name:'Select train'}).click();await expect(page).toHaveURL(/auth\/login\?returnUrl/);await page.getByLabel('Username or email').fill('demo_user');await page.getByLabel('Password',{exact:true}).fill('DemoPass@123');await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page.getByRole('heading',{name:'Who’s coming along?'})).toBeVisible();await page.getByLabel('Choose saved passenger').selectOption('1');await expect(page.getByLabel('Full name')).toHaveValue('Demo Traveller');
+ await page.goto('/');await page.getByLabel('Departure station').fill('DSTA');await page.getByLabel('Arrival station').fill('DSTC');await page.getByRole('button',{name:'Find trains',exact:true}).click();await expect(page.getByText('Demo Small Capacity Express')).toBeVisible();await page.getByRole('link',{name:'Choose SL'}).click();await expect(page).toHaveURL(/auth\/login\?returnUrl/);await page.getByLabel('Username or email').fill('demo_user');await page.getByLabel('Password',{exact:true}).fill('DemoPass@123');await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page.getByRole('heading',{name:'Who’s coming along?'})).toBeVisible();await page.getByLabel('Number of passengers').selectOption({label:'1 passenger'});await page.getByLabel('Choose saved passenger').selectOption('1');await expect(page.getByLabel('Full name')).toHaveValue('Demo Traveller');
  await page.screenshot({path:'test-results/passenger-details.png',fullPage:true});
 });
 test('uncertain booking retries keep the same idempotency key and body',async({page})=>{
  await auth(page);let attempts=0;const keys:string[]=[],bodies:string[]=[];
  await page.route('**/api/reservations/book',async route=>{attempts++;keys.push(route.request().headers()['idempotency-key']);bodies.push(route.request().postData()!);if(attempts===1)return route.abort('failed');return json(route,booking,201)});
- await page.goto(`/book/DM001?fromStation=DSTA&toStation=DSTC&dateOfJourney=${travel}&seatClass=SL&passengers=1`);await page.getByLabel('Choose saved passenger').selectOption('1');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Continue to checkout'}).click();await expect(page.getByRole('button',{name:'Retry the same booking'})).toBeVisible();await expect(page.getByLabel('Full name')).toBeDisabled();await page.getByRole('button',{name:'Retry the same booking'}).click();await expect(page).toHaveURL(/bookings\/1234567890/);expect(keys[0]).toBeTruthy();expect(keys[1]).toEqual(keys[0]);expect(bodies[1]).toEqual(bodies[0]);await expect(page.getByLabel('Time remaining')).toBeVisible();
+ await page.goto(`/book/DM001?fromStation=DSTA&toStation=DSTC&dateOfJourney=${travel}&seatClass=SL&passengers=1`);await page.getByLabel('Number of passengers').selectOption({label:'1 passenger'});await page.getByLabel('Choose saved passenger').selectOption('1');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Continue to checkout'}).click();await expect(page.getByRole('button',{name:'Retry the same booking'})).toBeVisible();await expect(page.getByLabel('Full name')).toBeDisabled();await page.getByRole('button',{name:'Retry the same booking'}).click();await expect(page).toHaveURL(/bookings\/1234567890/);expect(keys[0]).toBeTruthy();expect(keys[1]).toEqual(keys[0]);expect(bodies[1]).toEqual(bodies[0]);await expect(page.getByLabel('Time remaining')).toBeVisible();
 });
 test('signed test checkout is verified; a successful WL payment is not shown as confirmed',async({page})=>{
  await auth(page);let paid=false;let verified:unknown;
@@ -102,16 +102,16 @@ test('timetable endpoints stay fixed while intermediate stops are inserted and r
  await page.route('**/api/schedules/DM001',route=>json(route,{message:'No timetable yet'},404));
  await page.goto('/admin/schedules');await page.locator('select[name="train"]').selectOption('DM001');
  await page.getByRole('button',{name:'Load timetable'}).click();
- await expect(page.locator('[name="arrival0"]')).toBeDisabled();
- await expect(page.locator('[name="departure1"]')).toBeDisabled();
- await expect(page.locator('[name="station0"]')).toBeDisabled();
+ await expect(page.getByLabel('Arrival time',{exact:true}).nth(0)).toBeDisabled();
+ await expect(page.getByLabel('Departure time',{exact:true}).nth(1)).toBeDisabled();
+ await expect(page.getByRole('combobox',{name:'Station',exact:true}).nth(0)).toBeDisabled();
  await page.getByRole('button',{name:'Add intermediate stop'}).click();
- await expect(page.locator('[name="station2"]')).toHaveValue('DSTC');
- await expect(page.locator('[name="departure2"]')).toBeDisabled();
- await expect(page.locator('[name="arrival1"]')).toBeEnabled();
- await expect(page.locator('[name="departure1"]')).toBeEnabled();
+ await expect(page.getByRole('combobox',{name:'Station',exact:true}).nth(2)).toHaveValue('DSTC');
+ await expect(page.getByLabel('Departure time',{exact:true}).nth(2)).toBeDisabled();
+ await expect(page.getByLabel('Arrival time',{exact:true}).nth(1)).toBeEnabled();
+ await expect(page.getByLabel('Departure time',{exact:true}).nth(1)).toBeEnabled();
  await page.getByRole('button',{name:'Remove stop 2'}).click();
- await expect(page.locator('[name="station1"]')).toHaveValue('DSTC');
+ await expect(page.getByRole('combobox',{name:'Station',exact:true}).nth(1)).toHaveValue('DSTC');
 });
 
 test('saved passenger load failure can be retried and selection avoids duplicates across rows',async({page})=>{
@@ -121,22 +121,22 @@ test('saved passenger load failure can be retried and selection avoids duplicate
   const second=new URL(route.request().url()).searchParams.get('page')==='1';
   return json(route,{content:[{id:second?2:1,...passenger,name:second?'Second Traveller':'Demo Traveller',berthPreference:'LOWER'}],page:second?1:0,size:1,totalPages:2,totalElements:2});
  });
- await page.goto(`/book/DM001?fromStation=DSTA&toStation=DSTC&dateOfJourney=${travel}&seatClass=SL&passengers=2`);
+ await page.goto(`/book/DM001?fromStation=DSTA&toStation=DSTC&dateOfJourney=${travel}&seatClass=SL&passengers=2`);await page.getByLabel('Number of passengers').selectOption({label:'2 passengers'});
  await expect(page.getByText(/Saved passengers could not load/)).toBeVisible();
  failed=false;await page.getByRole('button',{name:'Retry saved passengers'}).click();
  const selectors=page.getByLabel('Choose saved passenger');
  await selectors.nth(0).selectOption('1');
- await expect(selectors.nth(1).locator('option[value="1"]')).toBeDisabled();
+ await expect(selectors.nth(1).locator('option[value="1"]')).toHaveJSProperty('disabled',true);
  await selectors.nth(1).selectOption('2');
  await expect(page.getByLabel('Full name').nth(1)).toHaveValue('Second Traveller');
  await page.getByLabel('Full name').nth(1).fill('Edited for this booking');
  await selectors.nth(0).selectOption('');
- await expect(selectors.nth(1).locator('option[value="1"]')).toBeEnabled();
+ await expect(selectors.nth(1).locator('option[value="1"]')).toHaveJSProperty('disabled',false);
 });
 
 test('empty master list keeps manual booking available',async({page})=>{
  await auth(page);await page.route('**/api/users/me/passengers**',route=>json(route,pageOf([])));
- await page.goto(`/book/DM001?fromStation=DSTA&toStation=DSTC&dateOfJourney=${travel}&seatClass=SL&passengers=1`);
+ await page.goto(`/book/DM001?fromStation=DSTA&toStation=DSTC&dateOfJourney=${travel}&seatClass=SL&passengers=1`);await page.getByLabel('Number of passengers').selectOption({label:'1 passenger'});
  await expect(page.getByText(/No saved passengers yet/)).toBeVisible();
  await expect(page.getByLabel('Full name')).toBeEnabled();
  await expect(page.getByLabel('Choose saved passenger')).toBeDisabled();
@@ -156,7 +156,7 @@ test('new account profile is editable when backend returns empty fields',async({
  await auth(page);await page.route('**/api/users/me',route=>json(route,{username:'demo_user',firstName:null,lastName:null,phoneNumber:null,gender:null,dateOfBirth:null,address:null}));
  await page.goto('/account');await expect(page.getByText('Welcome! Add your details to complete your profile.')).toBeVisible();
  await expect(page.getByLabel('First name')).toHaveValue('');
- await expect(page.getByLabel('Gender',{exact:true})).toHaveValue('');
+ await expect(page.locator('select[name="gender"]')).toHaveValue('');
 });
 
 test('Google account can choose its username once without changing its booking owner',async({page})=>{
@@ -168,7 +168,7 @@ test('Google account can choose its username once without changing its booking o
   return json(route,{username:changed?'my_travels':'google_1234567890123',canChange:!changed,changedAt:changed?new Date().toISOString():null});
  });
  await page.goto('/auth/callback?code=google-username-choice');await expect(page).toHaveURL(/\/account\?returnUrl=/);
- await page.getByLabel('New username',{exact:true}).fill('My_Travels');
+ await page.getByLabel(/^New username/).fill('My_Travels');
  await page.getByLabel('I understand that this is my one username change.').check();
  await page.getByRole('button',{name:'Save username',exact:true}).click();
  await expect(page.getByText('Your one username change has been used.',{exact:false})).toBeVisible();
@@ -179,18 +179,18 @@ test('Google account can choose its username once without changing its booking o
 
 test('unavailable username is explained and the form remains editable',async({page})=>{
  await auth(page);await page.route('**/api/auth/username',route=>route.request().method()==='PUT'?json(route,{message:'That username is already taken. Choose another.'},409):json(route,{username:'demo_user',canChange:true,changedAt:null}));
- await page.goto('/account');await page.getByLabel('New username',{exact:true}).fill('taken_name');
+ await page.goto('/account');await page.getByLabel(/^New username/).fill('taken_name');
  await page.getByLabel('I understand that this is my one username change.').check();await page.getByRole('button',{name:'Save username',exact:true}).click();
  await expect(page.getByText('That username is already taken. Choose another.',{exact:false})).toBeVisible();
- await expect(page.getByLabel('New username',{exact:true})).toBeEnabled();
+ await expect(page.getByLabel(/^New username/)).toBeEnabled();
 });
 
 test('recent searches persist, restore details and support remove and clear',async({page})=>{
  await auth(page);
- await page.goto('/');await page.getByLabel('Departure station').fill('DSTA');await page.getByLabel('Arrival station').fill('DSTC');await page.getByLabel('Travel date').fill(travel);await page.getByLabel('Passengers',{exact:true}).selectOption({label:'2'});await page.getByRole('button',{name:'Find trains',exact:true}).click();
+ await page.goto('/');await page.getByLabel('Departure station').fill('DSTA');await page.getByLabel('Arrival station').fill('DSTC');await page.getByLabel('Travel date').fill(travel);await page.getByRole('button',{name:'Find trains',exact:true}).click();
  await expect(page.getByRole('region',{name:'Recent searches'})).toBeVisible();await page.reload();
  const history=page.getByRole('region',{name:'Recent searches'});await expect(history.getByRole('listitem')).toHaveCount(1);
- await page.getByLabel('Departure station').fill('DSTB');await history.getByRole('button',{name:/Reuse search/}).click();await expect(page.getByLabel('Departure station')).toHaveValue('DSTA');await expect(page.getByLabel('Passengers',{exact:true}).locator('option:checked')).toHaveText('2');
+ await page.getByLabel('Departure station').fill('DSTB');await history.getByRole('button',{name:/Reuse search/}).click();await expect(page.getByLabel('Departure station')).toHaveValue('DSTA');await expect(page.getByLabel('Passengers',{exact:true})).toHaveCount(0);
  await page.getByRole('button',{name:'Find trains',exact:true}).click();await expect(history.getByRole('listitem')).toHaveCount(1);
  await history.getByRole('button',{name:/Remove search/}).click();await expect(history).toHaveCount(0);
  await page.getByRole('button',{name:'Find trains',exact:true}).click();await history.getByRole('button',{name:'Clear all',exact:true}).click();await page.reload();await expect(history).toHaveCount(0);
