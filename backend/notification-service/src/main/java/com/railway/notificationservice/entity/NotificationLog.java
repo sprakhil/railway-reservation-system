@@ -13,8 +13,8 @@ public class NotificationLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String pnr;
+    @Column(length=40) private String supportTicketId;
 
     @Column(nullable = false)
     private String recipientEmail;

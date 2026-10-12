@@ -11,6 +11,23 @@ import java.util.*;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 class ReservationEmailOutboxTest {
+ @Test void supportNotificationPreservesReferenceWithoutBookingOrPdf() {
+  var repo=mock(BookingNotificationRepository.class);var pdf=mock(TicketPdfService.class);
+  var rabbit=mock(RabbitTemplate.class);var relay=mock(NotificationRelay.class);
+  var pending=new BookingNotification();pending.setEventId("support-reply:user");
+  pending.setEventType("SUPPORT_REPLY");pending.setSupportTicketId("SUP-"+UUID.randomUUID());
+  pending.setUserEmail("alice@example.test");pending.setUsername("alice");
+  when(repo.findTop50ByDeliveredAtIsNullAndNextAttemptAtLessThanEqual(any())).thenReturn(List.of(pending));
+  var jobs=new ReservationJobs(mock(BookingEngine.class),pdf,repo,rabbit,Clock.systemUTC(),relay);
+  ReflectionTestUtils.setField(jobs,"exchange","railway_exchange");ReflectionTestUtils.setField(jobs,"routingKey","notification.email");
+  doAnswer(invocation->{
+   NotificationEvent event=invocation.getArgument(2);
+   assertEquals(pending.getSupportTicketId(),event.getSupportTicketId());
+   assertEquals("alice@example.test",event.getUserEmail());assertNull(event.getPnr());assertNull(event.getTicketPdf());
+   CorrelationData correlation=invocation.getArgument(3);correlation.getFuture().complete(new CorrelationData.Confirm(true,null));return null;
+  }).when(rabbit).convertAndSend(anyString(),anyString(),any(NotificationEvent.class),any(CorrelationData.class));
+  jobs.deliverNotifications();assertNotNull(pending.getDeliveredAt());verifyNoInteractions(pdf,relay);verify(repo).save(pending);
+ }
  @Test void brokerFailureUsesDurableHttpFallbackAndFailureOfBothKeepsOutboxPending(){
   var repo=mock(BookingNotificationRepository.class);var rabbit=mock(RabbitTemplate.class);var relay=mock(NotificationRelay.class);var clock=Clock.systemUTC();
   var event=new BookingNotification();event.setPnr("1234567890");event.setEventId("1234567890:CANCELLED");event.setEventType("CANCELLED");

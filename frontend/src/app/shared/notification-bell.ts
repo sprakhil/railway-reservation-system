@@ -1,7 +1,7 @@
 import { Component, inject, signal, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { Notifications, NotificationItem } from '../core/notifications';
+import { Notifications, NotificationItem, notificationRoute } from '../core/notifications';
 import { Icon } from './ui';
 
 @Component({selector:'rw-notification-bell',imports:[Icon,DatePipe,RouterLink],template:`
@@ -14,8 +14,8 @@ import { Icon } from './ui';
  <div class="notification-items">@for(item of inbox.items().slice(0,3);track item.id){
  <button class="notification-item" [class.unread]="!item.readAt" [disabled]="busy()" (click)="visit(item)">
  <span class="notification-symbol"><rw-icon [name]="item.type.includes('REFUND')?'refresh':item.type==='PROMOTED'||item.type==='PAYMENT_RECEIVED'?'check':'ticket'"/></span>
- <span class="notification-copy"><strong>{{item.title}}</strong><span class="notification-pnr">PNR {{item.pnr}}</span><span class="notification-excerpt">{{item.message}}</span><span class="notification-meta">{{item.createdAt|date:'d MMM, h:mm a'}} <span>View booking →</span></span></span>@if(!item.readAt){<span class="unread-dot" aria-label="Unread"></span>}</button>
- }@empty{<div class="notification-empty"><rw-icon name="bell"/><h3>{{inbox.ready()?'You’re all caught up':'Loading your updates…'}}</h3><p>Booking, payment and refund updates will appear here.</p></div>}</div>
+ <span class="notification-copy"><strong>{{item.title}}</strong><span class="notification-pnr">{{item.supportTicketId?'Support request '+item.supportTicketId:'PNR '+item.pnr}}</span><span class="notification-excerpt">{{item.message}}</span><span class="notification-meta">{{item.createdAt|date:'d MMM, h:mm a'}} <span>{{item.supportTicketId?'View request →':'View booking →'}}</span></span></span>@if(!item.readAt){<span class="unread-dot" aria-label="Unread"></span>}</button>
+ }@empty{<div class="notification-empty"><rw-icon name="bell"/><h3>{{inbox.ready()?'You’re all caught up':'Loading your updates…'}}</h3><p>Booking, payment, refund and support updates will appear here.</p></div>}</div>
  <a routerLink="/notifications" class="notification-footer" (click)="open.set(false)">View all notifications <rw-icon name="arrow"/></a>
 </section>}
 `})
@@ -27,7 +27,7 @@ export class NotificationBell {
   @HostListener('document:click',['$event']) outside(event:MouseEvent){if(!this.host.nativeElement.contains(event.target))this.open.set(false)}
   @HostListener('document:keydown.escape') escape(){if(this.open())this.close()}
   @HostListener('focusout',['$event']) blur(event:FocusEvent){if(event.relatedTarget&&!this.host.nativeElement.contains(event.relatedTarget))this.open.set(false)}
-  async visit(item:NotificationItem){this.busy.set(true);this.error.set('');try{await this.inbox.read(item);this.open.set(false);await this.router.navigate(['/bookings',item.pnr])}catch{this.error.set('Could not mark this update as read. Please retry.')}finally{this.busy.set(false)}}
+  async visit(item:NotificationItem){this.busy.set(true);this.error.set('');try{await this.inbox.read(item);this.open.set(false);await this.router.navigate(notificationRoute(item))}catch{this.error.set('Could not mark this update as read. Please retry.')}finally{this.busy.set(false)}}
   async readAll(){this.busy.set(true);this.error.set('');try{await this.inbox.readAll()}catch{this.error.set('Could not mark notifications as read. Please retry.')}finally{this.busy.set(false)}}
 }
 

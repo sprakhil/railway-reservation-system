@@ -3,6 +3,13 @@ RAILWIZE - INDIA CATALOGUE AND EVALUATION GUIDE
 Prepared: 11 October 2026
 Files: LOAD-INDIA-CATALOGUE.sql and INDIA-DATA-GUIDE.txt
 
+For a larger network, also see ADD-MAJOR-CITY-ROUTES.sql and MAJOR-CITIES-GUIDE.txt:
+68 daily services, 111 station records (existing codes reused) and 414 stops,
+including MMCT/CSMT -> NDLS in SL, 3A and 2A. That expansion works independently
+or after this original catalogue. Its locally defined schedules are separate
+from the researched snapshots below. Extra routes can change planner rankings
+and examples that previously had no direct service.
+
 1. WHAT YOU ARE LOADING
 -----------------------
 60 real Indian station identities, 27 trains, 165 timetable stops.
@@ -464,7 +471,7 @@ Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
   4 | LDH   | D2 01:35           | D2 01:45             | 265
   5 | NDLS  | D2 05:55           | --                   | 577
 
-RW901 - Railwize Demo - Delhi Agra Lucknow Layout Explorer
+RW901 - Nizamuddin Lucknow Express
 Runs: Daily. Category: EXPRESS
 Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
 Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
@@ -473,7 +480,7 @@ Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
   3 | CNB   | D1 13:00           | D1 13:10             | 470
   4 | LJN   | D1 14:30           | --                   | 544
 
-RW902 - Railwize Demo - Lucknow Varanasi Connection
+RW902 - Lucknow Varanasi Express
 Runs: Daily. Category: EXPRESS
 Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
 Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
@@ -481,21 +488,21 @@ Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
   2 | PRYJ  | D1 19:00           | D1 19:10             | 200
   3 | BSB   | D1 21:00           | --                   | 335
 
-RW903 - Railwize Demo - Connection Too Short
+RW903 - Lucknow Varanasi Intercity
 Runs: Daily. Category: EXPRESS
 Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
 Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
   1 | LJN   | --                 | D1 14:50             | 0
   2 | BSB   | D1 20:00           | --                   | 335
 
-RW904 - Railwize Demo - Connection Too Long
+RW904 - Lucknow Varanasi Night Express
 Runs: Daily. Category: EXPRESS
 Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
 Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
   1 | LJN   | --                 | D1 23:45             | 0
   2 | BSB   | D2 05:00           | --                   | 335
 
-RW905 - Railwize Demo - Bandra Sabarmati Nearby Alternative
+RW905 - Bandra Sabarmati Express
 Runs: Daily. Category: EXPRESS
 Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
 Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
@@ -504,7 +511,7 @@ Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
   3 | BRC   | D1 13:00           | D1 13:10             | 381
   4 | SBT   | D1 15:00           | --                   | 490
 
-RW906 - Railwize Demo - Monday Midnight Crossing
+RW906 - Nizamuddin Lucknow Night Express
 Runs: Monday. Category: EXPRESS
 Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
 Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
@@ -512,7 +519,7 @@ Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
   2 | AGC   | D1 23:55           | D2 00:05             | 188
   3 | LJN   | D2 06:00           | --                   | 544
 
-RW907 - Railwize Demo - Jammu Katra Waitlist Lab
+RW907 - Jammu Katra Express
 Runs: Daily. Category: EXPRESS
 Source: Fictional Railwize evaluation fixture; not an Indian Railways service.
 Seq | Code  | Arrival (day/time) | Departure (day/time) | Cumulative km
@@ -824,3 +831,11 @@ fresh insertion, existing-station preservation, duplicate-run rejection, orphan
 timetable conflict rejection and rollback across both schemas were checked.
 No changes were made to the running application's databases by this preparation.
 This validates catalogue import; it is not a new end-to-end payment/email test.
+
+CATALOGUE DISPLAY-NAME UPDATE
+-----------------------------
+New imports use route-based names for RW901-RW907. If these trains are already
+imported, run UPDATE-TRAIN-DISPLAY-NAMES.sql in MySQL Workbench and refresh the
+frontend. Do not rerun the full import over existing trains. The update changes
+only exact original names and leaves custom names and booking snapshots intact.
+The RW services remain fictional fixtures as documented above.

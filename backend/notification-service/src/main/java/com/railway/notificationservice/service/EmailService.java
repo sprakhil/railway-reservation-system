@@ -20,9 +20,9 @@ public class EmailService {
     @Value("${notification.refund-timeline:Test refunds are reconciled approximately every 30 seconds while services are running. Provider delays may take longer; there is no bank-credit timeline in test mode.}")
     private String timeline="Test refunds are reconciled approximately every 30 seconds while services are running. Provider delays may take longer; there is no bank-credit timeline in test mode.";
     public boolean processTicketConfirmation(NotificationEvent event) {
-        NotificationLog audit=NotificationLog.builder().pnr(event.getPnr()).recipientEmail(event.getUserEmail()).sentAt(LocalDateTime.now()).build();
+        NotificationLog audit=NotificationLog.builder().pnr(event.getPnr()).supportTicketId(event.getSupportTicketId()).recipientEmail(event.getUserEmail()).sentAt(LocalDateTime.now()).build();
         try {
-            var content=BookingEmailTemplate.render(event,frontend,timeline,Instant.now());
+            var content=event.getSupportTicketId()!=null?SupportEmailTemplate.render(event,frontend):BookingEmailTemplate.render(event,frontend,timeline,Instant.now());
             var message=mailSender.createMimeMessage();var helper=new MimeMessageHelper(message,true,"UTF-8");
             if(!from.isBlank())helper.setFrom(from,"Railwize");
             helper.setTo(event.getUserEmail());helper.setSubject(content.subject());helper.setText(content.plain(),content.html());

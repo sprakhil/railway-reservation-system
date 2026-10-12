@@ -15,8 +15,15 @@ import java.time.*;
 public class NotificationCenter {
     private final UserNotificationRepository repository;
     private final Clock clock;
-    public record Item(String id,String pnr,String type,String title,String message,Instant createdAt,Instant readAt) {}
+    public record Item(String id,String pnr,String type,String title,String message,Instant createdAt,Instant readAt,String supportTicketId) {}
     public record Inbox(PageResult<Item> notifications,long unreadCount) {}
+
+    @Transactional(propagation=Propagation.MANDATORY)
+    public void support(String id,String owner,String ticketId,String pnr,String type,String title,String message) {
+        if(repository.existsById(id))return;
+        var n=new UserNotification();n.setEventId(id);n.setUsername(owner);n.setSupportTicketId(ticketId);n.setPnr(pnr);
+        n.setEventType(type);n.setTitle(title);n.setMessage(message);n.setCreatedAt(clock.instant());repository.save(n);
+    }
 
     // Must commit or roll back with the booking transition that produced the event.
     @Transactional(propagation=Propagation.MANDATORY)
@@ -48,7 +55,7 @@ public class NotificationCenter {
         if(page<0 || size<1 || size>100) throw BookingException.badRequest("Page must be non-negative and size must be 1-100");
         var paging=PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,"createdAt","eventId"));
         var entries=unreadOnly?repository.findByUsernameAndReadAtIsNull(owner,paging):repository.findByUsername(owner,paging);
-        return new Inbox(PageResult.of(entries.map(n->new Item(n.getEventId(),n.getPnr(),n.getEventType(),n.getTitle(),n.getMessage(),n.getCreatedAt(),n.getReadAt()))),repository.countByUsernameAndReadAtIsNull(owner));
+        return new Inbox(PageResult.of(entries.map(n->new Item(n.getEventId(),n.getPnr(),n.getEventType(),n.getTitle(),n.getMessage(),n.getCreatedAt(),n.getReadAt(),n.getSupportTicketId()))),repository.countByUsernameAndReadAtIsNull(owner));
     }
     @Transactional
     public void read(String owner,String id) {

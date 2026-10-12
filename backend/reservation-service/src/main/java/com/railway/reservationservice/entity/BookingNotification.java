@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import lombok.*;
 @Entity @Table(name="booking_notification_outbox") @Data @NoArgsConstructor
 public class BookingNotification {
+    @Column(length=40) private String supportTicketId;
     @Id private String eventId;
     @Lob @Column(columnDefinition="LONGTEXT") private String bookingJson;
     private String pnr;

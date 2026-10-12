@@ -552,7 +552,7 @@ Angular generates an `.ics` file for a future confirmed departure using the serv
 
 **Q101. What is the Help section?**
 
-A public, searchable, categorized set of guidance for accounts, bookings, payments, waitlists, refunds and operational cancellation, with relevant navigation links. It remains useful when the AI provider is unavailable. It is not a staffed live-support or support-case tracking system.
+A public, searchable, categorized set of guidance for accounts, bookings, payments, waitlists, refunds and operational cancellation, with relevant navigation links. It remains useful when the AI provider is unavailable. The Help centre now links to a support-case workflow: passengers create private requests with an optional owned PNR, administrators reply and track Open/In progress/Resolved status, and updates arrive through email and in-app notifications. It is not a synchronous live chat or a guaranteed response-time service.
 
 ## 11. Admin management, reports and exports
 

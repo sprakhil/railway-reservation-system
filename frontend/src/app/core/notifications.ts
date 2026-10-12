@@ -5,7 +5,8 @@ import { Auth } from './api';
 import { Page } from './models';
 import { NotificationRefresh } from './notification-refresh';
 
-export interface NotificationItem {id:string;pnr:string;type:string;title:string;message:string;createdAt:string;readAt:string|null}
+export interface NotificationItem {id:string;pnr:string|null;supportTicketId?:string|null;type:string;title:string;message:string;createdAt:string;readAt:string|null}
+export function notificationRoute(item:NotificationItem):string[]{return item.supportTicketId&&/^SUP-[0-9a-f-]{36}$/.test(item.supportTicketId)?['/support',item.supportTicketId]:item.pnr?['/bookings',item.pnr]:['/notifications']}
 export interface Inbox {notifications:Page<NotificationItem>;unreadCount:number}
 export const NOTIFICATION_POLL_MS=5000;
 const PATH='/api/reservations/notifications';

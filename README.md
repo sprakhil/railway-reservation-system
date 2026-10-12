@@ -16,6 +16,8 @@ The project combines an **Angular frontend** with **12 Spring Boot services**. I
 | [Frontend README](frontend/README.md) | Passenger/admin screens, routes, authentication, browser storage, setup and UI tests |
 | [India dataset guide](Railwize-india-data/INDIA-DATA-GUIDE.txt) | All sample stations/trains/timetables and feature demonstration steps |
 | [India SQL dataset](Railwize-india-data/LOAD-INDIA-CATALOGUE.sql) | Catalogue, operating days, capacity, fares and schedules |
+| [Major-city expansion](Railwize-india-data/ADD-MAJOR-CITY-ROUTES.sql) | 68 additional daily services, including Mumbai–Delhi in Sleeper, 3A and 2A |
+| [Major-city guide](Railwize-india-data/MAJOR-CITIES-GUIDE.txt) | Import instructions, station directory, all 414 stops, search examples and fare checks |
 | [Additional QA dataset](Railwize-test-data/README.md) | Synthetic routes for targeted boundary checks |
 | [Evaluation guide](EVALUATION-GUIDE.md) | 143 viva questions, worked examples, edge cases, demonstration plan and implementation links |
 
@@ -58,6 +60,7 @@ These are timetable-based suggestions. Each leg has its own booking, payment and
 | Notifications | Read booking, payment, waitlist, cancellation and refund updates in the notification centre |
 | Travel assistant | Ask policy questions, search trains, inspect an owned PNR, list bookings/cancellations and ask about the next journey |
 | Help centre | Search categorized guidance about accounts, booking, payments, waitlists and cancellations |
+| Support requests | Contact support, optionally link an owned PNR, follow replies/status and receive email/in-app updates |
 
 ## Administrator features
 
@@ -75,6 +78,7 @@ Administrators use the same sign-in page and enter the **Admin workspace** after
 | Revenue and cancellations | Group reports by journey day, month or train, with cancellation rates and refund totals |
 | Exports | Download user, booking, cancellation and financial reports as Excel-compatible CSV |
 | Dated train cancellation | Preview and cancel one future source-date run, notify affected passengers and refund captured fares in full |
+| Support inbox | Search/filter passenger requests, reply and manage Open/In progress/Resolved status with conversation history |
 | Admin invitations | Invite a verified account, inspect invitation history and revoke unused invitations |
 
 Train-run cancellation preserves the train and historical records. It cancels a **specific source departure date**, across all classes and boarding segments, while other dates remain available.
@@ -144,7 +148,7 @@ Railwize/
 ├── README.md
 ├── backend/                 # 12 services, configuration, SQL and launch/test helpers
 ├── frontend/                # Angular application and frontend tests
-├── Railwize-india-data/      # 60 stations, 27 trains, 165 timetable stops and guide
+├── Railwize-india-data/      # Original India catalogue + major-city expansion and guides
 └── Railwize-test-data/       # Additional synthetic QA catalogue and request examples
 ```
 
@@ -185,6 +189,10 @@ Open **http://localhost:4200**. The development proxy sends `/api` requests to t
 Start the current train/schedule services once so the tables exist, then stop the application services and execute [LOAD-INDIA-CATALOGUE.sql](Railwize-india-data/LOAD-INDIA-CATALOGUE.sql) as a complete script in MySQL Workbench. Restart the services afterward.
 
 The dataset contains **60 stations, 20 researched Indian train services, 7 fictional test services and 165 stops**. Sample capacities/fares and approximate coordinates make it useful for demonstrations; it is not a live timetable feed. Existing station records are preserved, and conflicting train/timetable numbers abort the import. Read the [dataset guide](Railwize-india-data/INDIA-DATA-GUIDE.txt) before loading.
+
+For wider coverage, run [ADD-MAJOR-CITY-ROUTES.sql](Railwize-india-data/ADD-MAJOR-CITY-ROUTES.sql), either independently or after the original import. It supplies **111 station records, 68 daily services and 414 stops**, with SL, 3A and 2A on every service. Existing stations are reused, so these counts are not all additional stations. Identical services are skipped on rerun; conflicting or incomplete existing services stop the import. RW1001–RW1068 use locally defined schedules and fares, not official Indian Railways timings. See the [complete timetable and search guide](Railwize-india-data/MAJOR-CITIES-GUIDE.txt).
+
+To check Mumbai–Delhi, search **MMCT → NDLS (RW1001)** or **CSMT → NDLS (RW1003)** for a future date in SL/3A/2A. Direct search matches station codes and class: the original 12951 does not offer SL, and Mumbai's terminals are not interchangeable. Nearby search can suggest alternative terminals.
 
 ### Local entry points
 

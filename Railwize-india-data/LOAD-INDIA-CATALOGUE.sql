@@ -111,13 +111,13 @@ INSERT INTO rw_india_trains (number,name,category,source_code,destination_code) 
  ('22435','Varanasi - New Delhi Vande Bharat','VANDE_BHARAT','BSB','NDLS'),
  ('12425','New Delhi - Jammu Tawi Rajdhani','RAJDHANI','NDLS','JAT'),
  ('12426','Jammu Tawi - New Delhi Rajdhani','RAJDHANI','JAT','NDLS'),
- ('RW901','Railwize Demo - Delhi Agra Lucknow Layout Explorer','EXPRESS','NZM','LJN'),
- ('RW902','Railwize Demo - Lucknow Varanasi Connection','EXPRESS','LJN','BSB'),
- ('RW903','Railwize Demo - Connection Too Short','EXPRESS','LJN','BSB'),
- ('RW904','Railwize Demo - Connection Too Long','EXPRESS','LJN','BSB'),
- ('RW905','Railwize Demo - Bandra Sabarmati Nearby Alternative','EXPRESS','BDTS','SBT'),
- ('RW906','Railwize Demo - Monday Midnight Crossing','EXPRESS','NZM','LJN'),
- ('RW907','Railwize Demo - Jammu Katra Waitlist Lab','EXPRESS','JAT','SVDK');
+ ('RW901','Nizamuddin Lucknow Express','EXPRESS','NZM','LJN'),
+ ('RW902','Lucknow Varanasi Express','EXPRESS','LJN','BSB'),
+ ('RW903','Lucknow Varanasi Intercity','EXPRESS','LJN','BSB'),
+ ('RW904','Lucknow Varanasi Night Express','EXPRESS','LJN','BSB'),
+ ('RW905','Bandra Sabarmati Express','EXPRESS','BDTS','SBT'),
+ ('RW906','Nizamuddin Lucknow Night Express','EXPRESS','NZM','LJN'),
+ ('RW907','Jammu Katra Express','EXPRESS','JAT','SVDK');
 
 INSERT INTO rw_india_days (number,day) VALUES
  ('12951','MONDAY'),
@@ -623,7 +623,7 @@ INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,d
  ('12426','NDLS',5,'05:55:00',NULL,2,2,577);
 
 
--- RW901 Railwize Demo - Delhi Agra Lucknow Layout Explorer
+-- RW901 Nizamuddin Lucknow Express
 -- Fictional Railwize test service; timings and distances are illustrative.
 
 INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,departure_day,km) VALUES
@@ -633,7 +633,7 @@ INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,d
  ('RW901','LJN',4,'14:30:00',NULL,1,1,544);
 
 
--- RW902 Railwize Demo - Lucknow Varanasi Connection
+-- RW902 Lucknow Varanasi Express
 -- Fictional Railwize test service; timings and distances are illustrative.
 
 INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,departure_day,km) VALUES
@@ -642,7 +642,7 @@ INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,d
  ('RW902','BSB',3,'21:00:00',NULL,1,1,335);
 
 
--- RW903 Railwize Demo - Connection Too Short
+-- RW903 Lucknow Varanasi Intercity
 -- Fictional Railwize test service; timings and distances are illustrative.
 
 INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,departure_day,km) VALUES
@@ -650,7 +650,7 @@ INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,d
  ('RW903','BSB',2,'20:00:00',NULL,1,1,335);
 
 
--- RW904 Railwize Demo - Connection Too Long
+-- RW904 Lucknow Varanasi Night Express
 -- Fictional Railwize test service; timings and distances are illustrative.
 
 INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,departure_day,km) VALUES
@@ -658,7 +658,7 @@ INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,d
  ('RW904','BSB',2,'05:00:00',NULL,2,2,335);
 
 
--- RW905 Railwize Demo - Bandra Sabarmati Nearby Alternative
+-- RW905 Bandra Sabarmati Express
 -- Fictional Railwize test service; timings and distances are illustrative.
 
 INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,departure_day,km) VALUES
@@ -668,7 +668,7 @@ INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,d
  ('RW905','SBT',4,'15:00:00',NULL,1,1,490);
 
 
--- RW906 Railwize Demo - Monday Midnight Crossing
+-- RW906 Nizamuddin Lucknow Night Express
 -- Fictional Railwize test service; timings and distances are illustrative.
 
 INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,departure_day,km) VALUES
@@ -677,7 +677,7 @@ INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,d
  ('RW906','LJN',3,'06:00:00',NULL,2,2,544);
 
 
--- RW907 Railwize Demo - Jammu Katra Waitlist Lab
+-- RW907 Jammu Katra Express
 -- Fictional Railwize test service; timings and distances are illustrative.
 
 INSERT INTO rw_india_stops (number,code,sequence,arrival,departure,arrival_day,departure_day,km) VALUES

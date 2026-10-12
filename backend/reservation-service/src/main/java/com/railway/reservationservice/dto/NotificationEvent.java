@@ -12,6 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificationEvent implements Serializable {
+    private String supportTicketId;
     private String bookingJson;
     private byte[] ticketPdf;
     private String eventId;

@@ -3,6 +3,8 @@ import { adminGuard, signedInGuard } from './core/api';
 import { guestOnlyGuard } from './core/api';
 
 export const routes:Routes=[
+ {path:'support',title:'Your support requests · Railwize',canActivate:[signedInGuard],loadComponent:()=>import('./pages/support').then(m=>m.SupportPage)},
+ {path:'support/:id',title:'Support conversation · Railwize',canActivate:[signedInGuard],loadComponent:()=>import('./pages/support').then(m=>m.SupportPage)},
  {path:'assistant',title:'Your travel companion · Railwize',canActivate:[signedInGuard],loadComponent:()=>import('./pages/chat').then(m=>m.ChatPage)},
  {path:'notifications',title:'Your updates · Railwize',canActivate:[signedInGuard],loadComponent:()=>import('./pages/notifications').then(m=>m.NotificationHistory)},
  {path:'',title:'Railwize — A better way to get there',loadComponent:()=>import('./pages/home').then(m=>m.Home)},
@@ -17,6 +19,8 @@ export const routes:Routes=[
  {path:'admin/accept-invitation',title:'Accept invitation · Railwize',loadComponent:()=>import('./pages/admin').then(m=>m.AcceptInvitation)},
  {path:'admin',canActivate:[adminGuard],loadComponent:()=>import('./pages/admin').then(m=>m.AdminShell),children:[
   {path:'',title:'Admin workspace · Railwize',loadComponent:()=>import('./pages/admin-insights').then(m=>m.AdminDashboardPage)},
+  {path:'support',title:'Support inbox · Railwize',data:{adminSupport:true},loadComponent:()=>import('./pages/support').then(m=>m.SupportPage)},
+  {path:'support/:id',title:'Support conversation · Railwize',data:{adminSupport:true},loadComponent:()=>import('./pages/support').then(m=>m.SupportPage)},
   {path:'users',title:'User management · Railwize',loadComponent:()=>import('./pages/admin-management').then(m=>m.AdminUsersPage)},
   {path:'bookings',title:'Booking management · Railwize',loadComponent:()=>import('./pages/admin-management').then(m=>m.AdminBookingsPage)},
   {path:'reports',title:'Revenue & reports · Railwize',loadComponent:()=>import('./pages/admin-insights').then(m=>m.AdminReportsPage)},

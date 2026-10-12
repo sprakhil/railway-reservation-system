@@ -34,7 +34,7 @@ public class ReservationJobs {
     public void deliverNotifications() {
         for(var pending:notifications.findTop50ByDeliveredAtIsNullAndNextAttemptAtLessThanEqual(clock.instant())) {
             try {
-                NotificationEvent event=NotificationEvent.builder().pnr(pending.getPnr()).username(pending.getUsername())
+                NotificationEvent event=NotificationEvent.builder().pnr(pending.getPnr()).supportTicketId(pending.getSupportTicketId()).username(pending.getUsername())
                     .bookingJson(pending.getBookingJson()).eventId(pending.getEventId()).eventType(pending.getEventType()).message(pending.getMessage())
                     .userEmail(pending.getUserEmail()).trainNumber(pending.getTrainNumber()).dateOfJourney(pending.getDateOfJourney()).build();
                 if(pending.getBookingJson()!=null && java.util.Set.of("PAYMENT_RECEIVED","PROMOTED").contains(pending.getEventType())) {

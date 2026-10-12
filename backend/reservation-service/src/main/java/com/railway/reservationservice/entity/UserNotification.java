@@ -12,7 +12,8 @@ import java.time.Instant;
 public class UserNotification {
     @Id @Column(length=120) private String eventId;
     @Column(nullable=false) private String username;
-    @Column(nullable=false) private String pnr;
+    private String pnr;
+    @Column(length=40) private String supportTicketId;
     @Column(nullable=false) private String eventType;
     @Column(nullable=false) private String title;
     @Column(nullable=false,length=4000) private String message;

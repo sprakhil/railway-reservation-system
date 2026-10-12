@@ -6,7 +6,8 @@ public class NotificationInbox {
  private final NotificationDeliveryRepository deliveries; private final EmailService emails;
  @Transactional public void accept(NotificationEvent event) {
   String id=event.getEventId()==null ? event.getPnr()+":LEGACY_CONFIRMATION" : event.getEventId();
-  if(id.length()>150 || event.getPnr()==null || event.getUserEmail()==null || event.getUserEmail().isBlank()) throw new IllegalArgumentException("Invalid notification event");
+  boolean support=event.getEventType()!=null && java.util.Set.of("SUPPORT_CREATED","SUPPORT_REPLY","SUPPORT_STATUS","SUPPORT_NEW","SUPPORT_USER_REPLY").contains(event.getEventType());
+  if(id.length()>150 || (support ? event.getSupportTicketId()==null || !event.getSupportTicketId().matches("SUP-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}") : event.getPnr()==null) || event.getUserEmail()==null || event.getUserEmail().isBlank()) throw new IllegalArgumentException("Invalid notification event");
   if(deliveries.existsById(id)) return;
   NotificationDelivery d=new NotificationDelivery(); d.setEventId(id); d.setPnr(event.getPnr()); d.setUserEmail(event.getUserEmail()); d.setUsername(event.getUsername());
   d.setTrainNumber(event.getTrainNumber()); d.setDateOfJourney(event.getDateOfJourney()); d.setEventType(event.getEventType()); d.setMessage(event.getMessage()); d.setPayloadJson(new tools.jackson.databind.json.JsonMapper().writeValueAsString(event)); d.setNextAttemptAt(Instant.now()); deliveries.saveAndFlush(d);

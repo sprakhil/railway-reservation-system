@@ -97,11 +97,11 @@ Passenger cancellation first shows the backend's fee/refund estimate and require
 
 ### Notifications and Help
 
-The navbar bell opens a compact preview with the latest three items. The `/notifications` page offers full paginated history, All/Unread filtering and read actions. Opening an item marks it read and navigates to its booking.
+The navbar bell opens a compact preview with the latest three items. The `/notifications` page offers full paginated history, All/Unread filtering and read actions. Opening an item marks it read and navigates to its booking or support conversation.
 
 Notifications refresh every **five seconds** while signed in with a visible tab, and after relevant successful booking/payment/cancellation actions. Failures use slower retries. Unread state is saved by the backend; logout removes the visible account state.
 
-The public `/help` page has searchable, categorized guidance and shortcuts to account, booking and assistant pages. It explains payment holds, WL promotion, cancellations, refunds and train-run cancellation.
+The public `/help` page has searchable, categorized guidance and shortcuts to account, booking and assistant pages. It explains payment holds, WL promotion, cancellations, refunds and train-run cancellation. Contact support opens `/support` for a private request, with an optional owned PNR, category, subject and message. Users can follow and reply to requests; replying reopens a resolved conversation. Requests and conversations refresh every ten seconds while the tab is visible. Help remains in the upper utility bar, without a duplicate main-navigation link.
 
 ### Ask Railwize
 
@@ -123,7 +123,8 @@ The frontend reads authenticated SSE events through a bounded streaming parser. 
 | `/admin/trains` | Create/configure trains, operating days, seat classes, coach capacity and fare rules |
 | `/admin/schedules` | Load and publish validated timetables |
 | `/admin/train-runs` | Preview/cancel a dated train run; inspect audit history and refund progress |
-| `/admin/invitations` | Invite administrators and review/revoke invitations |
+| /admin/support | Search/filter support requests, open conversations, reply and update status; ticket-version checks prevent overwriting a newer update |
+| /admin/invitations | Invite administrators and review/revoke invitations |
 
 Timetable editing disables source arrival and destination departure. Payload preparation also sets them to `null`, assigns consecutive stop sequences, and checks chronology, midnight departure days and increasing cumulative kilometres. Published-route restrictions are enforced by the backend.
 
@@ -140,7 +141,7 @@ Administrator access comes from backend bootstrap or a verified invitation. Angu
 | Public | `/`, `/journeys`, `/help` |
 | Guest account pages | `/auth/login`, `/auth/register`, and the recovery/verification modes in the auth page |
 | OAuth completion | `/auth/callback` |
-| Signed-in passenger/account | `/book/:trainNumber`, `/bookings`, `/bookings/:pnr`, `/passengers`, `/account`, `/notifications`, `/assistant` |
+| Signed-in passenger/account | `/book/:trainNumber`, `/bookings`, `/bookings/:pnr`, `/passengers`, `/account`, `/notifications`, `/assistant`, `/support`, `/support/:id` |
 | Invitation acceptance | `/admin/accept-invitation` with backend-verified invitation/account checks |
 | ADMIN | `/admin` and its workspace children |
 | Error pages | `/forbidden` and the wildcard not-found route |
@@ -226,6 +227,7 @@ Update backend CORS, frontend base/callback/invitation URLs and Google OAuth con
 | Admin analytics/management | [pages/admin-insights.ts](src/app/pages/admin-insights.ts), [pages/admin-management.ts](src/app/pages/admin-management.ts) |
 | Dated train cancellation | [pages/admin-runs.ts](src/app/pages/admin-runs.ts) |
 | Help centre | [pages/help.ts](src/app/pages/help.ts) |
+| Support inbox/conversations | [pages/support.ts](src/app/pages/support.ts), [core/support.ts](src/app/core/support.ts) |
 
 ## Troubleshooting
 
@@ -241,3 +243,5 @@ Update backend CORS, frontend base/callback/invitation URLs and Google OAuth con
 | Deep link returns 404 after deployment | Configure SPA fallback and API reverse proxy |
 
 For a complete demonstration, follow the [India dataset guide](../Railwize-india-data/INDIA-DATA-GUIDE.txt), then verify actual provider integrations with the configured backend.
+
+The [major-city expansion guide](../Railwize-india-data/MAJOR-CITIES-GUIDE.txt) adds 68 daily services with SL/3A/2A. After importing its SQL, test **MMCT → NDLS** or **CSMT → NDLS** with a future boarding date. Select station suggestions explicitly: city labels do not make different terminals interchangeable. Nearby search covers alternate terminals when their coordinates are present.

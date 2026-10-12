@@ -1,0 +1,762 @@
+RAILWIZE MAJOR-CITY CATALOGUE EXPANSION
+======================================
+
+Contents: 111 station records, 68 directional services (34 return pairs),
+414 timetable stops, 3 seat classes per train, all 7 operating days.
+Run ADD-MAJOR-CITY-ROUTES.sql. It works on its own or after LOAD-INDIA-CATALOGUE.sql.
+Station codes are real; RW1001-RW1068 are Railwize-defined services.
+Times and distances are internally consistent planning values, not Indian Railways'
+official schedules or fares. No live railway feed is connected. Coordinates are
+approximate station-area points for nearby search, not platform/navigation positions.
+Train display names use natural city names with no test/demo labels.
+
+IMPORT IN MYSQL WORKBENCH
+1. Back up existing schemas. Start current train-service and schedule-service once
+   with DDL_AUTO=update so the six catalogue tables exist; then stop app services.
+2. Open ADD-MAJOR-CITY-ROUTES.sql on the same MySQL server holding
+   railway_train_db and railway_schedule_db. Replace BOTH schema names throughout
+   if yours differ. No new database is needed.
+3. Execute the complete file in one connection, not one selected statement.
+   Required privileges are listed at the start of the SQL. The user needs access
+   to both schemas. Do not ignore an import error and assume it succeeded.
+4. Look for MAJOR-CITY IMPORT SUCCEEDED, then inspect new/unchanged counts.
+   Existing station rows are reused unchanged. An exact rerun inserts no duplicates.
+   Changed/partial RW services cause a clear error and rollback. Nothing is deleted,
+   and existing routes, bookings, seats and account data are never overwritten.
+   Do not rerun to reset a train modified later by an administrator.
+5. Restart services and frontend. Refresh the station suggestions/search page.
+   Seat inventory is created by the existing booking workflow; do not insert seats,
+   reservations or payments by hand. The loader does not reverse run cancellations.
+
+WHY MUMBAI -> DELHI MAY HAVE SHOWN NO TRAINS
+The original 12951 serves MMCT -> NDLS and has AC classes, not SL. Exact search
+uses selected station codes, direction, published stops, selected class, source
+operating weekday, future departure and cancellation state. A city is not one
+interchangeable station: CSMT != MMCT, and NDLS != NZM != DLI != ANVT.
+This expansion adds RW1001 MMCT -> NDLS and RW1003 CSMT -> NDLS with SL/3A/2A.
+RW1003 also stops at NZM before NDLS. Return trains have different numbers.
+If the SQL diagnostic returns a matching train but the website does not, verify
+the service datasource/schema, loaded configuration, live train/schedule responses,
+selected station codes, class and any dated cancellation. Do not insert duplicates
+to hide a service/configuration failure. Old 12951 is not repaired or changed.
+
+QUICK SEARCH CHECKS
+Pick tomorrow or today+7 (IST), within the two-calendar-month booking window.
+Use 1 passenger and Sleeper (SL), AC 3 Tier (CLASS_3A) or AC 2 Tier (CLASS_2A).
+EC/1A/3E/2S are intentionally absent from these services.
+
+MMCT -> NDLS: RW1001; return NDLS -> MMCT: RW1002.
+CSMT -> NDLS: RW1003; return NDLS -> CSMT: RW1004.
+CSMT -> NZM: RW1003, getting off before its final New Delhi stop.
+CSMT -> PUNE: RW1005 plus through services.
+CSMT -> SBC: RW1007. CSMT -> MAS: RW1009. CSMT -> SC: RW1011.
+CSMT -> HWH: RW1013. MMCT -> ADI: RW1015. CSMT -> MAO: RW1019.
+NDLS -> HWH: RW1021. NDLS -> MAS: RW1023. NDLS -> SBC: RW1025.
+NDLS -> PNBE: RW1027. SBC -> MAS: RW1045. SC -> MAS: RW1047.
+SBC -> ERS: RW1049. ERS -> TVC: RW1051. HWH -> GHY: RW1059.
+Each pair below has its own reverse train; reversing only the search stations is
+not enough unless a separate service exists, which this file supplies.
+
+FARE / BERTH CHECK
+SL: 2 coaches x 72 seats, base Rs40, Rs0.60/km, minimum Rs120 (S1/S2).
+3A: 2 coaches x 72 berths, base Rs100, Rs1.50/km, minimum Rs300 (B1/B2).
+2A: 1 coach x 48 berths, base Rs150, Rs2.20/km, minimum Rs450 (A1).
+Fare=max(minimum,base + route distance x rate), multiplied by passenger count.
+MMCT -> NDLS is 1,384 km: SL Rs870.40, 3A Rs2,176.00, 2A Rs3,194.80 per person.
+Intermediate journeys use destination cumulative km minus boarding cumulative km.
+PNR, WL promotion, PDF, calendar, emails, support and refunds use normal flows.
+To check WL, use the existing smaller QA trains; do not shrink these published
+capacities after bookings exist. Payments remain Razorpay test mode.
+
+CONNECTION / NEARBY CHECKS
+MAO -> TVC has no direct service in this expansion: look for MAO -> ERS -> TVC
+with a compatible transfer window (up to 720 minutes); check the day-labelled
+times below. These remain two independently booked legs.
+YPR -> MAS with nearby enabled can use SBC/KJM. MS -> SBC can use MAS.
+HYB -> MAS can use SC. SDAH -> GHY can use HWH. DLI -> MMCT can use NDLS.
+Use a 25 km radius where available and include ground travel time yourself.
+The alternate terminals YPR/MS/HYB/SDAH/DLI/ANVT/BDTS/SBT are included for nearby
+lookup even when they have no new direct service of their own. Existing station
+coordinates are preserved; the SQL lists missing/invalid ones for admin review.
+Additional trains loaded previously can change which alternative ranks first.
+
+DAY NUMBER RULE
+Day 1 is departure day at the first station, not today's date. An intermediate
+boarding date maps back to source run date using departure_day_number - 1.
+Every source has NULL arrival; every terminal has NULL departure. Distances start
+at 0 and strictly increase. Stops have consecutive sequence numbers. Every next
+arrival follows the previous departure, including overnight and day-3 journeys.
+
+STATION DIRECTORY (decimal-degree latitude, longitude)
+ADI    | Ahmedabad Junction | Ahmedabad, Gujarat | 23.026, 72.602
+AGC    | Agra Cantt | Agra, Uttar Pradesh | 27.158, 77.989
+AII    | Ajmer Junction | Ajmer, Rajasthan | 26.456, 74.638
+AJJ    | Arakkonam Junction | Arakkonam, Tamil Nadu | 13.077, 79.671
+AK     | Akola Junction | Akola, Maharashtra | 20.722, 77.004
+ALJN   | Aligarh Junction | Aligarh, Uttar Pradesh | 27.888, 78.074
+ALLP   | Alappuzha | Alappuzha, Kerala | 9.49, 76.327
+ANND   | Anand Junction | Anand, Gujarat | 22.563, 72.966
+ANVT   | Anand Vihar Terminal | Delhi, Delhi | 28.65, 77.315
+ASN    | Asansol Junction | Asansol, West Bengal | 23.691, 86.974
+ASR    | Amritsar Junction | Amritsar, Punjab | 31.634, 74.872
+BAM    | Brahmapur | Brahmapur, Odisha | 19.298, 84.805
+BBS    | Bhubaneswar | Bhubaneswar, Odisha | 20.266, 85.843
+BDTS   | Bandra Terminus | Mumbai, Maharashtra | 19.062, 72.84
+BEAS   | Beas Junction | Beas, Punjab | 31.516, 75.289
+BHC    | Bhadrak | Bhadrak, Odisha | 21.058, 86.497
+BKSC   | Bokaro Steel City | Bokaro, Jharkhand | 23.663, 86.151
+BPL    | Bhopal Junction | Bhopal, Madhya Pradesh | 23.268, 77.413
+BRC    | Vadodara Junction | Vadodara, Gujarat | 22.31, 73.181
+BSB    | Varanasi Junction | Varanasi, Uttar Pradesh | 25.327, 82.986
+BSL    | Bhusaval Junction | Bhusaval, Maharashtra | 21.046, 75.789
+BSP    | Bilaspur Junction | Bilaspur, Chhattisgarh | 22.057, 82.172
+BVI    | Borivali | Mumbai, Maharashtra | 19.23, 72.857
+BZA    | Vijayawada Junction | Vijayawada, Andhra Pradesh | 16.519, 80.619
+CAN    | Kannur | Kannur, Kerala | 11.872, 75.369
+CBE    | Coimbatore Junction | Coimbatore, Tamil Nadu | 10.995, 76.967
+CDG    | Chandigarh | Chandigarh, Chandigarh | 30.702, 76.821
+CLT    | Kozhikode | Kozhikode, Kerala | 11.245, 75.781
+CNB    | Kanpur Central | Kanpur, Uttar Pradesh | 26.454, 80.35
+CSMT   | Chhatrapati Shivaji Maharaj Terminus | Mumbai, Maharashtra | 18.93985, 72.83544
+CTC    | Cuttack Junction | Cuttack, Odisha | 20.465, 85.9
+DDU    | Pt Deen Dayal Upadhyaya Junction | Chandauli, Uttar Pradesh | 25.282, 83.12
+DHN    | Dhanbad Junction | Dhanbad, Jharkhand | 23.791, 86.429
+DLI    | Delhi Junction | Delhi, Delhi | 28.661, 77.228
+DMM    | Dharmavaram Junction | Dharmavaram, Andhra Pradesh | 14.413, 77.722
+DURG   | Durg Junction | Durg, Chhattisgarh | 21.2, 81.29
+ED     | Erode Junction | Erode, Tamil Nadu | 11.328, 77.727
+ERS    | Ernakulam Junction | Kochi, Kerala | 9.97, 76.291
+ET     | Itarsi Junction | Itarsi, Madhya Pradesh | 22.612, 77.758
+GAYA   | Gaya Junction | Gaya, Bihar | 24.807, 85.0
+GHY    | Guwahati | Guwahati, Assam | 26.182, 91.751
+GTL    | Guntakal Junction | Guntakal, Andhra Pradesh | 15.172, 77.365
+GZB    | Ghaziabad Junction | Ghaziabad, Uttar Pradesh | 28.654, 77.427
+HWH    | Howrah Junction | Kolkata, West Bengal | 22.584, 88.343
+HYB    | Hyderabad Deccan | Hyderabad, Telangana | 17.392, 78.467
+INDB   | Indore Junction | Indore, Madhya Pradesh | 22.717, 75.869
+JAT    | Jammu Tawi | Jammu, Jammu and Kashmir | 32.706, 74.879
+JP     | Jaipur Junction | Jaipur, Rajasthan | 26.92, 75.787
+JTJ    | Jolarpettai Junction | Jolarpettai, Tamil Nadu | 12.571, 78.571
+JU     | Jodhpur Junction | Jodhpur, Rajasthan | 26.283, 73.022
+JUC    | Jalandhar City Junction | Jalandhar, Punjab | 31.326, 75.591
+KGP    | Kharagpur Junction | Kharagpur, West Bengal | 22.34, 87.325
+KJM    | Krishnarajapuram | Bengaluru, Karnataka | 13.001, 77.675
+KJT    | Karjat Junction | Karjat, Maharashtra | 18.91, 73.32
+KKDE   | Kurukshetra Junction | Kurukshetra, Haryana | 29.969, 76.852
+KOTA   | Kota Junction | Kota, Rajasthan | 25.224, 75.88
+KPD    | Katpadi Junction | Vellore, Tamil Nadu | 12.972, 79.138
+KTHU   | Kathua | Kathua, Jammu and Kashmir | 32.386, 75.526
+KYN    | Kalyan Junction | Kalyan, Maharashtra | 19.236, 73.13
+KZJ    | Kazipet Junction | Warangal, Telangana | 17.974, 79.506
+LDH    | Ludhiana Junction | Ludhiana, Punjab | 30.912, 75.848
+LJN    | Lucknow Junction | Lucknow, Uttar Pradesh | 26.831, 80.922
+LNL    | Lonavala | Lonavala, Maharashtra | 18.75, 73.407
+MAJN   | Mangaluru Junction | Mangaluru, Karnataka | 12.867, 74.879
+MAO    | Madgaon Junction | Margao, Goa | 15.267, 73.97
+MAS    | MGR Chennai Central | Chennai, Tamil Nadu | 13.083, 80.275
+MLDT   | Malda Town | Malda, West Bengal | 25.01, 88.14
+MMCT   | Mumbai Central | Mumbai, Maharashtra | 18.9697, 72.8194
+MS     | Chennai Egmore | Chennai, Tamil Nadu | 13.079, 80.261
+NBQ    | New Bongaigaon Junction | Bongaigaon, Assam | 26.478, 90.558
+NDLS   | New Delhi | New Delhi, Delhi | 28.6428, 77.21908
+NGP    | Nagpur Junction | Nagpur, Maharashtra | 21.153, 79.088
+NJP    | New Jalpaiguri Junction | Siliguri, West Bengal | 26.683, 88.444
+NLR    | Nellore | Nellore, Andhra Pradesh | 14.453, 79.988
+NZM    | Hazrat Nizamuddin | New Delhi, Delhi | 28.58917, 77.25417
+OGL    | Ongole | Ongole, Andhra Pradesh | 15.497, 80.06
+PGT    | Palakkad Junction | Palakkad, Kerala | 10.799, 76.643
+PNBE   | Patna Junction | Patna, Bihar | 25.603, 85.137
+PNP    | Panipat Junction | Panipat, Haryana | 29.391, 76.97
+PNVL   | Panvel Junction | Navi Mumbai, Maharashtra | 18.99, 73.121
+PRYJ   | Prayagraj Junction | Prayagraj, Uttar Pradesh | 25.445, 81.824
+PTKC   | Pathankot Cantt | Pathankot, Punjab | 32.269, 75.642
+PUNE   | Pune Junction | Pune, Maharashtra | 18.528, 73.874
+QLN    | Kollam Junction | Kollam, Kerala | 8.886, 76.596
+R      | Raipur Junction | Raipur, Chhattisgarh | 21.251, 81.63
+RC     | Raichur | Raichur, Karnataka | 16.206, 77.347
+RJY    | Rajahmundry | Rajahmundry, Andhra Pradesh | 16.983, 81.784
+RN     | Ratnagiri | Ratnagiri, Maharashtra | 17.0, 73.337
+RNC    | Ranchi | Ranchi, Jharkhand | 23.35, 85.336
+ROU    | Rourkela Junction | Rourkela, Odisha | 22.227, 84.863
+RTM    | Ratlam Junction | Ratlam, Madhya Pradesh | 23.331, 75.05
+RU     | Renigunta Junction | Tirupati, Andhra Pradesh | 13.635, 79.503
+SA     | Salem Junction | Salem, Tamil Nadu | 11.671, 78.114
+SBC    | KSR Bengaluru | Bengaluru, Karnataka | 12.979, 77.565
+SBT    | Sabarmati Junction | Ahmedabad, Gujarat | 23.072, 72.588
+SC     | Secunderabad Junction | Hyderabad, Telangana | 17.434, 78.502
+SDAH   | Sealdah | Kolkata, West Bengal | 22.567, 88.37
+SRR    | Shoranur Junction | Shoranur, Kerala | 10.758, 76.272
+ST     | Surat | Surat, Gujarat | 21.204, 72.841
+SUR    | Solapur | Solapur, Maharashtra | 17.665, 75.892
+SWM    | Sawai Madhopur Junction | Sawai Madhopur, Rajasthan | 26.018, 76.359
+TATA   | Tatanagar Junction | Jamshedpur, Jharkhand | 22.769, 86.198
+TCR    | Thrissur | Thrissur, Kerala | 10.514, 76.208
+TVC    | Thiruvananthapuram Central | Thiruvananthapuram, Kerala | 8.487, 76.952
+UJN    | Ujjain Junction | Ujjain, Madhya Pradesh | 23.179, 75.78
+UMB    | Ambala Cantt Junction | Ambala, Haryana | 30.338, 76.827
+VGLJ   | Virangana Lakshmibai Jhansi Junction | Jhansi, Uttar Pradesh | 25.444, 78.552
+VKB    | Vikarabad Junction | Vikarabad, Telangana | 17.336, 77.905
+VSKP   | Visakhapatnam | Visakhapatnam, Andhra Pradesh | 17.722, 83.289
+WADI   | Wadi Junction | Wadi, Karnataka | 17.054, 76.991
+YPR    | Yesvantpur Junction | Bengaluru, Karnataka | 13.023, 77.551
+
+COMPLETE TIMETABLES (IST; selected stops, not every physical halt)
+
+RW1001: Mumbai Central - New Delhi Express | MMCT -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MMCT   arrival --         departure D1 16:00      0 km
+   2 BVI    arrival D1 16:35   departure D1 16:45     30 km
+   3 ST     arrival D1 21:00   departure D1 21:10    263 km
+   4 BRC    arrival D1 23:35   departure D1 23:45    392 km
+   5 RTM    arrival D2 04:30   departure D2 04:40    650 km
+   6 KOTA   arrival D2 09:35   departure D2 09:45    917 km
+   7 NDLS   arrival D2 18:15   departure --         1384 km
+
+RW1002: New Delhi - Mumbai Central Express | NDLS -> MMCT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 16:00      0 km
+   2 KOTA   arrival D2 00:30   departure D2 00:40    467 km
+   3 RTM    arrival D2 05:35   departure D2 05:45    734 km
+   4 BRC    arrival D2 10:30   departure D2 10:40    992 km
+   5 ST     arrival D2 13:05   departure D2 13:15   1121 km
+   6 BVI    arrival D2 17:30   departure D2 17:40   1354 km
+   7 MMCT   arrival D2 18:15   departure --         1384 km
+
+RW1003: Mumbai CSMT - New Delhi Express | CSMT -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 CSMT   arrival --         departure D1 18:00      0 km
+   2 KYN    arrival D1 19:00   departure D1 19:10     54 km
+   3 BSL    arrival D2 02:20   departure D2 02:30    445 km
+   4 BPL    arrival D2 09:40   departure D2 09:50    838 km
+   5 VGLJ   arrival D2 15:10   departure D2 15:20   1129 km
+   6 AGC    arrival D2 19:15   departure D2 19:25   1344 km
+   7 NZM    arrival D2 22:55   departure D2 23:05   1532 km
+   8 NDLS   arrival D2 23:15   departure --         1540 km
+
+RW1004: New Delhi - Mumbai CSMT Express | NDLS -> CSMT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 18:00      0 km
+   2 NZM    arrival D1 18:10   departure D1 18:20      8 km
+   3 AGC    arrival D1 21:50   departure D1 22:00    196 km
+   4 VGLJ   arrival D2 01:55   departure D2 02:05    411 km
+   5 BPL    arrival D2 07:25   departure D2 07:35    702 km
+   6 BSL    arrival D2 14:45   departure D2 14:55   1095 km
+   7 KYN    arrival D2 22:05   departure D2 22:15   1486 km
+   8 CSMT   arrival D2 23:15   departure --         1540 km
+
+RW1005: Mumbai - Pune Express | CSMT -> PUNE | DAILY | SL / CLASS_3A / CLASS_2A
+   1 CSMT   arrival --         departure D1 06:00      0 km
+   2 KYN    arrival D1 07:00   departure D1 07:10     54 km
+   3 KJT    arrival D1 08:05   departure D1 08:15    100 km
+   4 LNL    arrival D1 08:50   departure D1 09:00    128 km
+   5 PUNE   arrival D1 10:10   departure --          192 km
+
+RW1006: Pune - Mumbai Express | PUNE -> CSMT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 PUNE   arrival --         departure D1 17:00      0 km
+   2 LNL    arrival D1 18:10   departure D1 18:20     64 km
+   3 KJT    arrival D1 18:55   departure D1 19:05     92 km
+   4 KYN    arrival D1 20:00   departure D1 20:10    138 km
+   5 CSMT   arrival D1 21:10   departure --          192 km
+
+RW1007: Mumbai - Bengaluru Express | CSMT -> SBC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 CSMT   arrival --         departure D1 08:00      0 km
+   2 PUNE   arrival D1 11:30   departure D1 11:40    192 km
+   3 SUR    arrival D1 16:30   departure D1 16:40    456 km
+   4 WADI   arrival D1 19:25   departure D1 19:35    605 km
+   5 RC     arrival D1 21:35   departure D1 21:45    713 km
+   6 GTL    arrival D2 00:00   departure D2 00:10    834 km
+   7 DMM    arrival D2 02:05   departure D2 02:15    936 km
+   8 SBC    arrival D2 05:40   departure --         1120 km
+
+RW1008: Bengaluru - Mumbai Express | SBC -> CSMT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 SBC    arrival --         departure D1 08:00      0 km
+   2 DMM    arrival D1 11:25   departure D1 11:35    184 km
+   3 GTL    arrival D1 13:30   departure D1 13:40    286 km
+   4 RC     arrival D1 15:55   departure D1 16:05    407 km
+   5 WADI   arrival D1 18:05   departure D1 18:15    515 km
+   6 SUR    arrival D1 21:00   departure D1 21:10    664 km
+   7 PUNE   arrival D2 02:00   departure D2 02:10    928 km
+   8 CSMT   arrival D2 05:40   departure --         1120 km
+
+RW1009: Mumbai - Chennai Express | CSMT -> MAS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 CSMT   arrival --         departure D1 12:00      0 km
+   2 PUNE   arrival D1 15:30   departure D1 15:40    192 km
+   3 SUR    arrival D1 20:30   departure D1 20:40    456 km
+   4 WADI   arrival D1 23:25   departure D1 23:35    605 km
+   5 RC     arrival D2 01:35   departure D2 01:45    713 km
+   6 GTL    arrival D2 04:00   departure D2 04:10    834 km
+   7 RU     arrival D2 09:50   departure D2 10:00   1143 km
+   8 AJJ    arrival D2 11:25   departure D2 11:35   1220 km
+   9 MAS    arrival D2 12:55   departure --         1289 km
+
+RW1010: Chennai - Mumbai Express | MAS -> CSMT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MAS    arrival --         departure D1 12:00      0 km
+   2 AJJ    arrival D1 13:20   departure D1 13:30     69 km
+   3 RU     arrival D1 14:55   departure D1 15:05    146 km
+   4 GTL    arrival D1 20:45   departure D1 20:55    455 km
+   5 RC     arrival D1 23:10   departure D1 23:20    576 km
+   6 WADI   arrival D2 01:20   departure D2 01:30    684 km
+   7 SUR    arrival D2 04:15   departure D2 04:25    833 km
+   8 PUNE   arrival D2 09:15   departure D2 09:25   1097 km
+   9 CSMT   arrival D2 12:55   departure --         1289 km
+
+RW1011: Mumbai - Hyderabad Express | CSMT -> SC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 CSMT   arrival --         departure D1 20:00      0 km
+   2 PUNE   arrival D1 23:30   departure D1 23:40    192 km
+   3 SUR    arrival D2 04:30   departure D2 04:40    456 km
+   4 WADI   arrival D2 07:25   departure D2 07:35    605 km
+   5 VKB    arrival D2 09:40   departure D2 09:50    718 km
+   6 SC     arrival D2 11:10   departure --          790 km
+
+RW1012: Hyderabad - Mumbai Express | SC -> CSMT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 SC     arrival --         departure D1 20:00      0 km
+   2 VKB    arrival D1 21:20   departure D1 21:30     72 km
+   3 WADI   arrival D1 23:35   departure D1 23:45    185 km
+   4 SUR    arrival D2 02:30   departure D2 02:40    334 km
+   5 PUNE   arrival D2 07:30   departure D2 07:40    598 km
+   6 CSMT   arrival D2 11:10   departure --          790 km
+
+RW1013: Mumbai - Kolkata Express | CSMT -> HWH | DAILY | SL / CLASS_3A / CLASS_2A
+   1 CSMT   arrival --         departure D1 06:00      0 km
+   2 BSL    arrival D1 14:10   departure D1 14:20    445 km
+   3 AK     arrival D1 16:55   departure D1 17:05    585 km
+   4 NGP    arrival D1 21:40   departure D1 21:50    837 km
+   5 DURG   arrival D2 02:40   departure D2 02:50   1099 km
+   6 R      arrival D2 03:35   departure D2 03:45   1136 km
+   7 BSP    arrival D2 05:50   departure D2 06:00   1247 km
+   8 ROU    arrival D2 11:35   departure D2 11:45   1550 km
+   9 TATA   arrival D2 14:45   departure D2 14:55   1715 km
+  10 KGP    arrival D2 17:25   departure D2 17:35   1849 km
+  11 HWH    arrival D2 19:45   departure --         1964 km
+
+RW1014: Kolkata - Mumbai Express | HWH -> CSMT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 HWH    arrival --         departure D1 06:00      0 km
+   2 KGP    arrival D1 08:10   departure D1 08:20    115 km
+   3 TATA   arrival D1 10:50   departure D1 11:00    249 km
+   4 ROU    arrival D1 14:00   departure D1 14:10    414 km
+   5 BSP    arrival D1 19:45   departure D1 19:55    717 km
+   6 R      arrival D1 22:00   departure D1 22:10    828 km
+   7 DURG   arrival D1 22:55   departure D1 23:05    865 km
+   8 NGP    arrival D2 03:55   departure D2 04:05   1127 km
+   9 AK     arrival D2 08:40   departure D2 08:50   1379 km
+  10 BSL    arrival D2 11:25   departure D2 11:35   1519 km
+  11 CSMT   arrival D2 19:45   departure --         1964 km
+
+RW1015: Mumbai Central - Ahmedabad Express | MMCT -> ADI | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MMCT   arrival --         departure D1 07:00      0 km
+   2 BVI    arrival D1 07:35   departure D1 07:45     30 km
+   3 ST     arrival D1 12:00   departure D1 12:10    263 km
+   4 BRC    arrival D1 14:35   departure D1 14:45    392 km
+   5 ANND   arrival D1 15:25   departure D1 15:35    427 km
+   6 ADI    arrival D1 16:45   departure --          491 km
+
+RW1016: Ahmedabad - Mumbai Central Express | ADI -> MMCT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 ADI    arrival --         departure D1 08:00      0 km
+   2 ANND   arrival D1 09:10   departure D1 09:20     64 km
+   3 BRC    arrival D1 10:00   departure D1 10:10     99 km
+   4 ST     arrival D1 12:35   departure D1 12:45    228 km
+   5 BVI    arrival D1 17:00   departure D1 17:10    461 km
+   6 MMCT   arrival D1 17:45   departure --          491 km
+
+RW1017: Mumbai Central - Jaipur Express | MMCT -> JP | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MMCT   arrival --         departure D1 15:00      0 km
+   2 ST     arrival D1 19:50   departure D1 20:00    263 km
+   3 BRC    arrival D1 22:25   departure D1 22:35    392 km
+   4 RTM    arrival D2 03:20   departure D2 03:30    650 km
+   5 KOTA   arrival D2 08:25   departure D2 08:35    917 km
+   6 SWM    arrival D2 10:35   departure D2 10:45   1025 km
+   7 JP     arrival D2 13:10   departure --         1156 km
+
+RW1018: Jaipur - Mumbai Central Express | JP -> MMCT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 JP     arrival --         departure D1 15:00      0 km
+   2 SWM    arrival D1 17:25   departure D1 17:35    131 km
+   3 KOTA   arrival D1 19:35   departure D1 19:45    239 km
+   4 RTM    arrival D2 00:40   departure D2 00:50    506 km
+   5 BRC    arrival D2 05:35   departure D2 05:45    764 km
+   6 ST     arrival D2 08:10   departure D2 08:20    893 km
+   7 MMCT   arrival D2 13:10   departure --         1156 km
+
+RW1019: Mumbai - Goa Express | CSMT -> MAO | DAILY | SL / CLASS_3A / CLASS_2A
+   1 CSMT   arrival --         departure D1 06:00      0 km
+   2 PNVL   arrival D1 07:20   departure D1 07:30     69 km
+   3 RN     arrival D1 12:50   departure D1 13:00    362 km
+   4 MAO    arrival D1 17:00   departure --          581 km
+
+RW1020: Goa - Mumbai Express | MAO -> CSMT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MAO    arrival --         departure D1 09:00      0 km
+   2 RN     arrival D1 13:00   departure D1 13:10    219 km
+   3 PNVL   arrival D1 18:30   departure D1 18:40    512 km
+   4 CSMT   arrival D1 20:00   departure --          581 km
+
+RW1021: New Delhi - Kolkata Express | NDLS -> HWH | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 09:00      0 km
+   2 CNB    arrival D1 17:05   departure D1 17:15    441 km
+   3 PRYJ   arrival D1 20:50   departure D1 21:00    636 km
+   4 DDU    arrival D1 23:50   departure D2 00:00    788 km
+   5 GAYA   arrival D2 03:45   departure D2 03:55    993 km
+   6 DHN    arrival D2 07:35   departure D2 07:45   1192 km
+   7 ASN    arrival D2 08:50   departure D2 09:00   1250 km
+   8 HWH    arrival D2 12:40   departure --         1450 km
+
+RW1022: Kolkata - New Delhi Express | HWH -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 HWH    arrival --         departure D1 09:00      0 km
+   2 ASN    arrival D1 12:40   departure D1 12:50    200 km
+   3 DHN    arrival D1 13:55   departure D1 14:05    258 km
+   4 GAYA   arrival D1 17:45   departure D1 17:55    457 km
+   5 DDU    arrival D1 21:40   departure D1 21:50    662 km
+   6 PRYJ   arrival D2 00:40   departure D2 00:50    814 km
+   7 CNB    arrival D2 04:25   departure D2 04:35   1009 km
+   8 NDLS   arrival D2 12:40   departure --         1450 km
+
+RW1023: New Delhi - Chennai Express | NDLS -> MAS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 15:00      0 km
+   2 AGC    arrival D1 18:35   departure D1 18:45    195 km
+   3 VGLJ   arrival D1 22:40   departure D1 22:50    410 km
+   4 BPL    arrival D2 04:10   departure D2 04:20    701 km
+   5 ET     arrival D2 06:05   departure D2 06:15    793 km
+   6 NGP    arrival D2 11:45   departure D2 11:55   1091 km
+   7 KZJ    arrival D2 20:15   departure D2 20:25   1545 km
+   8 BZA    arrival D3 00:25   departure D3 00:35   1764 km
+   9 NLR    arrival D3 05:15   departure D3 05:25   2020 km
+  10 MAS    arrival D3 08:40   departure --         2195 km
+
+RW1024: Chennai - New Delhi Express | MAS -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MAS    arrival --         departure D1 15:00      0 km
+   2 NLR    arrival D1 18:15   departure D1 18:25    175 km
+   3 BZA    arrival D1 23:05   departure D1 23:15    431 km
+   4 KZJ    arrival D2 03:15   departure D2 03:25    650 km
+   5 NGP    arrival D2 11:45   departure D2 11:55   1104 km
+   6 ET     arrival D2 17:25   departure D2 17:35   1402 km
+   7 BPL    arrival D2 19:20   departure D2 19:30   1494 km
+   8 VGLJ   arrival D3 00:50   departure D3 01:00   1785 km
+   9 AGC    arrival D3 04:55   departure D3 05:05   2000 km
+  10 NDLS   arrival D3 08:40   departure --         2195 km
+
+RW1025: New Delhi - Bengaluru Express | NDLS -> SBC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 10:00      0 km
+   2 AGC    arrival D1 13:35   departure D1 13:45    195 km
+   3 VGLJ   arrival D1 17:40   departure D1 17:50    410 km
+   4 BPL    arrival D1 23:10   departure D1 23:20    701 km
+   5 ET     arrival D2 01:05   departure D2 01:15    793 km
+   6 NGP    arrival D2 06:45   departure D2 06:55   1091 km
+   7 KZJ    arrival D2 15:15   departure D2 15:25   1545 km
+   8 SC     arrival D2 17:50   departure D2 18:00   1677 km
+   9 RC     arrival D2 23:10   departure D2 23:20   1957 km
+  10 GTL    arrival D3 01:35   departure D3 01:45   2078 km
+  11 DMM    arrival D3 03:40   departure D3 03:50   2180 km
+  12 SBC    arrival D3 07:15   departure --         2364 km
+
+RW1026: Bengaluru - New Delhi Express | SBC -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 SBC    arrival --         departure D1 10:00      0 km
+   2 DMM    arrival D1 13:25   departure D1 13:35    184 km
+   3 GTL    arrival D1 15:30   departure D1 15:40    286 km
+   4 RC     arrival D1 17:55   departure D1 18:05    407 km
+   5 SC     arrival D1 23:15   departure D1 23:25    687 km
+   6 KZJ    arrival D2 01:50   departure D2 02:00    819 km
+   7 NGP    arrival D2 10:20   departure D2 10:30   1273 km
+   8 ET     arrival D2 16:00   departure D2 16:10   1571 km
+   9 BPL    arrival D2 17:55   departure D2 18:05   1663 km
+  10 VGLJ   arrival D2 23:25   departure D2 23:35   1954 km
+  11 AGC    arrival D3 03:30   departure D3 03:40   2169 km
+  12 NDLS   arrival D3 07:15   departure --         2364 km
+
+RW1027: New Delhi - Patna Express | NDLS -> PNBE | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 19:00      0 km
+   2 CNB    arrival D2 03:05   departure D2 03:15    441 km
+   3 PRYJ   arrival D2 06:50   departure D2 07:00    636 km
+   4 DDU    arrival D2 09:50   departure D2 10:00    788 km
+   5 PNBE   arrival D2 13:55   departure --         1000 km
+
+RW1028: Patna - New Delhi Express | PNBE -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 PNBE   arrival --         departure D1 19:00      0 km
+   2 DDU    arrival D1 22:55   departure D1 23:05    212 km
+   3 PRYJ   arrival D2 01:55   departure D2 02:05    364 km
+   4 CNB    arrival D2 05:40   departure D2 05:50    559 km
+   5 NDLS   arrival D2 13:55   departure --         1000 km
+
+RW1029: New Delhi - Lucknow Express | NDLS -> LJN | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 06:00      0 km
+   2 GZB    arrival D1 06:30   departure D1 06:40     26 km
+   3 ALJN   arrival D1 08:40   departure D1 08:50    132 km
+   4 CNB    arrival D1 14:30   departure D1 14:40    441 km
+   5 LJN    arrival D1 16:05   departure --          515 km
+
+RW1030: Lucknow - New Delhi Express | LJN -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 LJN    arrival --         departure D1 17:00      0 km
+   2 CNB    arrival D1 18:25   departure D1 18:35     74 km
+   3 ALJN   arrival D2 00:15   departure D2 00:25    383 km
+   4 GZB    arrival D2 02:25   departure D2 02:35    489 km
+   5 NDLS   arrival D2 03:05   departure --          515 km
+
+RW1031: Lucknow - Varanasi Express | LJN -> BSB | DAILY | SL / CLASS_3A / CLASS_2A
+   1 LJN    arrival --         departure D1 18:00      0 km
+   2 PRYJ   arrival D1 21:40   departure D1 21:50    200 km
+   3 BSB    arrival D2 00:20   departure --          335 km
+
+RW1032: Varanasi - Lucknow Express | BSB -> LJN | DAILY | SL / CLASS_3A / CLASS_2A
+   1 BSB    arrival --         departure D1 06:00      0 km
+   2 PRYJ   arrival D1 08:30   departure D1 08:40    135 km
+   3 LJN    arrival D1 12:20   departure --          335 km
+
+RW1033: New Delhi - Chandigarh Express | NDLS -> CDG | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 07:00      0 km
+   2 PNP    arrival D1 08:40   departure D1 08:50     90 km
+   3 KKDE   arrival D1 10:05   departure D1 10:15    158 km
+   4 UMB    arrival D1 11:05   departure D1 11:15    200 km
+   5 CDG    arrival D1 12:05   departure --          245 km
+
+RW1034: Chandigarh - New Delhi Express | CDG -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 CDG    arrival --         departure D1 16:00      0 km
+   2 UMB    arrival D1 16:50   departure D1 17:00     45 km
+   3 KKDE   arrival D1 17:50   departure D1 18:00     87 km
+   4 PNP    arrival D1 19:15   departure D1 19:25    155 km
+   5 NDLS   arrival D1 21:05   departure --          245 km
+
+RW1035: New Delhi - Amritsar Express | NDLS -> ASR | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 06:00      0 km
+   2 UMB    arrival D1 09:40   departure D1 09:50    200 km
+   3 LDH    arrival D1 11:55   departure D1 12:05    312 km
+   4 JUC    arrival D1 13:10   departure D1 13:20    369 km
+   5 BEAS   arrival D1 14:00   departure D1 14:10    405 km
+   6 ASR    arrival D1 15:00   departure --          447 km
+
+RW1036: Amritsar - New Delhi Express | ASR -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 ASR    arrival --         departure D1 15:00      0 km
+   2 BEAS   arrival D1 15:50   departure D1 16:00     42 km
+   3 JUC    arrival D1 16:40   departure D1 16:50     78 km
+   4 LDH    arrival D1 17:55   departure D1 18:05    135 km
+   5 UMB    arrival D1 20:10   departure D1 20:20    247 km
+   6 NDLS   arrival D2 00:00   departure --          447 km
+
+RW1037: New Delhi - Jammu Express | NDLS -> JAT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 NDLS   arrival --         departure D1 18:00      0 km
+   2 UMB    arrival D1 21:40   departure D1 21:50    200 km
+   3 LDH    arrival D1 23:55   departure D2 00:05    312 km
+   4 PTKC   arrival D2 03:10   departure D2 03:20    478 km
+   5 KTHU   arrival D2 03:50   departure D2 04:00    501 km
+   6 JAT    arrival D2 05:25   departure --          577 km
+
+RW1038: Jammu - New Delhi Express | JAT -> NDLS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 JAT    arrival --         departure D1 18:00      0 km
+   2 KTHU   arrival D1 19:25   departure D1 19:35     76 km
+   3 PTKC   arrival D1 20:05   departure D1 20:15     99 km
+   4 LDH    arrival D1 23:20   departure D1 23:30    265 km
+   5 UMB    arrival D2 01:35   departure D2 01:45    377 km
+   6 NDLS   arrival D2 05:25   departure --          577 km
+
+RW1039: Ahmedabad - Jaipur Express | ADI -> JP | DAILY | SL / CLASS_3A / CLASS_2A
+   1 ADI    arrival --         departure D1 07:00      0 km
+   2 AII    arrival D1 16:00   departure D1 16:10    492 km
+   3 JP     arrival D1 18:40   departure --          627 km
+
+RW1040: Jaipur - Ahmedabad Express | JP -> ADI | DAILY | SL / CLASS_3A / CLASS_2A
+   1 JP     arrival --         departure D1 07:00      0 km
+   2 AII    arrival D1 09:30   departure D1 09:40    135 km
+   3 ADI    arrival D1 18:40   departure --          627 km
+
+RW1041: Jaipur - Jodhpur Express | JP -> JU | DAILY | SL / CLASS_3A / CLASS_2A
+   1 JP     arrival --         departure D1 07:00      0 km
+   2 AII    arrival D1 09:30   departure D1 09:40    135 km
+   3 JU     arrival D1 12:55   departure --          310 km
+
+RW1042: Jodhpur - Jaipur Express | JU -> JP | DAILY | SL / CLASS_3A / CLASS_2A
+   1 JU     arrival --         departure D1 15:00      0 km
+   2 AII    arrival D1 18:15   departure D1 18:25    175 km
+   3 JP     arrival D1 20:55   departure --          310 km
+
+RW1043: Mumbai Central - Indore Express | MMCT -> INDB | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MMCT   arrival --         departure D1 19:00      0 km
+   2 ST     arrival D1 23:50   departure D2 00:00    263 km
+   3 BRC    arrival D2 02:25   departure D2 02:35    392 km
+   4 RTM    arrival D2 07:20   departure D2 07:30    650 km
+   5 UJN    arrival D2 09:15   departure D2 09:25    745 km
+   6 INDB   arrival D2 10:55   departure --          824 km
+
+RW1044: Indore - Mumbai Central Express | INDB -> MMCT | DAILY | SL / CLASS_3A / CLASS_2A
+   1 INDB   arrival --         departure D1 19:00      0 km
+   2 UJN    arrival D1 20:30   departure D1 20:40     79 km
+   3 RTM    arrival D1 22:25   departure D1 22:35    174 km
+   4 BRC    arrival D2 03:20   departure D2 03:30    432 km
+   5 ST     arrival D2 05:55   departure D2 06:05    561 km
+   6 MMCT   arrival D2 10:55   departure --          824 km
+
+RW1045: Bengaluru - Chennai Express | SBC -> MAS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 SBC    arrival --         departure D1 08:00      0 km
+   2 KJM    arrival D1 08:20   departure D1 08:30     14 km
+   3 JTJ    arrival D1 10:55   departure D1 11:05    145 km
+   4 KPD    arrival D1 12:40   departure D1 12:50    229 km
+   5 AJJ    arrival D1 14:00   departure D1 14:10    290 km
+   6 MAS    arrival D1 15:30   departure --          359 km
+
+RW1046: Chennai - Bengaluru Express | MAS -> SBC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MAS    arrival --         departure D1 16:00      0 km
+   2 AJJ    arrival D1 17:20   departure D1 17:30     69 km
+   3 KPD    arrival D1 18:40   departure D1 18:50    130 km
+   4 JTJ    arrival D1 20:25   departure D1 20:35    214 km
+   5 KJM    arrival D1 23:00   departure D1 23:10    345 km
+   6 SBC    arrival D1 23:30   departure --          359 km
+
+RW1047: Hyderabad - Chennai Express | SC -> MAS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 SC     arrival --         departure D1 17:00      0 km
+   2 KZJ    arrival D1 19:25   departure D1 19:35    132 km
+   3 BZA    arrival D1 23:35   departure D1 23:45    351 km
+   4 OGL    arrival D2 02:20   departure D2 02:30    489 km
+   5 NLR    arrival D2 04:40   departure D2 04:50    606 km
+   6 MAS    arrival D2 08:05   departure --          781 km
+
+RW1048: Chennai - Hyderabad Express | MAS -> SC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MAS    arrival --         departure D1 17:00      0 km
+   2 NLR    arrival D1 20:15   departure D1 20:25    175 km
+   3 OGL    arrival D1 22:35   departure D1 22:45    292 km
+   4 BZA    arrival D2 01:20   departure D2 01:30    430 km
+   5 KZJ    arrival D2 05:30   departure D2 05:40    649 km
+   6 SC     arrival D2 08:05   departure --          781 km
+
+RW1049: Bengaluru - Kochi Express | SBC -> ERS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 SBC    arrival --         departure D1 18:00      0 km
+   2 KJM    arrival D1 18:20   departure D1 18:30     14 km
+   3 JTJ    arrival D1 20:55   departure D1 21:05    145 km
+   4 SA     arrival D1 23:25   departure D1 23:35    270 km
+   5 ED     arrival D2 00:45   departure D2 00:55    330 km
+   6 CBE    arrival D2 02:50   departure D2 03:00    431 km
+   7 PGT    arrival D2 04:00   departure D2 04:10    486 km
+   8 SRR    arrival D2 05:00   departure D2 05:10    530 km
+   9 TCR    arrival D2 05:50   departure D2 06:00    563 km
+  10 ERS    arrival D2 07:25   departure --          637 km
+
+RW1050: Kochi - Bengaluru Express | ERS -> SBC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 ERS    arrival --         departure D1 18:00      0 km
+   2 TCR    arrival D1 19:25   departure D1 19:35     74 km
+   3 SRR    arrival D1 20:15   departure D1 20:25    107 km
+   4 PGT    arrival D1 21:15   departure D1 21:25    151 km
+   5 CBE    arrival D1 22:25   departure D1 22:35    206 km
+   6 ED     arrival D2 00:30   departure D2 00:40    307 km
+   7 SA     arrival D2 01:50   departure D2 02:00    367 km
+   8 JTJ    arrival D2 04:20   departure D2 04:30    492 km
+   9 KJM    arrival D2 06:55   departure D2 07:05    623 km
+  10 SBC    arrival D2 07:25   departure --          637 km
+
+RW1051: Kochi - Thiruvananthapuram Express | ERS -> TVC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 ERS    arrival --         departure D1 07:00      0 km
+   2 ALLP   arrival D1 08:05   departure D1 08:15     57 km
+   3 QLN    arrival D1 09:50   departure D1 10:00    141 km
+   4 TVC    arrival D1 11:15   departure --          206 km
+
+RW1052: Thiruvananthapuram - Kochi Express | TVC -> ERS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 TVC    arrival --         departure D1 15:00      0 km
+   2 QLN    arrival D1 16:15   departure D1 16:25     65 km
+   3 ALLP   arrival D1 18:00   departure D1 18:10    149 km
+   4 ERS    arrival D1 19:15   departure --          206 km
+
+RW1053: Goa - Kochi Express | MAO -> ERS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MAO    arrival --         departure D1 08:00      0 km
+   2 MAJN   arrival D1 13:50   departure D1 14:00    320 km
+   3 CAN    arrival D1 16:30   departure D1 16:40    457 km
+   4 CLT    arrival D1 18:20   departure D1 18:30    546 km
+   5 SRR    arrival D1 20:05   departure D1 20:15    632 km
+   6 TCR    arrival D1 20:55   departure D1 21:05    665 km
+   7 ERS    arrival D1 22:30   departure --          739 km
+
+RW1054: Kochi - Goa Express | ERS -> MAO | DAILY | SL / CLASS_3A / CLASS_2A
+   1 ERS    arrival --         departure D1 08:00      0 km
+   2 TCR    arrival D1 09:25   departure D1 09:35     74 km
+   3 SRR    arrival D1 10:15   departure D1 10:25    107 km
+   4 CLT    arrival D1 12:00   departure D1 12:10    193 km
+   5 CAN    arrival D1 13:50   departure D1 14:00    282 km
+   6 MAJN   arrival D1 16:30   departure D1 16:40    419 km
+   7 MAO    arrival D1 22:30   departure --          739 km
+
+RW1055: Chennai - Bhubaneswar Express | MAS -> BBS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 MAS    arrival --         departure D1 08:00      0 km
+   2 NLR    arrival D1 11:15   departure D1 11:25    175 km
+   3 BZA    arrival D1 16:05   departure D1 16:15    431 km
+   4 RJY    arrival D1 19:00   departure D1 19:10    581 km
+   5 VSKP   arrival D1 22:50   departure D1 23:00    781 km
+   6 BAM    arrival D2 04:05   departure D2 04:15   1058 km
+   7 BBS    arrival D2 07:20   departure --         1224 km
+
+RW1056: Bhubaneswar - Chennai Express | BBS -> MAS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 BBS    arrival --         departure D1 08:00      0 km
+   2 BAM    arrival D1 11:05   departure D1 11:15    166 km
+   3 VSKP   arrival D1 16:20   departure D1 16:30    443 km
+   4 RJY    arrival D1 20:10   departure D1 20:20    643 km
+   5 BZA    arrival D1 23:05   departure D1 23:15    793 km
+   6 NLR    arrival D2 03:55   departure D2 04:05   1049 km
+   7 MAS    arrival D2 07:20   departure --         1224 km
+
+RW1057: Bhubaneswar - Kolkata Express | BBS -> HWH | DAILY | SL / CLASS_3A / CLASS_2A
+   1 BBS    arrival --         departure D1 08:00      0 km
+   2 CTC    arrival D1 08:35   departure D1 08:45     28 km
+   3 BHC    arrival D1 10:55   departure D1 11:05    144 km
+   4 KGP    arrival D1 14:25   departure D1 14:35    324 km
+   5 HWH    arrival D1 16:45   departure --          439 km
+
+RW1058: Kolkata - Bhubaneswar Express | HWH -> BBS | DAILY | SL / CLASS_3A / CLASS_2A
+   1 HWH    arrival --         departure D1 08:00      0 km
+   2 KGP    arrival D1 10:10   departure D1 10:20    115 km
+   3 BHC    arrival D1 13:40   departure D1 13:50    295 km
+   4 CTC    arrival D1 16:00   departure D1 16:10    411 km
+   5 BBS    arrival D1 16:45   departure --          439 km
+
+RW1059: Kolkata - Guwahati Express | HWH -> GHY | DAILY | SL / CLASS_3A / CLASS_2A
+   1 HWH    arrival --         departure D1 15:00      0 km
+   2 MLDT   arrival D1 21:05   departure D1 21:15    332 km
+   3 NJP    arrival D2 01:30   departure D2 01:40    565 km
+   4 NBQ    arrival D2 06:10   departure D2 06:20    810 km
+   5 GHY    arrival D2 09:15   departure --          967 km
+
+RW1060: Guwahati - Kolkata Express | GHY -> HWH | DAILY | SL / CLASS_3A / CLASS_2A
+   1 GHY    arrival --         departure D1 15:00      0 km
+   2 NBQ    arrival D1 17:55   departure D1 18:05    157 km
+   3 NJP    arrival D1 22:35   departure D1 22:45    402 km
+   4 MLDT   arrival D2 03:00   departure D2 03:10    635 km
+   5 HWH    arrival D2 09:15   departure --          967 km
+
+RW1061: Kolkata - Ranchi Express | HWH -> RNC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 HWH    arrival --         departure D1 07:00      0 km
+   2 KGP    arrival D1 09:10   departure D1 09:20    115 km
+   3 TATA   arrival D1 11:50   departure D1 12:00    249 km
+   4 RNC    arrival D1 15:10   departure --          419 km
+
+RW1062: Ranchi - Kolkata Express | RNC -> HWH | DAILY | SL / CLASS_3A / CLASS_2A
+   1 RNC    arrival --         departure D1 07:00      0 km
+   2 TATA   arrival D1 10:10   departure D1 10:20    170 km
+   3 KGP    arrival D1 12:50   departure D1 13:00    304 km
+   4 HWH    arrival D1 15:10   departure --          419 km
+
+RW1063: Patna - Ranchi Express | PNBE -> RNC | DAILY | SL / CLASS_3A / CLASS_2A
+   1 PNBE   arrival --         departure D1 07:00      0 km
+   2 GAYA   arrival D1 08:45   departure D1 08:55     92 km
+   3 BKSC   arrival D1 11:45   departure D1 11:55    245 km
+   4 RNC    arrival D1 13:55   departure --          355 km
+
+RW1064: Ranchi - Patna Express | RNC -> PNBE | DAILY | SL / CLASS_3A / CLASS_2A
+   1 RNC    arrival --         departure D1 07:00      0 km
+   2 BKSC   arrival D1 09:00   departure D1 09:10    110 km
+   3 GAYA   arrival D1 12:00   departure D1 12:10    263 km
+   4 PNBE   arrival D1 13:55   departure --          355 km
+
+RW1065: Varanasi - Patna Express | BSB -> PNBE | DAILY | SL / CLASS_3A / CLASS_2A
+   1 BSB    arrival --         departure D1 08:00      0 km
+   2 DDU    arrival D1 08:20   departure D1 08:30     18 km
+   3 PNBE   arrival D1 12:25   departure --          230 km
+
+RW1066: Patna - Varanasi Express | PNBE -> BSB | DAILY | SL / CLASS_3A / CLASS_2A
+   1 PNBE   arrival --         departure D1 16:00      0 km
+   2 DDU    arrival D1 19:55   departure D1 20:05    212 km
+   3 BSB    arrival D1 20:25   departure --          230 km
+
+RW1067: Bhopal - Indore Express | BPL -> INDB | DAILY | SL / CLASS_3A / CLASS_2A
+   1 BPL    arrival --         departure D1 08:00      0 km
+   2 UJN    arrival D1 11:20   departure D1 11:30    183 km
+   3 INDB   arrival D1 13:00   departure --          262 km
+
+RW1068: Indore - Bhopal Express | INDB -> BPL | DAILY | SL / CLASS_3A / CLASS_2A
+   1 INDB   arrival --         departure D1 16:00      0 km
+   2 UJN    arrival D1 17:30   departure D1 17:40     79 km
+   3 BPL    arrival D1 21:00   departure --          262 km
+
+REFERENCE FOR STATION IDENTITIES (not the generated timetable)
+Indian Railways major-city station list:
+https://www.indianrail.gov.in/availability_Trains_From_Major_Cities.html
+Railway Board station-code index:
+https://indianrailways.gov.in/railwayboard/uploads/directorate/coaching/pdf/Station_code.pdf
+Some legacy lists use old station names. Code matching, not the city display label,
+determines direct search. Service numbers, timings, capacities and fare parameters
+in this expansion are defined for Railwize and must not be presented as IRCTC data.
