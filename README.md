@@ -17,6 +17,7 @@ The project combines an **Angular frontend** with **12 Spring Boot services**. I
 | [India dataset guide](Railwize-india-data/INDIA-DATA-GUIDE.txt) | All sample stations/trains/timetables and feature demonstration steps |
 | [India SQL dataset](Railwize-india-data/LOAD-INDIA-CATALOGUE.sql) | Catalogue, operating days, capacity, fares and schedules |
 | [Additional QA dataset](Railwize-test-data/README.md) | Synthetic routes for targeted boundary checks |
+| [Evaluation guide](EVALUATION-GUIDE.md) | 143 viva questions, worked examples, edge cases, demonstration plan and implementation links |
 
 ## The problem I wanted to solve
 
