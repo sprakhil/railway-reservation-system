@@ -1,0 +1,125 @@
+RAILWIZE — FIVE-MINUTE PROJECT PRESENTATION
+
+Read the spoken paragraphs aloud. The timestamps and [screen cues] are for
+you, not for narration. Aim for a calm pace of about 125–135 words per minute.
+The timing is approximate; leave short pauses while switching screens.
+
+Before recording: keep a passenger account and an admin account ready in
+separate browser sessions. Preload a search with results, a nearby/connecting
+option, an existing confirmed ticket, and the admin dashboard. Choose a valid
+future journey date from your loaded catalogue. Use the prepared ticket to
+explain the payment outcome instead of waiting through checkout on camera.
+
+
+0:00–0:30 | INTRODUCTION
+[Show the Railwize home page.]
+
+Hello everyone. Today, I'm presenting my project, Railwize, a railway
+reservation platform built using Angular and Spring Boot.
+
+I wanted to solve a practical problem: when a suitable direct train is
+unavailable, passengers have to manually check nearby stations and compare
+connecting trains. Railwize brings that search together, along with booking,
+payment tracking and journey updates, in one application.
+
+
+0:30–1:00 | SEARCH EXPERIENCE
+[Show a prepared train search and its class-wise results.]
+
+Let me start with the passenger journey. Users can register with email
+verification or sign in through Google.
+
+To search, I only need the source, destination and travel date. The results
+show the available classes, seat availability and per-person fares. After
+choosing a class, I enter the passenger count and details. Saved passengers
+can be selected from the Master List, which makes repeat bookings faster.
+
+
+1:00–2:00 | THE DISTINCTIVE FEATURE
+[Show nearby-station results, followed by a prepared connecting itinerary.]
+
+The main feature I want to highlight is alternative journey discovery.
+
+For example, someone may search from Mumbai Central to Old Delhi. A train
+arriving at nearby New Delhi could still be useful. My search considers
+nearby stations at both ends, so it can suggest a different departure
+station, arrival station, or both.
+
+It also supports journeys with one interchange. For example, a journey from
+Hazrat Nizamuddin to Varanasi can connect through Lucknow Junction. The
+system checks the operating dates, arrival and departure times, transfer
+window and availability before suggesting it.
+
+The results show station names alongside codes. Each leg has its own booking
+and PNR, so passengers can clearly understand what they are booking. This
+reduces the effort of comparing separate searches manually.
+
+
+2:00–3:00 | BOOKING, WAITLIST AND UPDATES
+[Show the passenger-entry page, then an existing ticket and notifications.]
+
+Once the passengers are selected, the backend calculates a fresh fare and
+creates a payment hold for up to two minutes. I integrated Razorpay in test
+mode, so no real money is involved. The backend verifies payment before
+activating the booking.
+
+The platform supports confirmed and waitlisted bookings. I keep everyone in
+one booking together. Paid waitlisted bookings are automatically confirmed
+in queue order when enough seats become available for the whole group.
+
+If a booking is still waitlisted at the cutoff, it is cancelled and refunded
+in full.
+
+Passengers can download a PDF ticket, see coach and berth details, and add
+their journey to a calendar. Booking confirmation includes an emailed PDF
+ticket. Cancellation, refund and waitlist-promotion updates are also
+communicated through email and in-app notifications.
+
+
+3:00–3:40 | ADMINISTRATOR FEATURES
+[Switch to the admin dashboard, then show dated train cancellation.]
+
+On the administrator side, I provide a workspace to manage stations,
+trains, timetables, users and bookings. The dashboard includes booking,
+cancellation and revenue statistics, popular trains and downloadable CSV
+reports.
+
+An important operation is cancelling a train for a specific departure date.
+Affected passengers are notified and receive full refunds without a
+cancellation deduction. Other departure dates remain available.
+
+Admin access is controlled through initial setup and invitations. A user
+cannot simply choose the admin role during public registration.
+
+
+3:40–4:15 | ASSISTANT AND SUPPORT
+[Open Ask Railwize, then briefly show the support-ticket section.]
+
+I also integrated a Gemini-powered assistant. It retrieves platform FAQs
+for policy questions and uses protected backend tools for information such
+as train availability and the logged-in user's bookings. It can remember
+recent conversation context, but it does not make payments or cancel
+tickets on the user's behalf.
+
+For issues that need human attention, passengers can raise support tickets,
+optionally link a booking, and follow the administrator's replies and
+resolution status.
+
+
+4:15–5:00 | TECHNICAL DESIGN AND CLOSING
+[Show the architecture slide from the presentation, then return to the home page.]
+
+Technically, the Angular frontend communicates through an API Gateway with
+twelve Spring Boot services. MySQL stores business data, Eureka supports
+service discovery, and RabbitMQ carries booking events for email delivery.
+
+I use JWT authentication, backend role and ownership checks, database
+locking and duplicate-request protection. Testing includes JUnit, Mockito,
+integration tests, Jasmine and Playwright.
+
+Railwize manages its own catalogue and inventory; it is not connected to
+Indian Railways' live reservation system.
+
+My main contribution is combining practical journey alternatives with a
+complete reservation lifecycle, from finding a train to tracking refunds
+and getting support. Thank you.
