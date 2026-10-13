@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1670" height="1270" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1670 1270" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>02 Class Diagram</title>
+	<desc>Railwize source-based system diagram. Selected details and notation are explained within the diagram.</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1670" height="1270"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1270)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1670" height="1270" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="0" y="1168" width="1670" height="102" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="36" y="1232" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2464) scale(1,-1)">02 / Class diagram</text>
+			<text x="36" y="1197" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(78%,84%,94%); stroke:none;" transform="translate(0,2394) scale(1,-1)">Selected reservation-domain classes and collaborators; method signatures abbreviated</text>
+			<rect x="36" y="1168" width="65" height="4" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(38%,86%,94%); fill-rule: evenodd;"/>
+			<rect x="620" y="960" width="430" height="170" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="620" y="1096" width="430" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="632" y="1107" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2214) scale(1,-1)">ReservationService  &lt;&lt;service&gt;&gt;</text>
+			<text x="632" y="1075.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2150) scale(1,-1)">- journeys: JourneyService</text>
+			<text x="632" y="1056.8" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2113) scale(1,-1)">- engine: BookingEngine; pnrs: PnrGateway</text>
+			<text x="632" y="1038.6" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2077) scale(1,-1)">+ bookTicket(...): ReservationRes</text>
+			<text x="632" y="1020.4" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2040) scale(1,-1)">+ discover(...): List&lt;TrainSearchResult&gt;</text>
+			<text x="632" y="1002.2" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2004) scale(1,-1)">+ history(...); cancelReservation(...)</text>
+			<rect x="60" y="705" width="400" height="155" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="60" y="826" width="400" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="72" y="837" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1674) scale(1,-1)">JourneyService  &lt;&lt;service&gt;&gt;</text>
+			<text x="72" y="805.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1610) scale(1,-1)">- trains: TrainCatalogClient</text>
+			<text x="72" y="786.8" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1573) scale(1,-1)">- schedules: ScheduleCatalogClient</text>
+			<text x="72" y="768.6" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1537) scale(1,-1)">+ quote(...): JourneyQuote</text>
+			<text x="72" y="750.4" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1500) scale(1,-1)">+ searchAllClasses(...): List&lt;JourneyQuote&gt;</text>
+			<rect x="620" y="655" width="430" height="205" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="620" y="826" width="430" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="632" y="837" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1674) scale(1,-1)">BookingEngine  &lt;&lt;service&gt;&gt;</text>
+			<text x="632" y="805.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1610) scale(1,-1)">- reservations: ReservationRepository</text>
+			<text x="632" y="786.8" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1573) scale(1,-1)">- inventories: SeatInventoryRepository</text>
+			<text x="632" y="768.6" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1537) scale(1,-1)">+ create(...); confirm(...); cancel(...)</text>
+			<text x="632" y="750.4" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1500) scale(1,-1)">+ availability(...): int; expireHolds()</text>
+			<text x="632" y="732.2" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1464) scale(1,-1)">+ cancelRun(...); refundStatus(...)</text>
+			<text x="632" y="714.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1428) scale(1,-1)">Local READ_COMMITTED transactions</text>
+			<rect x="1220" y="1015" width="390" height="115" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1220" y="1096" width="390" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1232" y="1107" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2214) scale(1,-1)">PnrGateway  &lt;&lt;adapter&gt;&gt;</text>
+			<text x="1232" y="1075.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2150) scale(1,-1)">Allocates PNR through PNR service</text>
+			<text x="1232" y="1056.8" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2113) scale(1,-1)">Resilience4j dependency boundary</text>
+			<rect x="60" y="977" width="400" height="153" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="60" y="1096" width="400" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="72" y="1107" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2214) scale(1,-1)">JourneyPlanner  &lt;&lt;service&gt;&gt;</text>
+			<text x="72" y="1075.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2150) scale(1,-1)">- journeys: JourneyService</text>
+			<text x="72" y="1056.8" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2113) scale(1,-1)">- bookings: BookingEngine</text>
+			<text x="72" y="1038.6" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2077) scale(1,-1)">+ search(...): JourneyPlan.Results</text>
+			<text x="72" y="1020.4" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2040) scale(1,-1)">Read-only alternatives / nearby search</text>
+			<rect x="1220" y="745" width="390" height="115" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1220" y="826" width="390" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1232" y="837" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1674) scale(1,-1)">TicketPdfService  &lt;&lt;service&gt;&gt;</text>
+			<text x="1232" y="805.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1610) scale(1,-1)">- bookings: BookingEngine</text>
+			<text x="1232" y="786.8" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1573) scale(1,-1)">+ download(...): byte[]; render(...): byte[]</text>
+			<rect x="600" y="425" width="350" height="123" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="600" y="514" width="350" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="612" y="525" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1050) scale(1,-1)">ReservationRepository  &lt;&lt;interface&gt;&gt;</text>
+			<text x="612" y="493.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,986) scale(1,-1)">Spring Data JPA repository</text>
+			<text x="612" y="474.79999999999995" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,949) scale(1,-1)">Reservation locks + segment queries</text>
+			<text x="612" y="456.6" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,913) scale(1,-1)">Find history / booking by PNR</text>
+			<rect x="1030" y="425" width="350" height="123" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1030" y="514" width="350" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1042" y="525" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1050) scale(1,-1)">SeatInventoryRepository  &lt;&lt;interface&gt;&gt;</text>
+			<text x="1042" y="493.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,986) scale(1,-1)">Spring Data JPA repository</text>
+			<text x="1042" y="474.79999999999995" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,949) scale(1,-1)">lock(...): PESSIMISTIC_WRITE</text>
+			<text x="1042" y="456.6" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,913) scale(1,-1)">Coordinates class inventory</text>
+			<rect x="550" y="119" width="440" height="205" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="550" y="290" width="440" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="562" y="301" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,602) scale(1,-1)">Reservation  &lt;&lt;entity&gt;&gt;</text>
+			<text x="562" y="269.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,538) scale(1,-1)">reservationId: Long; pnr: String [unique]</text>
+			<text x="562" y="250.79999999999995" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,501) scale(1,-1)">username; trainNumber; runDate; seatClass</text>
+			<text x="562" y="232.5999999999999" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,465) scale(1,-1)">fromSequence; toSequence; inventoryKey</text>
+			<text x="562" y="214.4000000000001" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,428) scale(1,-1)">status: ReservationStatus; totalFare: BigDecimal</text>
+			<text x="562" y="196.20000000000005" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,392) scale(1,-1)">passengers: List&lt;Passenger&gt;; version: Long</text>
+			<text x="562" y="178.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,356) scale(1,-1)">+ addPassenger(passenger): void</text>
+			<rect x="50" y="149" width="365" height="175" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="50" y="290" width="365" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="62" y="301" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,602) scale(1,-1)">Passenger  &lt;&lt;entity&gt;&gt;</text>
+			<text x="62" y="269.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,538) scale(1,-1)">passengerId: Long</text>
+			<text x="62" y="250.79999999999995" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,501) scale(1,-1)">reservation: Reservation</text>
+			<text x="62" y="232.5999999999999" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,465) scale(1,-1)">name; age; gender; birthPreference</text>
+			<text x="62" y="214.4000000000001" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,428) scale(1,-1)">seatNumber; bookingStatus</text>
+			<rect x="1110" y="186" width="360" height="122" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1110" y="274" width="360" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1122" y="285" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,570) scale(1,-1)">SeatInventory  &lt;&lt;entity&gt;&gt;</text>
+			<text x="1122" y="253.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,506) scale(1,-1)">inventoryKey: String [PK]</text>
+			<text x="1122" y="234.79999999999995" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,469) scale(1,-1)">capacity: int</text>
+			<path d="M 620,1045 L 530,1045 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 530,1045 L 530,920 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 530,920 L 260,920 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 260,920 L 260,860 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="260 860, 264 868, 256 868" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="267" y="926" width="33.2353515625" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="272" y="930" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1860) scale(1,-1)">uses</text>
+			<path d="M 835,960 L 835,860 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="835 860, 839 868, 831 868" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="842" y="904" width="57.7060546875" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="847" y="908" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1816) scale(1,-1)">delegates</text>
+			<path d="M 1050,1045 L 1220,1072.5 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1220 1072.5, 1211.464 1075.171, 1212.741 1067.274" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="1108" y="1056" width="33.2353515625" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1113" y="1060" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,2120) scale(1,-1)">uses</text>
+			<path d="M 260,977 L 260,860 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="260 860, 264 868, 256 868" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 460,1053.5 L 493,1055 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 493,1055 L 493,756 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 493,756 L 620,757.5 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="620 757.5, 611.9533 761.4052, 612.0478 753.4058" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 1220,802.5 L 1050,757.5 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1050 757.5, 1058.757 755.6803, 1056.71 763.414" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="1070" y="820" width="89.4814453125" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1075" y="824" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1648) scale(1,-1)">authorizes ticket</text>
+			<path d="M 835,655 L 835,603 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 835,603 L 775,603 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 775,603 L 775,548 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="775 548, 779 556, 771 556" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 1050,757.5 L 1205,690 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 1205,690 L 1205,548 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1205 548, 1209 556, 1201 556" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 775,425 L 770,324 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="770 324, 774.3907 331.7924, 766.4004 332.188" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="777" y="366" width="47.8984375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="782" y="370" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,740) scale(1,-1)">persists</text>
+			<path d="M 1205,425 L 1205,370 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 1205,370 L 1290,370 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 1290,370 L 1290,308 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1290 308, 1294 316, 1286 316" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="1242" y="375" width="35.0615234375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1247" y="379" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,758) scale(1,-1)">locks</text>
+			<path d="M 550,221.5 L 415,236.5 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="425" y="266" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 11px;fill: rgb(14%,34%,87%); stroke:none;" transform="translate(0,532) scale(1,-1)">1..*       owns       1</text>
+			<polygon points="550 221.5, 542 226.5, 534 221.5, 542 216.5" style="stroke: rgb(8%,14%,25%); stroke-linecap: butt; stroke-width: 1; fill: rgb(8%,14%,25%); fill-rule: evenodd;"/>
+			<rect x="45" y="477" width="435" height="141" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(92%,95%,100%); fill-rule: evenodd;"/>
+			<rect x="45" y="584" width="435" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="57" y="595" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1190) scale(1,-1)">How to read</text>
+			<text x="57" y="563.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1126) scale(1,-1)">Dashed arrow: caller depends on collaborator.</text>
+			<text x="57" y="546.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1092) scale(1,-1)">Solid association: owned passenger collection.</text>
+			<text x="57" y="529.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1058) scale(1,-1)">Reservation cascades passengers; orphan removal.</text>
+			<text x="57" y="512.6" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1025) scale(1,-1)">Only selected fields/methods are shown.</text>
+			<text x="57" y="495.79999999999995" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,991) scale(1,-1)">Remote catalogue / PNR APIs are not local entities.</text>
+			<text x="36" y="22" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,44) scale(1,-1)">Source: backend/reservation-service/src/main/java/com/railway/reservationservice/. The complete application also includes auth, payment, support and catalogue classes.</text>
+		</g>
+	</g>
+</svg>

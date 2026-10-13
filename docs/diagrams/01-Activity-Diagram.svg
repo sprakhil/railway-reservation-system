@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1260" height="1770" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1260 1770" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>01 Activity Diagram</title>
+	<desc>Railwize source-based system diagram. Selected details and notation are explained within the diagram.</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1260" height="1770"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1770)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1260" height="1770" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="0" y="1668" width="1260" height="102" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="36" y="1732" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,3464) scale(1,-1)">01 / Activity diagram</text>
+			<text x="36" y="1697" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(78%,84%,94%); stroke:none;" transform="translate(0,3394) scale(1,-1)">Booking, verified test payment, paid waitlist and cancellation lifecycle</text>
+			<rect x="36" y="1668" width="65" height="4" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(38%,86%,94%); fill-rule: evenodd;"/>
+			<circle cx="600" cy="1635" r="8" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<rect x="435" y="1547" width="330" height="58" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="491.648681640625" y="1571.775" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,3143) scale(1,-1)">Search origin, destination and date</text>
+			<rect x="435" y="1455" width="330" height="65" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="500.2783203125" y="1492.05" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2984) scale(1,-1)">Review trains, classes and fares</text>
+			<text x="473.589599609375" y="1474.5" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2949) scale(1,-1)">Direct / nearby / one-interchange options</text>
+			<rect x="435" y="1362" width="330" height="64" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="507.8828125" y="1398.55" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2797) scale(1,-1)">Select a leg and class; sign in</text>
+			<text x="476.833251953125" y="1381.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2762) scale(1,-1)">New account: register, verify OTP, login</text>
+			<rect x="435" y="1266" width="330" height="66" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="527.02734375" y="1303.55" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2607) scale(1,-1)">Choose 1-6 passengers</text>
+			<text x="481.501953125" y="1286.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2572) scale(1,-1)">Enter details or use saved passengers</text>
+			<rect x="435" y="1169" width="330" height="66" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="468.16552734375" y="1206.55" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2413) scale(1,-1)">Request fresh quote; submit expected fare</text>
+			<text x="533.8955078125" y="1189.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2378) scale(1,-1)">and idempotency key</text>
+			<polygon points="600 1139, 730 1098, 600 1057, 470 1098" style="stroke: rgb(83%,66%,32%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,95%,85%); fill-rule: evenodd;"/>
+			<text x="549.9873046875" y="1102.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2204) scale(1,-1)">Valid request and</text>
+			<text x="546.6591796875" y="1086.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2172) scale(1,-1)">bookable journey?</text>
+			<rect x="40" y="1065" width="275" height="65" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,94%,93%); fill-rule: evenodd;"/>
+			<text x="78.90185546874999" y="1102.05" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2204) scale(1,-1)">Return validation / conflict error</text>
+			<text x="102.36279296875" y="1084.5" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2169) scale(1,-1)">Correct details and retry</text>
+			<rect x="435" y="922.4" width="330" height="102.60000000000002" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="435" y="991" width="330" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="447" y="1002" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2004) scale(1,-1)">Create PENDING_PAYMENT</text>
+			<text x="447" y="970.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1940) scale(1,-1)">Lock run + class inventory; recheck seats</text>
+			<text x="447" y="953.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1906) scale(1,-1)">Hold seats if all fit, otherwise WL path</text>
+			<text x="447" y="936.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1872) scale(1,-1)">Server hold: up to 2 minutes</text>
+			<rect x="435" y="843" width="330" height="62" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="516.91552734375" y="878.55" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1757) scale(1,-1)">Create Razorpay test order</text>
+			<text x="521.247802734375" y="861.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1722) scale(1,-1)">User completes checkout</text>
+			<polygon points="600 810, 730 769, 600 728, 470 769" style="stroke: rgb(83%,66%,32%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,95%,85%); fill-rule: evenodd;"/>
+			<text x="547.32421875" y="773.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1546) scale(1,-1)">Captured payment</text>
+			<text x="540.3134765625" y="757.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1514) scale(1,-1)">verified by backend?</text>
+			<rect x="880" y="719.2" width="330" height="85.79999999999995" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="880" y="771" width="330" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="892" y="782" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1564) scale(1,-1)">Failure / incomplete checkout</text>
+			<text x="892" y="750.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1500) scale(1,-1)">Notify failure; retry before hold expires</text>
+			<text x="892" y="733.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1466) scale(1,-1)">No capture by deadline: EXPIRED</text>
+			<polygon points="600 696, 730 655, 600 614, 470 655" style="stroke: rgb(83%,66%,32%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,95%,85%); fill-rule: evenodd;"/>
+			<text x="549.33984375" y="659.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1318) scale(1,-1)">Hold and booking</text>
+			<text x="570.6591796875" y="643.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1286) scale(1,-1)">still valid?</text>
+			<rect x="880" y="604.2" width="330" height="85.79999999999995" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="880" y="656" width="330" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="892" y="667" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1334) scale(1,-1)">Expired or cancelled before capture</text>
+			<text x="892" y="635.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1270) scale(1,-1)">Do not revive booking</text>
+			<text x="892" y="618.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1236) scale(1,-1)">Request full test refund</text>
+			<polygon points="600 578, 730 538, 600 498, 470 538" style="stroke: rgb(83%,66%,32%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,95%,85%); fill-rule: evenodd;"/>
+			<text x="545.0009765625" y="542.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1084) scale(1,-1)">Whole booking has</text>
+			<text x="554.654296875" y="526.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1052) scale(1,-1)">seat allocation?</text>
+			<rect x="100" y="392" width="330" height="65" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(90%,96%,93%); fill-rule: evenodd;"/>
+			<text x="206.147705078125" y="429.04999999999995" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,858) scale(1,-1)">CONFIRMED (CNF)</text>
+			<text x="143.623291015625" y="411.5" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,823) scale(1,-1)">Persist assigned coach / seat positions</text>
+			<rect x="820" y="392" width="350" height="65" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,95%,85%); fill-rule: evenodd;"/>
+			<text x="933.62451171875" y="437.82500000000005" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,875) scale(1,-1)">WAITING (WL), paid</text>
+			<text x="892.7900390625" y="420.2750000000001" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,840) scale(1,-1)">Queue by booking creation order</text>
+			<text x="870.760498046875" y="402.72500000000014" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,805) scale(1,-1)">Send WL email / ticket and inbox update</text>
+			<rect x="820" y="244.4" width="350" height="102.6" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="820" y="313" width="350" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="832" y="324" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,648) scale(1,-1)">Lifecycle maintenance</text>
+			<text x="832" y="292.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,584) scale(1,-1)">All seats fit before cutoff: promote to CNF</text>
+			<text x="832" y="275.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,550) scale(1,-1)">Otherwise remain WL; no extra payment</text>
+			<text x="832" y="258.4000000000001" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,516) scale(1,-1)">At cutoff: cancel + full refund</text>
+			<rect x="100" y="244.4" width="520" height="102.6" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="100" y="313" width="520" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="112" y="324" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,648) scale(1,-1)">Commit state + notification events</text>
+			<text x="112" y="292.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,584) scale(1,-1)">Owner inbox update; durable event -&gt; notification-service</text>
+			<text x="112" y="275.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,550) scale(1,-1)">Booking/promotion email + ticket PDF; delivery can retry</text>
+			<text x="112" y="258.4000000000001" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,516) scale(1,-1)">User views status, downloads ticket / calendar</text>
+			<rect x="100" y="117.4" width="520" height="102.6" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="100" y="186" width="520" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="112" y="197" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,394) scale(1,-1)">Later cancellation</text>
+			<text x="112" y="165.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,330) scale(1,-1)">Passenger cancels whole booking: apply current policy</text>
+			<text x="112" y="148.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,296) scale(1,-1)">Admin cancels dated run: full refund of affected paid bookings</text>
+			<text x="112" y="131.4000000000001" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,262) scale(1,-1)">WL cutoff: full refund; processed status needs provider confirmation</text>
+			<rect x="820" y="117.4" width="350" height="102.6" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="820" y="186" width="350" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="832" y="197" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,394) scale(1,-1)">Refund / completion updates</text>
+			<text x="832" y="165.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,330) scale(1,-1)">Reconcile provider state independently</text>
+			<text x="832" y="148.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,296) scale(1,-1)">Notify cancellation, then refund progress</text>
+			<text x="832" y="131.4000000000001" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,262) scale(1,-1)">No real money is collected or returned</text>
+			<path d="M 600,1627 L 600,1605 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 1605, 604 1613, 596 1613" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,1547 L 600,1520 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 1520, 604 1528, 596 1528" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,1455 L 600,1426 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 1426, 604 1434, 596 1434" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,1362 L 600,1332 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 1332, 604 1340, 596 1340" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,1266 L 600,1235 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 1235, 604 1243, 596 1243" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,1169 L 600,1139 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 1139, 604 1147, 596 1147" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,1057 L 600,1025 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 1025, 604 1033, 596 1033" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,922.4 L 600,905 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 905, 604 913, 596 913" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,843 L 600,810 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 810, 604 818, 596 818" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,728 L 600,696 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 696, 604 704, 596 704" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 600,614 L 600,578 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="600 578, 604 586, 596 586" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 470,1098 L 315,1097.5 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="315 1097.5, 323.0129 1093.526, 322.9871 1101.526" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="340" y="1101" width="24.0615234375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="345" y="1105" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,2210) scale(1,-1)">No</text>
+			<path d="M 177.5,1130 L 177,1300 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 177,1300 L 435,1299 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="435 1299, 427.0156 1303.031, 426.9846 1295.031" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<text x="614" y="1038" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2076) scale(1,-1)">Yes</text>
+			<path d="M 730,769 L 880,762.1 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="880 762.1, 872.1923 766.4634, 871.8246 758.4718" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="767" y="781" width="72.3798828125" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="772" y="785" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1570) scale(1,-1)">No / pending</text>
+			<text x="614" y="706" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1412) scale(1,-1)">Yes</text>
+			<path d="M 730,655 L 880,647.1 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="880 647.1, 872.2214 651.5152, 871.8007 643.5263" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="767" y="662" width="24.0615234375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="772" y="666" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1332) scale(1,-1)">No</text>
+			<text x="614" y="589" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1178) scale(1,-1)">Yes</text>
+			<path d="M 470,538 L 265,538 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 265,538 L 265,457 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="265 457, 269 465, 261 465" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="325" y="546" width="28.95458984375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="330" y="550" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1100) scale(1,-1)">Yes</text>
+			<path d="M 730,538 L 995,538 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 995,538 L 995,457 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="995 457, 999 465, 991 465" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="833" y="546" width="24.0615234375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="838" y="550" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1100) scale(1,-1)">No</text>
+			<path d="M 265,392 L 360,347 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="360 347, 354.4824 354.0396, 351.0578 346.8097" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 995,392 L 995,347 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="995 347, 999 355, 991 355" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 820,295.7 L 620,295.7 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="620 295.7, 628 291.7, 628 299.7" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="674" y="318" width="57.68994140625" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="679" y="322" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,644) scale(1,-1)">Promoted</text>
+			<path d="M 360,244.4 L 360,220 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="360 220, 364 228, 356 228" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="375" y="225" width="65.64453125" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="380" y="229" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,458) scale(1,-1)">If cancelled</text>
+			<path d="M 620,168.7 L 820,168.7 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="820 168.7, 812 172.7, 812 164.7" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="657" y="187" width="97.4521484375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="662" y="191" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,382) scale(1,-1)">Refund requested</text>
+			<path d="M 995,244.4 L 995,220 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="995 220, 999 228, 991 228" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="1004" y="236" width="106.60986328125" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1009" y="240" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,480) scale(1,-1)">Cutoff / cancellation</text>
+			<path d="M 1210,647.1 L 1235,650 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1235,650 L 1235,170 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1235,170 L 1170,168.7 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="1170 168.7, 1178.078 164.8608, 1177.918 172.8592" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 1045,805 L 1045,827 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 1045,827 L 795,827 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 795,827 L 795,874 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 795,874 L 765,874 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="765 874, 773 870, 773 878" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="840" y="830" width="91.31298828125" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="845" y="834" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1668) scale(1,-1)">Retry within hold</text>
+			<rect x="40" y="1458" width="300" height="122" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(92%,95%,100%); fill-rule: evenodd;"/>
+			<rect x="40" y="1546" width="300" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="52" y="1557" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,3114) scale(1,-1)">State rules</text>
+			<text x="52" y="1525.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,3050) scale(1,-1)">CNF / WL apply to the whole booking.</text>
+			<text x="52" y="1508.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,3016) scale(1,-1)">No RAC or partial passenger cancellation.</text>
+			<text x="52" y="1491.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2982) scale(1,-1)">Search results are snapshots, not holds.</text>
+			<text x="52" y="1474.6" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2949) scale(1,-1)">Each connecting leg has its own PNR.</text>
+			<rect x="880" y="1438" width="330" height="122" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(92%,95%,100%); fill-rule: evenodd;"/>
+			<rect x="880" y="1526" width="330" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="892" y="1537" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,3074) scale(1,-1)">Failure recovery</text>
+			<text x="892" y="1505.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,3010) scale(1,-1)">The browser callback is not authoritative.</text>
+			<text x="892" y="1488.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2976) scale(1,-1)">Signatures and provider state are checked.</text>
+			<text x="892" y="1471.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2942) scale(1,-1)">Webhooks / reconciliation recover interruptions.</text>
+			<text x="892" y="1454.6" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2909) scale(1,-1)">Late captures enter the full-refund path.</text>
+			<rect x="880" y="1098" width="330" height="122" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(92%,95%,100%); fill-rule: evenodd;"/>
+			<rect x="880" y="1186" width="330" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="892" y="1197" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2394) scale(1,-1)">Inventory safety</text>
+			<text x="892" y="1165.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2330) scale(1,-1)">Run lock, then class inventory lock.</text>
+			<text x="892" y="1148.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2296) scale(1,-1)">Reuse a seat only on nonoverlapping segments.</text>
+			<text x="892" y="1131.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2262) scale(1,-1)">A paid WL group must fit in full.</text>
+			<text x="892" y="1114.6" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2229) scale(1,-1)">Oldest eligible group is not bypassed.</text>
+			<rect x="100" y="53" width="520" height="47" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(90%,96%,93%); fill-rule: evenodd;"/>
+			<text x="212.629638671875" y="72.27500000000009" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,144) scale(1,-1)">Otherwise keep confirmed ticket for the journey</text>
+			<path d="M 100,295.7 L 65,296 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 65,296 L 65,77 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 65,77 L 100,76.5 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="100 76.5, 92.05795 80.61387, 91.94368 72.61468" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<circle cx="740" cy="77" r="10" style="stroke: rgb(4%,8%,18%); stroke-linecap: butt; stroke-width: 1.6; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<circle cx="740" cy="77" r="6" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<path d="M 620,77 L 730,77 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="730 77, 722 81, 722 73" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 995,117.4 L 995,77 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 995,77 L 750,77 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="750 77, 758 73, 758 81" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<text x="36" y="22" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,44) scale(1,-1)">Source: ReservationService, BookingEngine, PaymentService, ReservationJobs. Simplified activity view; individual API retries are not expanded.</text>
+		</g>
+	</g>
+</svg>

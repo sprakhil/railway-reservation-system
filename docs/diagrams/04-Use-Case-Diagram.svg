@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1580" height="1380" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1580 1380" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>04 Use Case Diagram</title>
+	<desc>Railwize source-based system diagram. Selected details and notation are explained within the diagram.</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1580" height="1380"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1380)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1580" height="1380" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="0" y="1278" width="1580" height="102" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="36" y="1342" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2684) scale(1,-1)">04 / Use case diagram</text>
+			<text x="36" y="1307" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(78%,84%,94%); stroke:none;" transform="translate(0,2614) scale(1,-1)">Passenger and administrator capabilities; external providers support selected interactions</text>
+			<rect x="36" y="1278" width="65" height="4" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(38%,86%,94%); fill-rule: evenodd;"/>
+			<rect x="285" y="187" width="990" height="1055" rx="14" ry="14" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(96%,97%,99%); fill-rule: evenodd;"/>
+			<text x="310" y="1213" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 16px;fill: rgb(14%,34%,87%); stroke:none;" transform="translate(0,2426) scale(1,-1)">RAILWIZE APPLICATION</text>
+			<circle cx="130" cy="1132" r="15" style="stroke: rgb(8%,14%,25%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 130,1117 L 130,1075 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 105,1103 L 155,1103 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 130,1075 L 107,1044 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 130,1075 L 153,1044 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="108.21728515625" y="1022" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2044) scale(1,-1)">Visitor</text>
+			<circle cx="130" cy="690" r="15" style="stroke: rgb(8%,14%,25%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 130,675 L 130,633 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 105,661 L 155,661 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 130,633 L 107,602 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 130,633 L 153,602 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="94.58984375" y="580" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1160) scale(1,-1)">Passenger</text>
+			<circle cx="1440" cy="833" r="15" style="stroke: rgb(8%,14%,25%); stroke-linecap: butt; stroke-width: 1.5; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<path d="M 1440,818 L 1440,776 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1415,804 L 1465,804 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1440,776 L 1417,745 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1440,776 L 1463,745 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<text x="1394.10693359375" y="723" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1446) scale(1,-1)">Administrator</text>
+			<ellipse cx="532.5" cy="1136.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="470.4697265625" y="1147" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2294) scale(1,-1)">Search direct / nearby /</text>
+			<text x="487.1396484375" y="1130" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2260) scale(1,-1)">connecting trains</text>
+			<ellipse cx="532.5" cy="1038.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="468.4775390625" y="1049" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2098) scale(1,-1)">Register / verify / sign in</text>
+			<text x="474.134765625" y="1032" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2064) scale(1,-1)">Credentials or Google</text>
+			<ellipse cx="532.5" cy="916.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="471.486328125" y="927" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1854) scale(1,-1)">Book CNF or WL ticket</text>
+			<text x="452.1181640625" y="910" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1820) scale(1,-1)">Choose class and passengers</text>
+			<ellipse cx="532.5" cy="818.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="481.130859375" y="829" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1658) scale(1,-1)">Manage profile and</text>
+			<text x="483.802734375" y="812" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1624) scale(1,-1)">saved passengers</text>
+			<ellipse cx="532.5" cy="720.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="443.4697265625" y="731" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1462) scale(1,-1)">View bookings / PNR / ticket PDF</text>
+			<text x="465.134765625" y="714" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1428) scale(1,-1)">Export calendar reminder</text>
+			<ellipse cx="532.5" cy="622.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="480.4716796875" y="633" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1266) scale(1,-1)">Preview and cancel</text>
+			<text x="494.138671875" y="616" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1232) scale(1,-1)">whole booking</text>
+			<ellipse cx="532.5" cy="524.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="481.470703125" y="535" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1070) scale(1,-1)">Read notifications /</text>
+			<text x="480.8056640625" y="518" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1036) scale(1,-1)">follow refund status</text>
+			<ellipse cx="532.5" cy="426.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="467.1240234375" y="437" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,874) scale(1,-1)">Search help / create and</text>
+			<text x="466.46484375" y="420" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,840) scale(1,-1)">reply to support requests</text>
+			<ellipse cx="532.5" cy="328.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="470.47265625" y="339" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,678) scale(1,-1)">Ask read-only assistant</text>
+			<text x="444.7705078125" y="322" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,644) scale(1,-1)">Policies and owned booking data</text>
+			<ellipse cx="1017.5" cy="1136.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="953.7998046875" y="1147" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2294) scale(1,-1)">Manage stations, trains,</text>
+			<text x="953.46875" y="1130" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2260) scale(1,-1)">class capacity and fares</text>
+			<ellipse cx="1017.5" cy="1038.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="946.1240234375" y="1041" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2082) scale(1,-1)">Publish validated timetable</text>
+			<ellipse cx="1017.5" cy="916.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="936.79296875" y="927" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1854) scale(1,-1)">Search users / booking history</text>
+			<text x="931.4609375" y="910" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1820) scale(1,-1)">Block or reactivate eligible users</text>
+			<ellipse cx="1017.5" cy="818.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="963.4619140625" y="829" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1658) scale(1,-1)">Search and manage</text>
+			<text x="953.7939453125" y="812" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1624) scale(1,-1)">bookings / cancellations</text>
+			<ellipse cx="1017.5" cy="720.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="965.4716796875" y="731" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1462) scale(1,-1)">Preview and cancel</text>
+			<text x="973.8037109375" y="714" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1428) scale(1,-1)">a dated train run</text>
+			<ellipse cx="1017.5" cy="622.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="939.7958984375" y="633" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1266) scale(1,-1)">View analytics, popular trains</text>
+			<text x="954.8017578125" y="616" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1232) scale(1,-1)">and export CSV reports</text>
+			<ellipse cx="1017.5" cy="524.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="951.8017578125" y="535" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1070) scale(1,-1)">Invite / revoke invitations</text>
+			<text x="958.478515625" y="518" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1036) scale(1,-1)">for new administrators</text>
+			<ellipse cx="1017.5" cy="426.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="949.1298828125" y="437" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,874) scale(1,-1)">Reply to support requests</text>
+			<text x="958.7978515625" y="420" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,840) scale(1,-1)">Update request status</text>
+			<ellipse cx="1017.5" cy="328.0" rx="192.5" ry="32.0" style="stroke: rgb(62%,72%,90%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="961.138671875" y="339" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,678) scale(1,-1)">Review cancellation /</text>
+			<text x="944.7939453125" y="322" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,644) scale(1,-1)">refund processing progress</text>
+			<path d="M 155,1090 L 215,1090 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 215,1090 L 215,1035 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 215,1090 L 215,1136 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 215,1136 L 340,1136 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 215,1090 L 215,1038 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 215,1038 L 340,1038 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 155,648 L 250,648 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,648 L 250,916 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,916 L 340,916 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,648 L 250,818 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,818 L 340,818 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,648 L 250,720 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,720 L 340,720 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,648 L 250,622 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,622 L 340,622 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,648 L 250,524 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,524 L 340,524 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,648 L 250,426 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,426 L 340,426 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,648 L 250,328 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 250,328 L 340,328 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1415,791 L 1310,791 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,1136 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,1136 L 1210,1136 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,1038 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,1038 L 1210,1038 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,916 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,916 L 1210,916 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,818 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,818 L 1210,818 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,720 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,720 L 1210,720 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,622 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,622 L 1210,622 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,524 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,524 L 1210,524 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,426 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,426 L 1210,426 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,791 L 1310,328 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1310,328 L 1210,328 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<rect x="340" y="84" width="265" height="66" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(92%,95%,100%); fill-rule: evenodd;"/>
+			<text x="397.3818359375" y="112.77500000000009" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,225) scale(1,-1)">Google identity provider</text>
+			<rect x="655" y="84" width="265" height="66" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(92%,95%,100%); fill-rule: evenodd;"/>
+			<text x="739.82275390625" y="121.54999999999995" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,243) scale(1,-1)">Razorpay TEST</text>
+			<text x="695.763671875" y="104.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,208) scale(1,-1)">Checkout / refund processing</text>
+			<rect x="970" y="84" width="265" height="66" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(92%,95%,100%); fill-rule: evenodd;"/>
+			<text x="1034.589599609375" y="121.54999999999995" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,243) scale(1,-1)">Gemini Developer API</text>
+			<text x="1017.984130859375" y="104.0" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,208) scale(1,-1)">Policy answers / grounding</text>
+			<text x="340" y="160" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 12px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,320) scale(1,-1)">Supporting external actors (linked use cases identified by name)</text>
+			<text x="350" y="58" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,116) scale(1,-1)">Google -&gt; Sign in</text>
+			<text x="655" y="58" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,116) scale(1,-1)">Razorpay -&gt; Book / refunds</text>
+			<text x="970" y="58" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,116) scale(1,-1)">Gemini -&gt; Assistant</text>
+			<text x="340" y="250.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,500) scale(1,-1)">All private passenger operations require an authenticated owner; admin actions require ADMIN.</text>
+			<text x="340" y="233.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,466) scale(1,-1)">Public help is also available to visitors. Admins also have their own account and support access.</text>
+			<text x="340" y="216.4000000000001" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,432) scale(1,-1)">Automatic expiry, promotion and retries are internal system behavior, not additional human actors.</text>
+			<text x="36" y="22" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,44) scale(1,-1)">Associations show access to use cases, not execution order. The assistant cannot independently book, pay, cancel or refund.</text>
+		</g>
+	</g>
+</svg>

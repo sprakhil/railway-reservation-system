@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1840" height="1510" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1840 1510" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>05 System Architecture Diagram</title>
+	<desc>Railwize source-based system diagram. Selected details and notation are explained within the diagram.</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1840" height="1510"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-1510)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1840" height="1510" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="0" y="1408" width="1840" height="102" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="36" y="1472" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 27px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2944) scale(1,-1)">05 / System architecture</text>
+			<text x="36" y="1437" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(78%,84%,94%); stroke:none;" transform="translate(0,2874) scale(1,-1)">12 Spring Boot services, Angular client, 8 owned MySQL schemas and standalone integrations</text>
+			<rect x="36" y="1408" width="65" height="4" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(38%,86%,94%); fill-rule: evenodd;"/>
+			<rect x="690" y="1282.8" width="460" height="87.20000000000005" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="690" y="1336" width="460" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="702" y="1347" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2694) scale(1,-1)">Angular frontend :4200</text>
+			<text x="702" y="1315.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2630) scale(1,-1)">Passenger pages + admin workspace</text>
+			<text x="702" y="1296.8" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2593) scale(1,-1)">Relative /api requests; dev proxy -&gt; :8080</text>
+			<rect x="690" y="1138.2" width="460" height="85.79999999999995" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="690" y="1190" width="460" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="702" y="1201" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2402) scale(1,-1)">API Gateway :8080</text>
+			<text x="702" y="1169.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2338) scale(1,-1)">Routing, CORS, request IDs, aggregated Swagger</text>
+			<text x="702" y="1152.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2304) scale(1,-1)">Downstream services enforce role + ownership</text>
+			<rect x="45" y="1275" width="455" height="90" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="45" y="1331" width="455" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="57" y="1342" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2684) scale(1,-1)">Config Server :8888</text>
+			<text x="57" y="1310.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2620) scale(1,-1)">Central configuration from bundled repository</text>
+			<text x="57" y="1293.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2586) scale(1,-1)">Authenticated service access</text>
+			<rect x="1350" y="1275" width="445" height="90" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1350" y="1331" width="445" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1362" y="1342" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,2684) scale(1,-1)">Eureka Server :8761</text>
+			<text x="1362" y="1310.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2620) scale(1,-1)">Registration + discovery by service identity</text>
+			<text x="1362" y="1293.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,2586) scale(1,-1)">Not a booking database</text>
+			<path d="M 920,1282.8 L 920,1224 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="920 1224, 924 1232, 916 1232" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="934" y="1242" width="108.40380859375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="939" y="1246" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,2492) scale(1,-1)">HTTP / JSON / SSE</text>
+			<rect x="35" y="333" width="1765" height="739" rx="12" ry="12" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(96%,97%,99%); fill-rule: evenodd;"/>
+			<text x="62" y="1042" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 16px;fill: rgb(14%,34%,87%); stroke:none;" transform="translate(0,2084) scale(1,-1)">APPLICATION SERVICES / TRUSTED INTERNAL CALLS</text>
+			<rect x="65" y="860" width="385" height="150" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="65" y="976" width="385" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="77" y="987" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1974) scale(1,-1)">Auth :8081</text>
+			<text x="77" y="955.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1910) scale(1,-1)">Accounts, OTP, Google, JWT sessions</text>
+			<text x="77" y="938.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1876) scale(1,-1)">Admin invitation and user status</text>
+			<text x="77" y="921.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1842) scale(1,-1)">DB: railway_auth_db</text>
+			<rect x="505" y="860" width="385" height="150" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="505" y="976" width="385" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="517" y="987" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1974) scale(1,-1)">User :8082</text>
+			<text x="517" y="955.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1910) scale(1,-1)">Profile + passenger Master List</text>
+			<text x="517" y="938.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1876) scale(1,-1)">Stable account ownership</text>
+			<text x="517" y="921.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1842) scale(1,-1)">DB: railway_user_db</text>
+			<rect x="945" y="860" width="385" height="150" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="945" y="976" width="385" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="957" y="987" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1974) scale(1,-1)">Train :8083</text>
+			<text x="957" y="955.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1910) scale(1,-1)">Stations + coordinates; train metadata</text>
+			<text x="957" y="938.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1876) scale(1,-1)">Classes, capacity and fare settings</text>
+			<text x="957" y="921.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1842) scale(1,-1)">DB: railway_train_db</text>
+			<rect x="1385" y="860" width="385" height="150" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1385" y="976" width="385" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1397" y="987" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1974) scale(1,-1)">Schedule :8084</text>
+			<text x="1397" y="955.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1910) scale(1,-1)">Ordered stops + day offsets</text>
+			<text x="1397" y="938.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1876) scale(1,-1)">Timetable distance / chronology</text>
+			<text x="1397" y="921.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1842) scale(1,-1)">DB: railway_schedule_db</text>
+			<rect x="65" y="608" width="385" height="150" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="65" y="724" width="385" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="77" y="735" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1470) scale(1,-1)">Reservation :8085</text>
+			<text x="77" y="703.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1406) scale(1,-1)">Search + alternatives; fare quotes</text>
+			<text x="77" y="686.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1372) scale(1,-1)">Holds, CNF/WL, tickets, cancellation</text>
+			<text x="77" y="669.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1338) scale(1,-1)">Support, inbox, reports + outbox</text>
+			<text x="77" y="652.6" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1305) scale(1,-1)">DB: railway_reservation_db</text>
+			<rect x="505" y="608" width="385" height="150" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="505" y="724" width="385" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="517" y="735" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1470) scale(1,-1)">PNR :8086</text>
+			<text x="517" y="703.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1406) scale(1,-1)">Unique PNR allocation</text>
+			<text x="517" y="686.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1372) scale(1,-1)">Internal reservation dependency</text>
+			<text x="517" y="669.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1338) scale(1,-1)">DB: railway_pnr_db</text>
+			<rect x="945" y="608" width="385" height="150" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="945" y="724" width="385" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="957" y="735" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1470) scale(1,-1)">Payment :8087</text>
+			<text x="957" y="703.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1406) scale(1,-1)">Orders, signature / provider checks</text>
+			<text x="957" y="686.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1372) scale(1,-1)">Captures, reconciliation + refunds</text>
+			<text x="957" y="669.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1338) scale(1,-1)">DB: railway_payment_db</text>
+			<rect x="1385" y="608" width="385" height="150" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1385" y="724" width="385" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1397" y="735" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1470) scale(1,-1)">Notification :8088</text>
+			<text x="1397" y="703.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1406) scale(1,-1)">Durable event receipt + deduplication</text>
+			<text x="1397" y="686.2" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1372) scale(1,-1)">Email / attachments + retry jobs</text>
+			<text x="1397" y="669.4" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,1338) scale(1,-1)">DB: railway_notification_db</text>
+			<rect x="565" y="380" width="655" height="123" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="565" y="469" width="655" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="577" y="480" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,960) scale(1,-1)">Chatbot :8089 / Spring AI + WebFlux</text>
+			<text x="577" y="448.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,896) scale(1,-1)">Gemini + FAQ RAG (SimpleVectorStore); read-only live service tools</text>
+			<text x="577" y="429.79999999999995" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,859) scale(1,-1)">InMemoryChatMemoryRepository + bounded semantic cache</text>
+			<text x="577" y="411.5999999999999" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,823) scale(1,-1)">SSE output; guardrails + Resilience4j; process-local state</text>
+			<path d="M 920,1141 L 920,1100 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 920,1100 L 1740,1100 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 920,1100 L 85,1100 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 257.5,1100 L 257.5,1010 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="257.5 1010, 261.5 1018, 253.5 1018" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 697.5,1100 L 697.5,1010 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="697.5 1010, 701.5 1018, 693.5 1018" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 1137.5,1100 L 1137.5,1010 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="1137.5 1010, 1141.5 1018, 1133.5 1018" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 1577.5,1100 L 1577.5,1010 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="1577.5 1010, 1581.5 1018, 1573.5 1018" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<text x="85" y="1111" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,2222) scale(1,-1)">Gateway public routing fanout (not a service-to-service chain)</text>
+			<path d="M 85,1100 L 20,1100 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 20,1100 L 20,555 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 20,555 L 1600,555 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 257.5,555 L 257.5,608 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="257.5 608, 253.5 600, 261.5 600" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 697.5,555 L 697.5,608 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="697.5 608, 693.5 600, 701.5 600" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 1137.5,555 L 1137.5,608 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1137.5 608, 1133.5 600, 1141.5 600" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 1577.5,555 L 1577.5,608 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1577.5 608, 1573.5 600, 1581.5 600" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<path d="M 890,555 L 890,503 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="890 503, 894 511, 886 511" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<text x="470" y="529" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1058) scale(1,-1)">Additional gateway routes include PNR / notification endpoints; internal authorization still applies</text>
+			<path d="M 500,1320 L 558,1320 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 558,1320 L 558,1184 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 558,1184 L 690,1181.1 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="690 1181.1, 682.0898 1185.275, 681.9141 1177.277" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="512" y="1247" width="102.95751953125" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="517" y="1251" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,2502) scale(1,-1)">configuration plane</text>
+			<path d="M 1350,1320 L 1270,1320 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 1270,1320 L 1270,1184 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 1270,1184 L 1150,1181.1 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1150 1181.1, 1158.094 1177.294, 1157.901 1185.292" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="1225" y="1247" width="86.4306640625" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1230" y="1251" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,2502) scale(1,-1)">discovery plane</text>
+			<text x="550" y="1387" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,2774) scale(1,-1)">Config/discovery links apply across participating services; only representative links shown.</text>
+			<path d="M 450,683 L 505,683 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="505 683, 497 687, 497 679" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="449" y="691" width="52.7861328125" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="454" y="695" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1390) scale(1,-1)">PNR call</text>
+			<path d="M 257.5,758 L 257,820 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 257,820 L 1137,820 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 1137,820 L 1137.5,860 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1137.5 860, 1133.4 852.0506, 1141.4 851.9506" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="572" y="824" width="180.27978515625" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="577" y="828" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1656) scale(1,-1)">Catalogue + timetable calls (Feign)</text>
+			<path d="M 257.5,608 L 257,583 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 257,583 L 1137,583 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<path d="M 1137,583 L 1137.5,608 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4; stroke-dasharray: 5, 4;"/>
+			<polygon points="1137.5 608, 1133.341 600.0816, 1141.339 599.9216" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="543" y="587" width="205.6689453125" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="548" y="591" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,1182) scale(1,-1)">Payment decisions / refund coordination</text>
+			<rect x="45" y="161" width="290" height="89" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="45" y="216" width="290" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="57" y="227" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,454) scale(1,-1)">Google OAuth</text>
+			<text x="57" y="195.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,390) scale(1,-1)">Identity validation</text>
+			<text x="57" y="178.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,356) scale(1,-1)">Auth-service integration</text>
+			<rect x="390" y="161" width="310" height="89" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="390" y="216" width="310" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="402" y="227" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,454) scale(1,-1)">RabbitMQ</text>
+			<text x="402" y="195.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,390) scale(1,-1)">Reservation outbox -&gt; notification</text>
+			<text x="402" y="178.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,356) scale(1,-1)">Authenticated HTTP fallback</text>
+			<rect x="755" y="161" width="285" height="89" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="755" y="216" width="285" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="767" y="227" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,454) scale(1,-1)">Razorpay TEST</text>
+			<text x="767" y="195.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,390) scale(1,-1)">Orders, captures, refunds</text>
+			<text x="767" y="178.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,356) scale(1,-1)">Webhook + reconciliation</text>
+			<rect x="1095" y="161" width="285" height="89" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1095" y="216" width="285" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1107" y="227" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,454) scale(1,-1)">SMTP provider</text>
+			<text x="1107" y="195.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,390) scale(1,-1)">Auth account emails</text>
+			<text x="1107" y="178.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,356) scale(1,-1)">Notification lifecycle / support mail</text>
+			<rect x="1435" y="161" width="355" height="89" rx="10" ry="10" style="stroke: rgb(79%,84%,92%); stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="1435" y="216" width="355" height="34" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(4%,8%,18%); fill-rule: evenodd;"/>
+			<text x="1447" y="227" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,454) scale(1,-1)">Gemini Developer API</text>
+			<text x="1447" y="195.0" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,390) scale(1,-1)">Chat generation + embeddings</text>
+			<text x="1447" y="178.20000000000005" style="font-family: Arial, sans-serif; font-size: 12px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,356) scale(1,-1)">Free-tier provider availability varies</text>
+			<path d="M 1220,441.5 L 1260,442 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1260,442 L 1260,310 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1260,310 L 1612,310 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1612,310 L 1612.5,250 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="1612.5 250, 1616.433 258.0331, 1608.433 257.9664" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="1457" y="315" width="89.4921875" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="1462" y="319" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,638) scale(1,-1)">AI / embeddings</text>
+			<path d="M 1330,683 L 1347,683 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1347,683 L 1347,321 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 1347,321 L 897,321 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<path d="M 897,321 L 897.5,250 Z" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1.4;"/>
+			<polygon points="897.5 250, 901.4436 258.028, 893.4438 257.9716" style="stroke: rgb(34%,40%,49%); stroke-linecap: butt; stroke-width: 1; fill: rgb(34%,40%,49%); fill-rule: evenodd;"/>
+			<rect x="957" y="326" width="71.74609375" height="17" style="stroke: none; stroke-linecap: butt; stroke-width: 1.2; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="962" y="330" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,660) scale(1,-1)">Provider API</text>
+			<text x="50" y="281" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 16px;fill: rgb(14%,34%,87%); stroke:none;" transform="translate(0,562) scale(1,-1)">EXTERNAL / LOCAL INFRASTRUCTURE INTEGRATIONS</text>
+			<text x="50" y="120.0" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,240) scale(1,-1)">DB ownership is shown inside each service. All eight schemas can share a single local MySQL instance; there are no normal cross-service SQL joins.</text>
+			<text x="50" y="101.79999999999995" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,203) scale(1,-1)">Key internal paths: Reservation -&gt; Train/Schedule/PNR; Chatbot -&gt; authorized live APIs; protected services -&gt; Auth session/account validation.</text>
+			<text x="50" y="83.59999999999991" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,167) scale(1,-1)">Booking events: Reservation outbox -&gt; RabbitMQ (or internal HTTP) -&gt; Notification inbox -&gt; SMTP. Account mail: Auth -&gt; SMTP.</text>
+			<text x="50" y="65.40000000000009" style="font-family: Arial, sans-serif; font-size: 13px;fill: rgb(8%,14%,25%); stroke:none;" transform="translate(0,130) scale(1,-1)">External integration names identify their service relationships. No Redis, Docker or WSL is required; secrets remain in private environment configuration.</text>
+			<text x="36" y="22" style="font-family: Arial, sans-serif; font-size: 11px;fill: rgb(34%,40%,49%); stroke:none;" transform="translate(0,44) scale(1,-1)">Source: backend/README.md, service configuration and current API clients. Arrows show selected request/event directions; return traffic and every internal endpoint are omitted.</text>
+		</g>
+	</g>
+</svg>
