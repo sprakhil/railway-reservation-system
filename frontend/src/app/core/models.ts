@@ -23,4 +23,4 @@ export const DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDA
 
 
 export interface JourneyPlan {id:string;kind:string;legs:Quote[];interchangeStation:string|null;transferMinutes:number;durationMinutes:number;totalFare:number;allocation:string;originDistanceKm:number;destinationDistanceKm:number}
-export interface JourneyAlternatives {options:JourneyPlan[];notices:string[];limited:boolean;radiusKm:number;minTransferMinutes:number;maxTransferMinutes:number}
+export interface JourneyAlternatives {options:JourneyPlan[];notices:string[];limited:boolean;radiusKm:number;minTransferMinutes:number;maxTransferMinutes:number;stationNames?:Record<string,string>}

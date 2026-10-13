@@ -17,7 +17,7 @@ public final class BookingEmailTemplate {
     private static String money(JsonNode node,String key) { String v=text(node,key); return v.isBlank()?"Not recorded":"INR "+new BigDecimal(v).setScale(2,RoundingMode.HALF_UP); }
     private static String date(String value){try{return LocalDate.parse(value).format(DateTimeFormatter.ofPattern("dd MMM yyyy",Locale.ENGLISH));}catch(Exception ex){return Objects.toString(value,"Not recorded");}}
     private static String time(String value) { if(value.isBlank())return "Not recorded"; try{return TIME.format(Instant.parse(value));}catch(Exception ex){return value;} }
-    private static String row(String key,String value) {return "<tr><td style='padding:10px 12px;border-bottom:1px solid #e2e9df;color:#61766a;font-size:13px;overflow-wrap:anywhere'>"+RailwizeMail.escape(key)+"</td><td style='padding:10px 12px;border-bottom:1px solid #e2e9df;font-size:14px;font-weight:bold;overflow-wrap:anywhere'>"+RailwizeMail.escape(value)+"</td></tr>";}
+    private static String row(String key,String value) {return "<tr><td style='padding:10px 12px;border-bottom:1px solid #d6dff2;color:#536284;font-size:13px;overflow-wrap:anywhere'>"+RailwizeMail.escape(key)+"</td><td style='padding:10px 12px;border-bottom:1px solid #d6dff2;font-size:14px;font-weight:bold;overflow-wrap:anywhere'>"+RailwizeMail.escape(value)+"</td></tr>";}
     private static boolean eventNeedsTicket(String type){return "PAYMENT_RECEIVED".equals(type)||"PROMOTED".equals(type);}
     public static Content render(NotificationEvent e,String frontend,String timeline,Instant now) {
         JsonNode b=new JsonMapper().readTree(e.getBookingJson()==null?"{}":e.getBookingJson());
@@ -50,7 +50,7 @@ public final class BookingEmailTemplate {
         if(eventNeedsTicket(type) && (e.getTicketPdf()==null || e.getTicketPdf().length==0))
             intro=intro.replace("Your PDF ticket is attached.","Open your booking to download your ticket.").replace("Your updated PDF ticket is attached.","Open your booking to download the updated ticket.");
         StringBuilder plain=new StringBuilder("Hello "+Objects.toString(e.getUsername(),"traveller")+",\n\n"+intro+"\n\n");
-        StringBuilder body=new StringBuilder("<table role='presentation' width='100%' cellspacing='0' cellpadding='0' style='background:#f6f8f1;border-radius:10px'>");
+        StringBuilder body=new StringBuilder("<table role='presentation' width='100%' cellspacing='0' cellpadding='0' style='background:#eff2fa;border-radius:10px'>");
         var details=new LinkedHashMap<String,String>();
         details.put("PNR",e.getPnr());
         details.put("Train",Objects.toString(e.getTrainNumber(),"")+(text(b,"trainName").isBlank()?"":" · "+text(b,"trainName")));
@@ -74,7 +74,7 @@ public final class BookingEmailTemplate {
         for(var entry:details.entrySet())if(entry.getValue()!=null&&!entry.getValue().isBlank()){body.append(row(entry.getKey(),entry.getValue()));plain.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");}
         body.append("</table>");
         if(b.path("passengers").isArray()){
-            body.append("<h2 style='font-size:18px;margin:26px 0 12px'>").append(cancellation?"Passengers on this booking":"Your passengers").append("</h2><table width='100%' cellspacing='0' cellpadding='0'><tr><th align='left' style='padding:10px 12px;background:#eef3e9'>Passenger</th><th align='left' style='padding:10px 12px;background:#eef3e9'>Coach / berth</th></tr>");
+            body.append("<h2 style='font-size:18px;margin:26px 0 12px'>").append(cancellation?"Passengers on this booking":"Your passengers").append("</h2><table width='100%' cellspacing='0' cellpadding='0'><tr><th align='left' style='padding:10px 12px;background:#e6ebf7'>Passenger</th><th align='left' style='padding:10px 12px;background:#e6ebf7'>Coach / berth</th></tr>");
             for(JsonNode p:b.path("passengers")){
                 String seat=text(p.path("seatDetails"),"description");
                 if(seat.isBlank())seat=text(p,"seatNumber");if(seat.isBlank())seat="Not allocated";

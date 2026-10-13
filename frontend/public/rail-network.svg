@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" fill="none">
+<defs>
+ <linearGradient id="glass" x1="54" y1="30" x2="594" y2="390" gradientUnits="userSpaceOnUse"><stop stop-color="#1c365e"/><stop offset="1" stop-color="#10213f"/></linearGradient>
+ <linearGradient id="train" x1="285" y1="167" x2="352" y2="304" gradientUnits="userSpaceOnUse"><stop stop-color="#fff"/><stop offset="1" stop-color="#cbdcf8"/></linearGradient>
+ <linearGradient id="track" x1="80" y1="355" x2="560" y2="335" gradientUnits="userSpaceOnUse"><stop stop-color="#61dcf2" stop-opacity="0"/><stop offset=".5" stop-color="#61dcf2"/><stop offset="1" stop-color="#2459e0" stop-opacity="0"/></linearGradient>
+</defs>
+<rect x="30" y="26" width="580" height="364" rx="26" fill="url(#glass)" stroke="#3b5782"/>
+<path d="M70 115H570M70 175H570M70 235H570M70 295H570M130 72V350M210 72V350M290 72V350M370 72V350M450 72V350M530 72V350" stroke="#88b9ff" stroke-opacity=".07"/>
+<text x="64" y="69" font-family="Segoe UI,Arial,sans-serif" font-size="11" font-weight="600" letter-spacing="2" fill="#a9c7ef">A NETWORK OF POSSIBILITIES</text>
+<circle cx="566" cy="65" r="4" fill="#61dcf2"/>
+<path d="M105 144H203C236 144 238 108 267 108H418C453 108 462 144 497 144H548" stroke="#4373b8" stroke-width="2" stroke-dasharray="4 7"/>
+<path d="M93 324H158C192 324 194 282 233 282H425C469 282 466 323 501 323H550" stroke="#61dcf2" stroke-width="3"/>
+<circle cx="105" cy="144" r="7" fill="#163052" stroke="#5d85bf" stroke-width="2"/>
+<circle cx="418" cy="108" r="7" fill="#163052" stroke="#5d85bf" stroke-width="2"/>
+<circle cx="548" cy="144" r="7" fill="#163052" stroke="#5d85bf" stroke-width="2"/>
+<circle cx="93" cy="324" r="8" fill="#61dcf2"/><circle cx="550" cy="323" r="8" fill="#61dcf2"/>
+<text x="77" y="350" font-family="Segoe UI,Arial,sans-serif" font-size="11" fill="#c5d9f7">YOUR ORIGIN</text>
+<text x="459" y="350" font-family="Segoe UI,Arial,sans-serif" font-size="11" fill="#c5d9f7">YOUR DESTINATION</text>
+<path d="M85 260H145M67 276H119M502 201H553" stroke="#5885c3" stroke-width="2" stroke-linecap="round"/>
+<path d="M140 265H482" stroke="#04122c" stroke-width="18" stroke-linecap="round"/>
+<circle cx="202" cy="266" r="15" fill="#0a172f" stroke="#7993b9" stroke-width="4"/><circle cx="387" cy="266" r="15" fill="#0a172f" stroke="#7993b9" stroke-width="4"/>
+<path d="M134 173H353C408 173 446 200 482 245L490 258H134Z" fill="url(#train)"/>
+<path d="M134 234H471L490 258H134Z" fill="#2a62e8"/>
+<path d="M134 247H480L490 258H134Z" fill="#61dcf2"/>
+<rect x="155" y="191" width="45" height="27" rx="5" fill="#17365b"/>
+<rect x="210" y="191" width="45" height="27" rx="5" fill="#17365b"/>
+<rect x="265" y="191" width="45" height="27" rx="5" fill="#17365b"/>
+<path d="M368 190H390C412 197 427 208 441 222H368Z" fill="#17365b"/>
+<path d="M378 193L395 218M165 195L177 213M220 195L232 213M275 195L287 213" stroke="#5b89bc" stroke-width="2"/>
+<path d="M326 185H347V231H326Z" fill="#a9bfdc"/><path d="M336 186V230" stroke="#6e90bc"/>
+<path d="M139 179H352C380 179 399 183 415 194" stroke="white" stroke-width="3"/>
+<rect x="465" y="231" width="11" height="5" rx="2" fill="#fff"/>
+<path d="M107 285H525" stroke="url(#track)" stroke-width="2"/>
+<rect x="238" y="304" width="167" height="39" rx="19.5" fill="#0c1d38" stroke="#35628e"/>
+<circle cx="260" cy="324" r="4" fill="#61dcf2"/>
+<text x="273" y="328" font-family="Segoe UI,Arial,sans-serif" font-size="11" font-weight="600" fill="#e0efff">Explore every route</text>
+</svg>

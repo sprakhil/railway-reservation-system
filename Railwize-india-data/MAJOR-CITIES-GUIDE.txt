@@ -1,3 +1,28 @@
+NEARBY-STATION CHECKS (source, destination, or both)
+- Search MMCT -> DLI tomorrow with All classes and Include nearby stations.
+  MMCT -> NDLS (RW1001) should appear as a nearby-destination option if imported.
+- Compare with the direct MMCT -> NDLS search on the same date.
+- Search CSMT -> DLI to also consider nearby Mumbai terminals and Delhi terminals.
+- Names such as New Delhi (NDLS), Hazrat Nizamuddin (NZM), and Surat (ST) are
+  displayed wherever those configured stations are used. No timetable is invented.
+- Keep the nearby radius at 50 km initially; reduce it to verify distant options disappear.
+- An AC-only train remains eligible with All classes. A specific SL filter can exclude it.
+- Options require future departures, valid operating days and published schedules.
+  A cancelled train run or unavailable class will not be suggested.
+
+EXISTING STATIONS WITH MISSING COORDINATES
+The main import preserves existing rows. If DLI/NDLS/MMCT or another existing station
+has NULL, (0,0), or out-of-range coordinates, it may not participate in nearby search.
+Back up railway_train_db, stop train-service and run REPAIR-STATION-COORDINATES.sql
+as a whole file in MySQL Workbench. It uses the same approximate station coordinates
+as this catalogue for 111 known codes. It only repairs missing/invalid coordinate
+pairs; it preserves valid coordinates, names, IDs, trains, schedules and bookings.
+It prints repaired rows and any unknown/custom codes that still need coordinates.
+For those custom stations, enter the actual station latitude/longitude in Admin > Stations.
+Valid-looking but incorrect coordinates cannot be detected automatically; check those
+manually. Restart train-service and reservation-service after updating the application,
+then refresh the frontend. There is no table/schema migration for this enhancement.
+
 RAILWIZE MAJOR-CITY CATALOGUE EXPANSION
 ======================================
 

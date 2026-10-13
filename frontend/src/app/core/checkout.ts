@@ -14,7 +14,7 @@ export class Checkout {
   async open(order:Order):Promise<CheckoutResult|null>{
     if(!order.keyId.startsWith('rzp_test_')||order.mode!=='TEST')throw new Error('Only Razorpay test checkout is supported.');
     await this.load();
-    return new Promise((resolve,reject)=>{this.instance=new window.Razorpay!({key:order.keyId,order_id:order.razorpayOrderId,amount:order.amountInPaise,currency:order.currency,name:'Railwize',description:`Booking · PNR ${order.pnr}`,theme:{color:'#17594d'},handler:(result:CheckoutResult)=>resolve(result),modal:{ondismiss:()=>resolve(null)}});this.instance.on('payment.failed',e=>{this.instance?.close();reject(new Error(e.error?.description||'Payment could not be completed. You can retry while your booking hold is active.'))});this.instance.open()});
+    return new Promise((resolve,reject)=>{this.instance=new window.Razorpay!({key:order.keyId,order_id:order.razorpayOrderId,amount:order.amountInPaise,currency:order.currency,name:'Railwize',description:`Booking · PNR ${order.pnr}`,theme:{color:'#2459e0'},handler:(result:CheckoutResult)=>resolve(result),modal:{ondismiss:()=>resolve(null)}});this.instance.on('payment.failed',e=>{this.instance?.close();reject(new Error(e.error?.description||'Payment could not be completed. You can retry while your booking hold is active.'))});this.instance.open()});
   }
   close(){this.instance?.close();this.instance=null}
 }

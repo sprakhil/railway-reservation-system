@@ -18,7 +18,7 @@ public final class SupportEmailTemplate {
         };
         String url=frontend.replaceAll("/+$","")+(admin?"/admin/support/":"/support/")+id;
         String intro=event.getMessage()==null?"Sign in to view the latest update.":event.getMessage();
-        String content="<p style='font-size:13px;color:#52675e'>Request reference</p><p style='overflow-wrap:anywhere;font-weight:bold'>"+RailwizeMail.escape(id)+"</p>";
+        String content="<p style='font-size:13px;color:#475472'>Request reference</p><p style='overflow-wrap:anywhere;font-weight:bold'>"+RailwizeMail.escape(id)+"</p>";
         if(event.getPnr()!=null)content+="<p>Booking PNR: "+RailwizeMail.escape(event.getPnr())+"</p>";
         String footer="Reply through your support conversation. Do not send passwords, OTPs or full card details. A support request does not cancel a ticket or change a refund automatically.";
         return new BookingEmailTemplate.Content("Railwize support | "+id,title+"\n\n"+intro+"\n\nRequest: "+id+"\n"+url+"\n\n"+footer,

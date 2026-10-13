@@ -5,5 +5,5 @@ public record JourneyPlan(String id,String kind,List<JourneyQuote> legs,String i
     long transferMinutes,long durationMinutes,BigDecimal totalFare,String allocation,
     double originDistanceKm,double destinationDistanceKm) {
     public record Results(List<JourneyPlan> options,List<String> notices,boolean limited,
-        int radiusKm,int minTransferMinutes,int maxTransferMinutes) {}
+        int radiusKm,int minTransferMinutes,int maxTransferMinutes,java.util.Map<String,String> stationNames) {}
 }

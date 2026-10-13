@@ -24,7 +24,7 @@ public class EmailService {
             helper.setTo(toEmail); helper.setSubject("Welcome aboard, your Railwize account is active");
             String url=frontend.replaceAll("/+$","")+"/auth/login";
             String intro="Hello "+username+", your email is verified and your account is ready.";
-            String content="<div style='padding:20px;background:#f0f5ec;border-radius:10px'><h2 style='font-size:18px;margin:0 0 12px'>Make room for your next journey</h2><p style='line-height:1.8;margin:0'>Search train routes and fares.<br>Save your passengers for faster booking.<br>Find every ticket and booking update in My journeys.</p></div>";
+            String content="<div style='padding:20px;background:#edf3ff;border-radius:10px'><h2 style='font-size:18px;margin:0 0 12px'>Make room for your next journey</h2><p style='line-height:1.8;margin:0'>Search train routes and fares.<br>Save your passengers for faster booking.<br>Find every ticket and booking update in My journeys.</p></div>";
             helper.setText(intro+"\n\nSearch trains, save passengers and manage your bookings.\nSign in: "+url+"\n\nRailwize",RailwizeMail.page("Welcome aboard.",intro,content,url,"Explore Railwize","You can sign in with your verified account. Never share your password or verification codes."));
             RailwizeMail.logo(helper); mailSender.send(message);
         } catch(Exception ex) { log.warn("Welcome email delivery failed ({})",ex.getClass().getSimpleName()); }

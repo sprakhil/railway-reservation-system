@@ -320,7 +320,7 @@ It estimates great-circle distance between latitude/longitude points on a sphere
 
 **Q53. What are the search limits?**
 
-One same-station interchange, a common requested class, radius 1–100 km, minimum interchange 30–240 minutes and maximum up to 720 minutes. Defaults are 50 km and a 60–360-minute transfer window. The implementation bounds catalogue work, examines up to 200 trains and returns at most 20 plans. The Angular controls expose a smaller set of choices. Bounded results are not a guarantee of the globally optimal itinerary.
+One same-station interchange, radius 1–100 km, minimum interchange 30–240 minutes and maximum up to 720 minutes. Defaults are all classes, 50 km and a 60–360-minute transfer window. Each connection uses a class offered on both legs. All located stations within the radius are candidates at both ends. Nearby direct routes are examined before connections. The implementation scans at most 10,000 trains/stations within a 12-second work budget and other candidate limits, and returns at most 20 plans with partial-result notices. The Angular controls expose a smaller set of choices. Bounded results are not a guarantee of the globally optimal itinerary.
 
 **Q54. Why not give one ticket/payment for the entire connection?**
 

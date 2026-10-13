@@ -27,10 +27,10 @@ async function mock(page:Page){await page.route('**/api/**',async route=>{const 
 test.beforeEach(async({page})=>{await mock(page)});
 
 test('home is responsive and validates identical stations before search',async({page})=>{
- await page.goto('/');await expect(page.getByRole('heading',{name:'A better way to get there.'})).toBeVisible();
+ await page.goto('/');await expect(page.getByRole('heading',{name:'One search. More ways to go.'})).toBeVisible();
  await page.getByLabel('Departure station').fill('DSTA');await page.getByLabel('Arrival station').fill(' dsta ');await page.getByRole('button',{name:'Find trains',exact:true}).click();await expect(page.getByRole('alert')).toContainText('different stations');
  await page.screenshot({path:'test-results/home-desktop.png',fullPage:true});
- await page.setViewportSize({width:390,height:844});await expect(page.getByRole('heading',{name:'A better way to get there.'})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
+ await page.setViewportSize({width:390,height:844});await expect(page.getByRole('heading',{name:'One search. More ways to go.'})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
  await page.getByRole('button',{name:'Toggle navigation'}).click();await expect(page.getByRole('navigation',{name:'Main navigation'}).getByRole('link',{name:'My journeys'})).toBeVisible();await page.getByRole('button',{name:'Toggle navigation'}).click();await page.screenshot({path:'test-results/home-mobile.png',fullPage:true});
 });
 test('search selects a train and preserves return journey through sign-in',async({page})=>{

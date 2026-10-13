@@ -4,10 +4,10 @@ test('help topics, search and mobile layout work without signing in',async({page
  await page.goto('/help?topic=Train%20cancellations');
  await expect(page.getByRole('heading',{name:'Your journey, explained.'})).toBeVisible();
  await page.getByLabel('Search the Help centre').fill('calendar');
- await page.getByText('Will my connecting train and calendar reminder be cancelled too?',{exact:true}).click();
+ await page.locator('summary').filter({hasText:'Will my connecting train and calendar reminder be cancelled too?'}).click();
  await expect(page.getByText(/Connecting legs have independent PNRs/)).toBeVisible();
  await page.getByLabel('Search the Help centre').fill('unmatched-xyz');await expect(page.getByRole('heading',{name:'No matching answers'})).toBeVisible();
- await page.getByRole('button',{name:'Show all answers'}).click();await expect(page.getByText('How do I book a ticket?',{exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Show all answers'}).click();await expect(page.locator('summary').filter({hasText:'How do I book a ticket?'})).toBeVisible();
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy();
 });
 

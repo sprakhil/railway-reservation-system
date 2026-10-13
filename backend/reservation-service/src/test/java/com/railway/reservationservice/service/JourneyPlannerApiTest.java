@@ -52,4 +52,15 @@ class JourneyPlannerApiTest {
             .andExpect(jsonPath("$[0].classes[0].availableSeats").value(10)).andExpect(jsonPath("$[0].classes[1].availableSeats").value(72));
         mvc.perform(get("/v3/api-docs")).andExpect(status().isOk()).andExpect(jsonPath("$.paths['/api/reservations/trains'].get.security").isEmpty());
     }
+    @Test void alternativesDefaultToAllClassesAndIncludeStationNames()throws Exception {
+        var t=train("T1");t.setSeatClasses(Set.of("CLASS_3A"));t.getClassConfigurations().getFirst().setSeatClass("CLASS_3A");
+        when(trains.getPage(0,100)).thenReturn(new PageResult<>(List.of(t),0,100,1,1));
+        when(stations.station("DLI")).thenReturn(new CatalogStation("DLI","Delhi Junction",28.661,77.228));
+        when(stations.page(0,100)).thenReturn(new PageResult<>(List.of(station("AAA",19,73),new CatalogStation("NDLS","New Delhi",28.6428,77.21908)),0,100,2,1));
+        when(schedules.getSchedule("T1")).thenReturn(List.of(stop("AAA",1,1,"10:00",0),stop("NDLS",2,2,"12:00",1000)));
+        mvc.perform(get("/api/reservations/alternatives").param("fromStation","AAA").param("toStation","DLI").param("dateOfJourney",date))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.options[0].legs[0].toStation").value("NDLS"))
+            .andExpect(jsonPath("$.options[0].legs[0].seatClass").value("CLASS_3A"))
+            .andExpect(jsonPath("$.stationNames.NDLS").value("New Delhi"));
+    }
 }

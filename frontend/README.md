@@ -4,6 +4,12 @@ I built the Railwize frontend in **Angular** to give passengers a clear booking 
 
 This folder contains the client application. The [backend](../backend/README.md) owns authentication, permissions, fares, seat inventory, payment verification and booking state.
 
+## Visual design
+
+I use a navy, cobalt and cyan palette with light surfaces, clear typography and consistent cards across passenger pages, the admin workspace, support, notifications and the assistant. The homepage includes an original train-and-route illustration. Responsive layouts, visible keyboard focus and reduced-motion support keep the interface usable on desktop and mobile.
+
+The theme is defined in `src/theme.css`, loaded after the base styles. The local illustrations and logo sources are in `public/`; the matching account and booking email branding is packaged with the backend services.
+
 ## Stack and structure
 
 - Angular 21.2.24 with standalone components and lazy-loaded routes.
@@ -18,6 +24,7 @@ frontend/
 │   ├── main.ts                  # Bootstrap the Angular application
 │   ├── index.html               # Host document
 │   ├── styles.css               # Shared responsive design
+│   ├── theme.css                # Midnight Express palette and shared visual theme
 │   ├── chat.css                 # Assistant presentation
 │   └── app/
 │       ├── app.ts               # Main shell, navigation and global UI
@@ -58,8 +65,9 @@ Recent history stores only route and date; old account history is normalized to 
 
 **More ways to get there** displays itinerary alternatives. It loads automatically when no exact direct result has confirmed availability, and can also be opened manually.
 
-- Choose a class beside the alternative results; displayed itinerary fares are per passenger.
+- Search all classes by default, or select a specific class; displayed itinerary fares are per passenger.
 - Choose whether to include nearby departure/destination stations.
+- Both ends can change in the same itinerary. Station names and codes appear together in the interchange instructions and local-transfer explanation; selecting a ticket uses the actual boarding/destination station.
 - Select a nearby radius of 25, 50 or 100 km.
 - Select a minimum interchange time of 1, 1.5 or 2 hours; the UI uses a six-hour maximum.
 - Compare actual stations, boarding dates, travel/transfer time, class availability and per-leg/combined fares.

@@ -95,4 +95,71 @@ class JourneyPlannerTest {
         assertThrows(BookingException.class,()->planner.search("AAA","CCC",LocalDate.of(2029,12,31),"SL",1,false,50,60,360));
         verifyNoInteractions(stations);
     }
+
+    @Test void mumbaiToDelhiIncludesNewDelhiDestinationAndAcOnlyTrainsByDefault(){
+        catalogue.clear();
+        var mmct=new CatalogStation("MMCT","Mumbai Central",18.9697,72.8194);
+        var dli=new CatalogStation("DLI","Delhi Junction",28.661,77.228);
+        var ndls=new CatalogStation("NDLS","New Delhi",28.6428,77.21908);
+        when(stations.station("MMCT")).thenReturn(mmct);when(stations.station("DLI")).thenReturn(dli);
+        when(stations.page(0,100)).thenReturn(new PageResult<>(List.of(mmct,dli,ndls),0,100,3,1));
+        route("12951",List.of(stop("MMCT",1,1,"16:00",0),stop("NDLS",2,2,"08:00",1384)));
+        catalogue.getFirst().setSeatClasses(Set.of("CLASS_3A"));catalogue.getFirst().getClassConfigurations().getFirst().setSeatClass("CLASS_3A");
+        var result=planner.search("MMCT","DLI",date,"ALL",1,true,50,60,360);
+        var p=result.options().getFirst();assertEquals("NEARBY_DIRECT",p.kind());
+        assertEquals("MMCT",p.legs().getFirst().getFromStation());assertEquals("NDLS",p.legs().getFirst().getToStation());
+        assertEquals("CLASS_3A",p.legs().getFirst().getSeatClass());assertEquals(0,p.originDistanceKm());assertTrue(p.destinationDistanceKm()>1&&p.destinationDistanceKm()<3);
+        assertEquals("New Delhi",result.stationNames().get("NDLS"));assertEquals("Delhi Junction",result.stationNames().get("DLI"));
+        assertTrue(planner.search("MMCT","DLI",date,"SL",1,true,50,60,360).options().isEmpty());
+        assertTrue(planner.search("MMCT","DLI",date,"ALL",1,false,50,60,360).options().isEmpty());
+        assertTrue(planner.search("MMCT","DLI",date,"ALL",1,true,1,60,360).options().isEmpty());
+    }
+
+    @Test void usableStationsBeyondFourNearestAreSearchedAtBothEnds(){
+        catalogue.clear();var nearby=new ArrayList<CatalogStation>();
+        for(int i=1;i<=5;i++){nearby.add(station("A"+i,19+i*.01,73));nearby.add(station("C"+i,15+i*.01,74));}
+        nearby.add(station("PNVL",19.1,73));nearby.add(station("NZM",15.1,74));
+        when(stations.page(0,100)).thenReturn(new PageResult<>(nearby,0,100,nearby.size(),1));
+        route("T3",List.of(stop("PNVL",1,1,"09:00",0),stop("NZM",2,1,"14:00",200)));
+        var result=search(true);assertEquals(1,result.options().size());
+        var p=result.options().getFirst();assertEquals("PNVL",p.legs().getFirst().getFromStation());assertEquals("NZM",p.legs().getFirst().getToStation());
+        assertFalse(result.limited());
+    }
+
+    @Test void everyClassKeepsItsOwnFareAvailabilityAndId(){
+        catalogue.clear();when(stations.page(0,100)).thenReturn(new PageResult<>(List.of(station("CCN",15.1,74)),0,100,1,1));
+        route("T3",List.of(stop("AAA",1,1,"09:00",0),stop("CCN",2,1,"14:00",200)));
+        var t=catalogue.getFirst();var ac=train("unused").getClassConfigurations().getFirst();ac.setSeatClass("CLASS_3A");ac.setBaseFare(new BigDecimal("500"));
+        t.setSeatClasses(Set.of("SL","CLASS_3A"));t.setClassConfigurations(List.of(t.getClassConfigurations().getFirst(),ac));
+        doAnswer(i->{JourneyQuote q=i.getArgument(0);q.setSuggestedAllocation(q.getSeatClass().equals("SL")?"WL":"CNF");return null;}).when(engine).describeAvailability(any());
+        var options=planner.search("AAA","CCC",date,"ALL",1,true,50,60,360).options();
+        assertEquals(2,options.size());assertEquals("CLASS_3A",options.getFirst().legs().getFirst().getSeatClass());
+        assertEquals(new BigDecimal("700.00"),options.getFirst().totalFare());assertEquals(new BigDecimal("210.00"),options.getLast().totalFare());
+        assertNotEquals(options.getFirst().id(),options.getLast().id());verify(schedules,times(1)).getSchedule("T3");
+    }
+
+    @Test void connectionsCanChangeBothEndpointsAndResolveInterchangeName(){
+        catalogue.clear();when(stations.page(0,100)).thenReturn(new PageResult<>(List.of(station("AAN",19.1,73),station("CCN",15.1,74),new CatalogStation("ST","Surat",21.204,72.841)),0,100,3,1));
+        route("T3",List.of(stop("AAN",1,1,"09:00",0),stop("ST",2,1,"12:00",200)));
+        route("T4",List.of(stop("ST",1,1,"13:00",0),stop("CCN",2,1,"18:00",500)));
+        var result=planner.search("AAA","CCC",date,"ALL",1,true,50,60,360);
+        assertEquals("NEARBY_CONNECTION",result.options().getFirst().kind());assertEquals("Surat",result.stationNames().get("ST"));
+        assertEquals(60,result.options().getFirst().transferMinutes());
+    }
+
+    @Test void routesAfterTheSecondCataloguePageAreNotSilentlyDropped(){
+        catalogue.clear();route("LATE",List.of(stop("AAA",1,1,"09:00",0),stop("CCN",2,1,"14:00",200)));
+        when(stations.page(0,100)).thenReturn(new PageResult<>(List.of(station("CCN",15.1,74)),0,100,1,1));
+        when(trains.getPage(0,100)).thenReturn(new PageResult<>(List.of(),0,100,201,3));
+        when(trains.getPage(1,100)).thenReturn(new PageResult<>(List.of(),1,100,201,3));
+        when(trains.getPage(2,100)).thenReturn(new PageResult<>(catalogue,2,100,201,3));
+        assertEquals("LATE",search(true).options().getFirst().legs().getFirst().getTrainNumber());
+        verify(trains).getPage(2,100);
+    }
+
+    @Test void zeroCoordinatePlaceholderDoesNotPretendToBeALocation(){
+        when(stations.station("CCC")).thenReturn(new CatalogStation("CCC","Destination",0.0,0.0));
+        var result=search(true);assertEquals(1,result.options().size());assertTrue(result.notices().stream().anyMatch(n->n.contains("CCC")&&n.contains("coordinates")));
+        assertFalse(JourneyPlanner.located(new CatalogStation("BAD","Bad",Double.NaN,75.0)));
+    }
 }

@@ -12,9 +12,9 @@ import { Passenger } from '../core/models';
   }@else{<span class="position">{{passenger().seatNumber||'Not assigned'}}</span>}
 `,styles:`
   :host{display:block;min-width:150px}
-  .assignment{display:flex;align-items:center;gap:9px;color:var(--ink,#1e312b)}
-  .coach{display:inline-flex;align-items:center;justify-content:center;min-width:36px;padding:5px 8px;border:1px solid #cbded0;border-radius:7px;background:#eef5ee;color:#164033;font-size:12px;font-weight:800;letter-spacing:.04em}
-  .position{display:block;margin-top:5px;font-size:12px;line-height:1.5;color:var(--muted,#5b6f65)}
+  .assignment{display:flex;align-items:center;gap:9px;color:var(--ink,#152442)}
+  .coach{display:inline-flex;align-items:center;justify-content:center;min-width:36px;padding:5px 8px;border:1px solid #d4e1fa;border-radius:7px;background:#edf3ff;color:#234ea4;font-size:12px;font-weight:800;letter-spacing:.04em}
+  .position{display:block;margin-top:5px;font-size:12px;line-height:1.5;color:var(--muted,#58677f)}
   .bay{white-space:nowrap}
 `})
 export class SeatAssignment {passenger=input.required<Passenger>();}

@@ -10,7 +10,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts", "tsConfig": "tsconfig.app.json",
-            "index": "src/index.html", "styles": ["src/styles.css"],
+            "index": "src/index.html", "styles": ["src/styles.css", "src/theme.css"],
             "assets": [{"glob": "**/*", "input": "public"}],
             "outputPath": "dist/railway"
           },

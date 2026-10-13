@@ -129,11 +129,15 @@ The result is rounded to two decimal places and saved in the booking. Later cata
 | Nearby radius | 1–100 km; default 50 |
 | Minimum transfer | 30–240 minutes; default 60 |
 | Maximum transfer | At least the minimum and at most 720 minutes; default 360 |
-| Alternative stations | Up to four nearest at each endpoint, plus the exact station |
-| Catalogue bound | Up to 200 trains; station paging also has a bounded scan |
+| Alternative stations | All located stations within the radius at both endpoints, plus the exact stations |
+| Catalogue bound | Up to 10,000 trains and 10,000 stations; a 12-second work budget and candidate limits report partial results |
 | Returned alternatives | Up to 20, with partial-result notices if limits are reached |
 
 Plans show the actual stations, dates/times, transfer wait, each fare and total fare, and CNF/WL availability. Cancelled runs are excluded. The planner does not invent road travel times, allow a cross-city interchange, or reserve both legs. Each leg is booked and paid separately through the standard flow.
+
+The optional `seatClass` filter defaults to `ALL`. Each class keeps its own fare, availability and option ID; connections require that class on both legs. Nearby direct routes are evaluated before connections. Results prioritize CNF, fewer train changes, smaller combined endpoint distance, then arrival and fare. `stationNames` in the response provides names for every used code so the UI can say **Surat (ST)**, **New Delhi (NDLS)** or **Hazrat Nizamuddin (NZM)** even if its separate catalogue lookup is unavailable.
+
+For example, MMCT → DLI can suggest MMCT → NDLS, a nearby Mumbai terminal → DLI, or a nearby Mumbai terminal → NDLS/NZM when such services are configured and bookable. Both local transfers are displayed explicitly. A direct MMCT → NDLS service is not excluded simply because it offers AC classes without SL. Coordinates must be present and valid at both candidate endpoints; `(0,0)` is treated as a missing location. Existing catalogue imports preserve station rows, so older missing coordinates require the optional [coordinate repair](../Railwize-india-data/REPAIR-STATION-COORDINATES.sql), or an update through Admin → Stations for custom codes. No schema change is needed.
 
 ## Reservation lifecycle and concurrency
 
@@ -216,7 +220,7 @@ PDFBox embeds bundled Lato fonts from [ticket assets](reservation-service/src/ma
 
 ### Email delivery
 
-Account emails include registration OTP, welcome, password-reset OTP/instructions and admin invitations, with consistent Railwize branding. Auth-service handles account mail; notification-service handles booking lifecycle deliveries.
+Account emails include registration OTP, welcome, password-reset OTP/instructions and admin invitations, with consistent Railwize branding. Account, booking and support messages share the platform’s navy, cobalt and cyan palette, inline Railwize logo, clear action buttons and mobile-friendly layout. Logo assets are bundled in each mail service under `src/main/resources/mail/`, so delivery does not depend on a remote image host. Auth-service handles account mail; notification-service handles booking lifecycle deliveries.
 
 | Booking event | Email information |
 | --- | --- |
